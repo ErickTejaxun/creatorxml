@@ -1,0 +1,22 @@
+<importar>
+## Comentario de una sola linea.
+ \formulario1.xml
+## Segundo comentario de una sola linea. 
+#$
+--
+$#
+< / importar > 
+<importar>\formulas.fs</importar>
+<importar>\ventas.fs</importar>
+
+<ventana id = "form1" tipo="principal2">
+	<contenedor>
+	## Inicio de contenenedor
+	## Erick Tejaxun 
+	## 201213050
+	#$
+	Primer intento de archivo de entrada
+	27/02/2019
+	$#
+	<  /contenedor>
+</ventana>
