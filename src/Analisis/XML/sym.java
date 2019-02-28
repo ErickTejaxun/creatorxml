@@ -25,6 +25,7 @@ public class sym {
   public static final int taccion = 33;
   public static final int tmaximo = 28;
   public static final int tcolor = 11;
+  public static final int numero = 45;
   public static final int defecto = 35;
   public static final int EOF = 0;
   public static final int trecursiva = 25;
@@ -98,7 +99,8 @@ public class sym {
   "path",
   "autoreproduccion",
   "cadena",
-  "id"
+  "id",
+  "numero"
   };
 }
 

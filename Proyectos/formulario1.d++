@@ -9,7 +9,7 @@ $#
 <importar>\formulas.fs</importar>
 <importar>\ventas.fs</importar>
 
-<ventana id = "form1" tipo="principal2">
+<ventana id = "form1" tipo="principal" alto = 500 ancho = 300>
 	<contenedor>
 	## Inicio de contenenedor
 	## Erick Tejaxun 

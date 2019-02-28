@@ -128,7 +128,7 @@ terminal String menorque, mayorque, slash, igual, llaved, llavei,tid, ttipo,
 timportar,  tcolor, tinicial, tventana, tx, ty, tancho, tborde, falso, verdadero,
 contenedor, tnombre, tfuente, ttamanio, tnegrita, trecursiva, ttexto, tcontrol, tmaximo, 
 tminimo, tmultimedia, tenviar, tboton, taccion, treferencia, defecto, dato, listadatos,talto,tcursiva , tfinal,
-path, autoreproduccion, cadena, id;
+path, autoreproduccion, cadena, id, numero;
 
 /*
 * Aquí están los no terminales
@@ -168,7 +168,7 @@ VENTANA::= menorque:i tventana EVENTANA:vent mayorque  CONTENIDO
            {: vent.setLinea(ileft); vent.setColumna(iright); RESULT= vent;:}  
           |menorque:i tventana /*EVENTANA:vent*/ mayorque  CONTENIDO
            menorque slash tventana mayorque
-           {: RESULT= new Ventana(ileft,iright);:}                 
+           {: RESULT= new Ventana(ileft, iright);:}                 
 ;
 
 EVENTANA::= EVENTANA:v tid igual cadena:valor {:v.setId(valor); RESULT= v;:}
@@ -176,11 +176,15 @@ EVENTANA::= EVENTANA:v tid igual cadena:valor {:v.setId(valor); RESULT= v;:}
                    |EVENTANA:v tcolor igual cadena:valor {:v.setColor(valor); RESULT= v;:}
                    |EVENTANA:v tinicial igual cadena:valor {:v.setAccioninicial(valor); RESULT= v;:}
                    |EVENTANA:v tfinal igual cadena:valor {:v.setAccionfinal(valor); RESULT= v;:}
+                   |EVENTANA:v talto igual numero:valor {:v.setAlto(valor); RESULT= v;:}
+                   |EVENTANA:v tancho igual numero:valor {:v.setAncho(valor); RESULT= v;:}                   
                    |tid igual cadena :valor {:Ventana v = new Ventana(); v.setId(valor); RESULT= v;:}
                    |ttipo igual cadena:valor {:Ventana v = new Ventana(); v.setTipo(valor); RESULT= v;:}
                    |tcolor igual cadena:valor {:Ventana v = new Ventana(); v.setColor(valor); RESULT= v;:}
                    |tinicial igual cadena:valor {:Ventana v = new Ventana(); v.setAccioninicial(valor); RESULT= v;:}
                    |tfinal igual cadena:valor {:Ventana v = new Ventana(); v.setAccionfinal(valor); RESULT= v;:}
+                   |talto igual numero:valor {:Ventana v = new Ventana(); v.setAlto(valor); RESULT= v;:}
+                   |tancho igual numero:valor {:Ventana v = new Ventana(); v.setAncho(valor); RESULT= v;:}
 ;
 
 CONTENIDO::= CONTENIDO:l CONTENEDOR {:RESULT = l;:}

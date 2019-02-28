@@ -64,7 +64,7 @@ public class Importar extends NodoXML
         {
             Logger.getLogger(Importar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        ventana.escribirConsola((String) valor);
+        ventana.addCuerpo((String) valor);
         return this;
     }
 

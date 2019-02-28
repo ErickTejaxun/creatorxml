@@ -307,7 +307,12 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
         {
                 addLexema("identificador",yytext(), yyline, yychar);
                 return new Symbol(sym.id,yychar, yyline, yytext().substring(1,yytext().length()-1));
-        }         
+        }   
+    {numero}
+        {
+                addLexema("numerico",yytext(), yyline, yychar);
+                return new Symbol(sym.numero,yychar, yyline, yytext());
+        }                 
     {cadenaComillas}
         {
                 addLexema("cadena",yytext(), yyline, yychar);

@@ -19,6 +19,7 @@ public class Ventana extends NodoXML
     public String color;
     public String accioninicial;
     public String accionfinal;
+    public String alto, ancho;
 
     public Ventana()
     {
@@ -27,6 +28,8 @@ public class Ventana extends NodoXML
         color = "";
         accionfinal = "";
         accioninicial = "";
+        alto = "";
+        ancho = "";
     }
    
     public Ventana(int l, int c)
@@ -38,6 +41,8 @@ public class Ventana extends NodoXML
         color = "";
         accionfinal = "";
         accioninicial = "";
+        alto = "";
+        ancho = "";        
     }    
     
     
@@ -104,6 +109,17 @@ public class Ventana extends NodoXML
     public void setColumna(int columna) {
         this.columna = columna;
     }
+
+    public void setAlto(String alto) {
+        this.alto = alto;
+    }
+
+    public void setAncho(String ancho) {
+        this.ancho = ancho;
+    }
+    
+    
+    
     
     public void generar(Interfaz ventana)
     {
@@ -131,7 +147,12 @@ public class Ventana extends NodoXML
                 {
                     valor+= "\""+color+"\"";
                 }        
-                valor+= ");";
+                /*Ancho y alto*/
+                if(!alto.equals("") && !ancho.equals(""))
+                {
+                    valor += ","+alto+","+ancho;
+                }
+                valor+= ");";                
             }
             else 
             if(tipo.equals("secundaria"))
@@ -149,7 +170,7 @@ public class Ventana extends NodoXML
     public NodoXML ejecutar(Interfaz ventana) 
     {
         generar(ventana);
-        ventana.escribirConsola((String) valor);
+        ventana.addCuerpo((String) valor);
         return this;
     }              
 }

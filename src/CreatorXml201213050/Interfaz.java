@@ -49,6 +49,9 @@ public class Interfaz extends javax.swing.JFrame {
     public String salida = "";
     public ArrayList<ArrayList<NodoXML>> listaxml = new ArrayList<ArrayList<NodoXML>>();
     public int contadorVentanas = 0;
+    public String cadenaImportaciones = "";
+    public int contadorPrincipal = 0;
+    public String cadenaCuerpo = "";
         
     /**
      * Creates new form interfaz
@@ -1000,6 +1003,7 @@ public class Interfaz extends javax.swing.JFrame {
         todosErrores.clear();   
         listaxml.clear();
         textAreaConsola.setText("");
+        cadenaImportaciones = cadenaCuerpo = "";
         /*Guardar-------*/
         String actual = contenedorPaneles.getTitleAt(contenedorPaneles.getSelectedIndex());                
         if(actual.contains("."))
@@ -1042,6 +1046,8 @@ public class Interfaz extends javax.swing.JFrame {
                 n.ejecutar(this);
             }
         }
+        
+        mostrarTraduccion();
     }
     
     
@@ -1365,7 +1371,20 @@ public class Interfaz extends javax.swing.JFrame {
         simbolos.addColumn("Valor");
         tabladeSimbolos.setModel(simbolos);                                               
     }
+    public void addImportacion(String c)
+    {
+        cadenaImportaciones +="\n"+c;
+    }
     
+    public void addCuerpo(String c)
+    {
+        cadenaCuerpo +="\n"+c;
+    }
+    
+    public void mostrarTraduccion()
+    {
+        textAreaConsola.setText(cadenaImportaciones + "\n" + cadenaCuerpo);
+    }
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
