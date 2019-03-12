@@ -27,6 +27,7 @@ public class sym {
   public static final int tcolor = 11;
   public static final int numero = 45;
   public static final int defecto = 35;
+  public static final int control = 46;
   public static final int EOF = 0;
   public static final int trecursiva = 25;
   public static final int tfinal = 40;
@@ -100,7 +101,8 @@ public class sym {
   "autoreproduccion",
   "cadena",
   "id",
-  "numero"
+  "numero",
+  "control"
   };
 }
 

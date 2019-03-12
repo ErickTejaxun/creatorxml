@@ -1,6 +1,7 @@
 package Analisis.XML;
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
+import Analisis.XML.AST.erroresSinglenton;
 import Recursos.*;
 %%
 %{	    
@@ -30,8 +31,12 @@ import Recursos.*;
     
     public void adderror(int linea, int columna, String valor)
     {        
-        listaErrores.add(new error("Lexico",valor, linea, columna));
+        erroresSinglenton.add(new error("Lexico",valor, linea, columna));
     }
+    public void adderror(int linea, int columna, String valor, String desc)
+    {        
+        erroresSinglenton.add(new error("Lexico",linea, columna, valor, desc));
+    }    
     public void addLexema(String tipo, String valor, int linea, int columna)
     {        
         listaLexemas.add(new lexema(tipo, valor, linea, columna));	            
@@ -70,7 +75,6 @@ id = (({letra}|"_")({letra}|{numero}|"_")*)
 cadenaComillas = (("\"" [^*] ~"\"") | ("\“" [^*] ~"\”"))
 /*cadComillaSimple = ("'" [^*] ~"'")*/
 /*direccionWindows= ("\"" ({letra}":"("\\"({id}|{espacio}|"_"|"-"|{numero})+)+"."{id}) "\"")*/
-
 comentario = {TraditionalComment} | {EndOfLineComment} | 
           {DocumentationComment}
 
@@ -120,11 +124,11 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
         }
     "{" {
             addLexema("simbolo", yytext(), yyline, yychar);            
-            return  new Symbol(sym.llaved, yychar, yyline, yytext());
+            return  new Symbol(sym.llavei, yychar, yyline, yytext());
         }                       
     "}" {
             addLexema("simbolo", yytext(), yyline, yychar);            
-            return  new Symbol(sym.llavei, yychar, yyline, yytext());
+            return  new Symbol(sym.llaved, yychar, yyline, yytext());
         }                                    
     "id" 
         {
@@ -156,20 +160,19 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
         }       
     "texto" 
         {
-            addLexema("reservada", yytext(), yyline, yychar);  
-            yybegin(CADENA);
+            addLexema("reservada", yytext(), yyline, yychar);              
             iniciarCadena();
             return  new Symbol(sym.ttexto, yychar, yyline, yytext());
         }   
     "dato" 
         {
-            addLexema("reservada", yytext(), yyline, yychar);            
+            addLexema("reservada", yytext(), yyline, yychar);  
+            iniciarCadena();          
             return  new Symbol(sym.dato, yychar, yyline, yytext());
         }  
     "defecto" 
         {
-            addLexema("reservada", yytext(), yyline, yychar);            
-            yybegin(CADENA);
+            addLexema("reservada", yytext(), yyline, yychar);                        
             iniciarCadena();            
             return  new Symbol(sym.defecto, yychar, yyline, yytext());
         }                                                                                        
@@ -339,7 +342,7 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
                 yypushback(1);                
                 addLexema("cadena",cadena, yyline, yychar);     
                 Imprimir("Saliendo de estado cadena.");
-                return new Symbol(sym.cadena, yychar, yyline+1, cadena);            
+                return new Symbol(sym.cadena, yychar, yyline, cadena);            
             default:
                 if(yytext().equals("\n"))
                 {
@@ -390,12 +393,22 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
         {
             addLexema("reservada", yytext(), yyline, yychar);      
             return  new Symbol(sym.dato, yychar, yyline, yytext());
-        }  
+        } 
+    "listadatos" 
+        {
+            addLexema("reservada", yytext(), yyline, yychar);      
+            return  new Symbol(sym.listadatos, yychar, yyline, yytext());
+        }          
     "defecto" 
         {
             addLexema("reservada", yytext(), yyline, yychar);                         
             return  new Symbol(sym.defecto, yychar, yyline, yytext());
-        } 
+        }
+    "control" 
+        {
+            addLexema("reservada", yytext(), yyline, yychar);            
+            return  new Symbol(sym.tcontrol, yychar, yyline, yytext());
+        }                 
     "<" {
             addLexema("simbolo", yytext(), yyline, yychar);
             finalizarCadena();            
@@ -424,11 +437,18 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
         yybegin(COMENTARIO2);/*Comentario de una sola linea*/
         Imprimir("Inicia comentario uni linea.");
     }
-    [^#$]
+    "<"
+    {
+        adderror(yyline, yychar, yytext(),"Falta simbolo para cierre de comentario.");
+        yybegin(CADENA);
+        yypushback(1);
+    }
+    [^#$<]
     {
         yybegin(CADENA);        
         cadena = cadena + "#";
-    }    
+    }
+   
 }
 
 <COMENTARIO2>
@@ -451,8 +471,20 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
     {
         yybegin(CADENA);/*Comentario de una sola linea*/        
         Imprimir("Fin del comentario multi linea.");
-    }       
-    [^#$]    
+    } 
+    "$"
+    {
+        //cadena += "$";
+        adderror(yyline, yychar, yytext(),"Falta simbolo para cierre de comentario.");
+        yybegin(CADENA);/*Comentario de una sola linea*/        
+        Imprimir("Fin del comentario multi linea.");
+    }     
+    "<"
+    {
+        yybegin(CADENA);
+        yypushback(1);
+    }    
+    [^#$<]    
     {
         //Imprimir(yytext());
         /*Ignorar*/

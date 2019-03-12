@@ -2,15 +2,13 @@
 ## Comentario de una sola linea.
  \formulario1.xml
 ## Segundo comentario de una sola linea. 
-#$
---
-$#
+#$adfasfasdf $#
 < / importar > 
 <importar>\formulas.fs</importar>
 <importar>\ventas.fs</importar>
 
-<ventana id = "form1" tipo="principal" alto = 500 ancho = 300>
-	<contenedor>
+<ventana  id = "index" tipo="principal" alto = 500 ancho = 300 accioninicial = { "funcion()"} color = "#004fff" >
+	<contenedor id = "cont1" x = 0  y = 0>
 	## Inicio de contenenedor
 	## Erick Tejaxun 
 	## 201213050
@@ -19,4 +17,38 @@ $#
 	27/02/2019
 	$#
 	<  /contenedor>
+
+	<contenedor id = "cont2" x = 0 y = 500>
+	<texto nombre = "msn1" x = 0 y = 10>Bienvenidos a la encuesta.	</texto>
+	<texto nombre = "msn2" x = 0 y = 10 negrita = falso>--------------</texto>
+	<Control tipo = "texto" Nombre = "CTCorreo" X = 40 Y = 50 Alto = 10 Ancho = 100>	
+	<Defecto> Esta es un área de texto Que acepta textos con Múltiples líneas </Defecto>	
+	</Control>
+	<Control tipo = "numerico" Nombre = "CTtelefono" X = 40 Y = 50 Alto = 10 Ancho = 100>	
+	<Defecto> 78331339 </Defecto>	
+	</Control>	
+		<Texto Nombre = "lblBienvenida" X = 450 Y = 20 Fuente = "Times New Roman" Tam = 18 Negrita = verdadero Cursiva = verdadero>
+			Bienvenido a la prueba de Historia, responda las siguientes preguntas
+		</Texto>
+		<Texto Nombre = "lblNombre" X = 10 Y = 20>
+			Ingrese su Nombre:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTNombre" X = 100 Y = 20 Alto = 10 Ancho = 100>
+			<Defecto>Ingrese aqui su nombre</Defecto>
+		</Control>
+		###################### Playa
+		<Texto Nombre = "lblPaisaje1" X = 10 Y = 250>
+			Ingrese el paisaje de la foto
+		</Texto>	
+
+		<Control tipo = "desplegable" Nombre = "CDPaisaje1" X = 150 Y = 250 Alto = 50 Ancho = 100>
+			<ListaDatos>
+				<Dato>Playa</Dato>
+				<Dato>Luna</Dato>
+				<Dato>Selva</Dato>
+				<Dato>Desierto</Dato>
+				<Dato>Oceano</Dato>
+			</ListaDatos>	
+			</Control>	
+	</contenedor>
 </ventana>

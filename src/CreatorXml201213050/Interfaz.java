@@ -6,6 +6,7 @@
 package CreatorXml201213050;
 
 import Analisis.XML.AST.NodoXML;
+import Analisis.XML.AST.singlenton;
 import Analisis.XML.parserxml;
 import Analisis.XML.scannerxml;
 import Recursos.error;
@@ -48,11 +49,21 @@ public class Interfaz extends javax.swing.JFrame {
     public String archivoActual = "";
     public String salida = "";
     public ArrayList<ArrayList<NodoXML>> listaxml = new ArrayList<ArrayList<NodoXML>>();
-    public int contadorVentanas = 0;
+    
     public String cadenaImportaciones = "";
     public int contadorPrincipal = 0;
     public String cadenaCuerpo = "";
         
+    
+    /**
+     Contadores de elementos     
+     */
+    
+    public int contadorVentanas = 0;
+    public String ventanaActual = "";
+    public String colorActual = "";
+    public int contadorContenedor = 0; 
+    public String contenedorActual = "";
     /**
      * Creates new form interfaz
      */
@@ -65,6 +76,23 @@ public class Interfaz extends javax.swing.JFrame {
 //        root.removeAllChildren();
 //        model.reload(root); 
 
+    }
+    
+    public void setContenedorActual(String c)
+    {
+        contenedorActual = c;
+    }
+    public String gerConenedorActual()
+    {
+        return contenedorActual;
+    }
+    public void setVentanaActual(String c)
+    {
+        ventanaActual = c;
+    }
+    public void setColorActual(String c)
+    {
+        colorActual = c;
     }
 
     /**
@@ -201,11 +229,11 @@ public class Interfaz extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1196, Short.MAX_VALUE)
+            .addGap(0, 1197, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 465, Short.MAX_VALUE)
+            .addGap(0, 467, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("DASM", jPanel2);
@@ -248,14 +276,14 @@ public class Interfaz extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 1154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Consola", jPanel4);
@@ -278,7 +306,7 @@ public class Interfaz extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(11, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1176, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -287,7 +315,7 @@ public class Interfaz extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Tabla de Símbolos", jPanel5);
@@ -302,7 +330,7 @@ public class Interfaz extends javax.swing.JFrame {
                 .addComponent(panelDirectorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelEdicion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1203, Short.MAX_VALUE)
         );
         panelEditorLayout.setVerticalGroup(
             panelEditorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -311,7 +339,7 @@ public class Interfaz extends javax.swing.JFrame {
                     .addComponent(panelDirectorio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelEdicion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1000,7 +1028,8 @@ public class Interfaz extends javax.swing.JFrame {
     
     public void compilar() throws FileNotFoundException, Exception 
     {
-        todosErrores.clear();   
+        todosErrores.clear(); 
+        singlenton.listaErrores.clear();
         listaxml.clear();
         textAreaConsola.setText("");
         cadenaImportaciones = cadenaCuerpo = "";
@@ -1015,26 +1044,33 @@ public class Interfaz extends javax.swing.JFrame {
             guardarArchivoNuevoSinGrafo(true);
         }   
         /*Fin Guardar*------------*/
-        
-        String nombreArchivo = contenedorPaneles.getTitleAt(contenedorPaneles.getSelectedIndex());
-        String pathArchivo = direcciones.get(nombreArchivo);
-        archivoActual = nombreArchivo;
-        parserxml parserxml_;
-        scannerxml scannerxml_ = new scannerxml(new java.io.FileReader(pathArchivo));
-        parserxml_ = new parserxml(scannerxml_);
-        parserxml_.parse();        
-        todosErrores = scannerxml_.listaErrores;
-        for(error e: parserxml_.listaErrores)
+        try 
         {
-            todosErrores.add(e);
-        }        
-        if(!parserxml_.lista.isEmpty())
+            String nombreArchivo = contenedorPaneles.getTitleAt(contenedorPaneles.getSelectedIndex());
+            String pathArchivo = direcciones.get(nombreArchivo);
+            archivoActual = nombreArchivo;
+            parserxml parserxml_;
+            scannerxml scannerxml_ = new scannerxml(new java.io.FileReader(pathArchivo));
+            parserxml_ = new parserxml(scannerxml_);
+            parserxml_.parse();        
+    //        listaErrores = scannerxml_.listaErrores;
+    //        for(error e: parserxml_.listaErrores)
+    //        {
+    //            listaErrores.add(e);
+    //        }        
+            if(!parserxml_.lista.isEmpty())
+            {
+              listaxml.add(parserxml_.lista);
+            }             
+        } 
+        catch (Exception e) 
         {
-          listaxml.add(parserxml_.lista);
-        }                        
+            
+        }
+                       
         /*Mandamos a ejecutar esta onda.*/                
         EjecutarXML();
-        mostrarErrores(todosErrores);            
+        mostrarErrores(singlenton.listaErrores);            
     }
     
     public void EjecutarXML()
@@ -1376,10 +1412,16 @@ public class Interfaz extends javax.swing.JFrame {
         cadenaImportaciones +="\n"+c;
     }
     
-    public void addCuerpo(String c)
+    public void addCuerpoInicio(String c)
     {
-        cadenaCuerpo +="\n"+c;
+        //cadenaCuerpo =  c +"\n"+ cadenaCuerpo;
+        cadenaCuerpo +="\n"+ c;
     }
+    
+    public void addCuerpoFinal(String c)
+    {
+        cadenaCuerpo += "\n" + c;
+    }    
     
     public void mostrarTraduccion()
     {

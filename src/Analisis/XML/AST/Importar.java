@@ -49,22 +49,22 @@ public class Importar extends NodoXML
                 parserxml_ = new parserxml(scannerxml_);
                 parserxml_.parse();
                 if(parserxml_.lista.isEmpty()){ventana.listaxml.add(parserxml_.lista);}
-                ventana.todosErrores = scannerxml_.listaErrores;
-                for(error e: parserxml_.listaErrores)
-                {
-                    ventana.todosErrores.add(e);
-                }
+//                ventana.todosErrores = scannerxml_.listaErrores;
+//                for(error e: parserxml_.listaErrores)
+//                {
+//                    ventana.todosErrores.addErrores(e);
+//                }
             }
         } 
         catch (FileNotFoundException ex) // Error de que no exista el archivo.
         {
-            ventana.todosErrores.add(new error("Semantico", linea, columna, pathReal,"No se ha encontrado el archivo"));
+            singlenton.addErrores(new error("Semantico", linea, columna, pathReal,"No se ha encontrado el archivo"));
         } 
         catch (Exception ex) // Errores internos de cup o flex
         {
             Logger.getLogger(Importar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        ventana.addCuerpo((String) valor);
+        ventana.addImportacion((String) valor);
         return this;
     }
 

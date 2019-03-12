@@ -7,6 +7,7 @@ package Analisis.XML.AST;
 
 import CreatorXml201213050.Interfaz;
 import Recursos.error;
+import java.util.ArrayList;
 
 /**
  *
@@ -20,16 +21,18 @@ public class Ventana extends NodoXML
     public String accioninicial;
     public String accionfinal;
     public String alto, ancho;
+    public ArrayList<NodoXML> elementos;
 
     public Ventana()
     {
         id = "";
         tipo = "";
-        color = "";
+        color = "#ffffff";
         accionfinal = "";
         accioninicial = "";
-        alto = "";
-        ancho = "";
+        alto = "800";
+        ancho = "1000";
+        elementos = new ArrayList<NodoXML>();
     }
    
     public Ventana(int l, int c)
@@ -38,13 +41,18 @@ public class Ventana extends NodoXML
         columna = c;
         id = "";
         tipo = "";
-        color = "";
+        color = "#ffffff";
         accionfinal = "";
         accioninicial = "";
-        alto = "";
-        ancho = "";        
+        alto = "800";
+        ancho = "1000";   
+        elementos = new ArrayList<NodoXML>();
     }    
     
+    public void setElementos(ArrayList<NodoXML> l)
+    {
+        elementos = l;
+    }
     
     public String getId() {
         return id;
@@ -121,47 +129,64 @@ public class Ventana extends NodoXML
     
     
     
-    public void generar(Interfaz ventana)
+    public void generarCodigo(Interfaz ventana)
     {
         boolean flag = true;
         if(tipo.equals(""))// || id.equals(""))
         {
             flag = false;
-            ventana.todosErrores.add(new error("Semantico",columna,linea,"ventana", "No se ha definido el tipo para la ventana."));            
+            singlenton.addErrores(new error("Semantico",columna,linea,"ventana", "No se ha definido el tipo para la ventana."));            
         }
         if(id.equals(""))
         {
             flag = false;
-            ventana.todosErrores.add(new error("Semantico",columna,linea,"ventana", "No se ha definido el id para la ventana."));            
-        }        
+            singlenton.addErrores(new error("Semantico",columna,linea,"ventana", "No se ha definido el id para la ventana."));            
+        }  
         if(flag)
         {
             if(tipo.equals("principal"))
             {
-                valor = "var " + id + "= crearventana(";
-                if(color.equals(""))
-                {
-                    valor+= "\"#ffffff\"";
-                }
-                else
-                {
-                    valor+= "\""+color+"\"";
-                }        
+                String idVentana = "ventana" + ventana.contadorVentanas+ "_" + id ;
+                valor = "var "+idVentana+ "= crearventana(";
+                ventana.setVentanaActual(idVentana);
+                valor+= "\""+color+"\",";
                 /*Ancho y alto*/
-                if(!alto.equals("") && !ancho.equals(""))
-                {
-                    valor += ","+alto+","+ancho;
-                }
-                valor+= ");";                
+                valor+= alto + "," + ancho+");";     
+                ventana.addCuerpoInicio((String) valor);
             }
             else 
             if(tipo.equals("secundaria"))
             {
-                
+                String idVentana = "ventana" + ventana.contadorVentanas+ "_" + id ;
+                valor = "var "+idVentana+ "= crearventana(";
+                ventana.setVentanaActual(idVentana);
+                valor+= "\""+color+"\",";
+                /*Ancho y alto*/
+                valor+= alto + "," + ancho+");";    
+                ventana.addCuerpoInicio((String) valor);
             }
             else
             {
-                ventana.todosErrores.add(new error("Semantico",columna,linea,tipo, "Tipo de ventana no válido."));
+                String idVentana = "ventana" + ventana.contadorVentanas+ "_" + id ;
+                valor = "var "+idVentana+ "= crearventana(";
+                ventana.setVentanaActual(idVentana);
+                if(color.equals(""))
+                {
+                    color= "\"#ffffff\"";
+                }                
+                valor+= "\""+color+"\",";
+                        
+                /*Ancho y alto*/
+                valor+= alto + "," + ancho+");";   
+                ventana.addCuerpoInicio((String) valor);                                
+                singlenton.addErrores(new error("Semantico",columna,linea,tipo, "Tipo de ventana no válido"));
+            }
+            
+            ventana.setColorActual(color);
+            
+            for(NodoXML elem : elementos)
+            {
+                elem.ejecutar(ventana);
             }
         }
     }
@@ -169,8 +194,7 @@ public class Ventana extends NodoXML
     @Override
     public NodoXML ejecutar(Interfaz ventana) 
     {
-        generar(ventana);
-        ventana.addCuerpo((String) valor);
+        generarCodigo(ventana);              
         return this;
     }              
 }

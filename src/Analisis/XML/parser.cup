@@ -100,7 +100,7 @@ parser code
         a.setDescripcion("Se esperaba: " +esperados); 
         a.setTipo("Sintactico");
         Imprimir("Linea: "+linea + "\tColumna: " + columna);
-        listaErrores.add(a);    
+        erroresSinglenton.add(a);    
 
     }
     
@@ -128,17 +128,24 @@ terminal String menorque, mayorque, slash, igual, llaved, llavei,tid, ttipo,
 timportar,  tcolor, tinicial, tventana, tx, ty, tancho, tborde, falso, verdadero,
 contenedor, tnombre, tfuente, ttamanio, tnegrita, trecursiva, ttexto, tcontrol, tmaximo, 
 tminimo, tmultimedia, tenviar, tboton, taccion, treferencia, defecto, dato, listadatos,talto,tcursiva , tfinal,
-path, autoreproduccion, cadena, id, numero;
+path, autoreproduccion, cadena, id, numero, control;
 
 /*
 * Aquí están los no terminales
 */
 non terminal INICIO;
 non terminal LEXP, EXP;
-non terminal Contenedor CONTENEDOR;
-non terminal ArrayList<NodoXML> CONTENIDO, LIMPORTAR;
+non terminal String BOOL,ACCION;
+non terminal Contenedor CONTENEDOR, ECONTENEDOR;
+non terminal ArrayList<NodoXML> LCONTENEDOR, LIMPORTAR , LVENTANA;
 non terminal Importar IMPORTAR;
 non terminal Ventana VENTANA, EVENTANA;
+non terminal ArrayList<NodoXML> LCOMPONENTES;
+non terminal Texto TEXTO, ETEXTO;
+non terminal NodoXML COMPONENTE, CONTCONTROL, DEFECTO, LDATOS;
+non terminal Controlador CONTROL, ECONTROL;
+non terminal Dato DATO;
+non terminal ArrayList<Dato> DATOS;
 
 /* Precedencia 
 precedence left suma, resta;
@@ -148,9 +155,9 @@ precedence left potencia;
 /* ­­­­­­­­­­­­­­ Definición de la gramatica  ­­­­­­­­­­­ */
 start with INICIO; // indicamos con qué producción debe empezar la gramatica.    
 
-INICIO::= VENTANA:vent {:lista.add(vent);:} 
-        | LIMPORTAR:l VENTANA:vent {: lista = l; lista.add(vent); :}
-        | error VENTANA:vent {: ArrayList<NodoXML> lista = new ArrayList<NodoXML>();  lista.add(vent); :}
+INICIO::= LVENTANA:lv {:lista = lv;:} 
+        | LIMPORTAR:l LVENTANA:lv {: lista = l; for(NodoXML v: lv){lista.add(v);} RESULT = lista;:}
+        | error LVENTANA:l {: RESULT = l; :}
         | LIMPORTAR:l error {: lista = l; :};
 
 
@@ -163,41 +170,169 @@ IMPORTAR::= menorque timportar mayorque cadena:cad
             {:RESULT = new Importar(cad, cadleft, cadright);:}
 ;
 
-VENTANA::= menorque:i tventana EVENTANA:vent mayorque  CONTENIDO
-           menorque slash tventana mayorque
-           {: vent.setLinea(ileft); vent.setColumna(iright); RESULT= vent;:}  
-          |menorque:i tventana /*EVENTANA:vent*/ mayorque  CONTENIDO
-           menorque slash tventana mayorque
-           {: RESULT= new Ventana(ileft, iright);:}                 
+LVENTANA::= LVENTANA:l VENTANA:v {: l.add(v); RESULT = l;:}
+            |VENTANA:vent {:ArrayList<NodoXML> l = new ArrayList<NodoXML>(); l.add(vent); RESULT = l;:}
 ;
 
-EVENTANA::= EVENTANA:v tid igual cadena:valor {:v.setId(valor); RESULT= v;:}
-                   |EVENTANA:v ttipo igual cadena:valor {:v.setTipo(valor); RESULT= v;:}
-                   |EVENTANA:v tcolor igual cadena:valor {:v.setColor(valor); RESULT= v;:}
-                   |EVENTANA:v tinicial igual cadena:valor {:v.setAccioninicial(valor); RESULT= v;:}
-                   |EVENTANA:v tfinal igual cadena:valor {:v.setAccionfinal(valor); RESULT= v;:}
-                   |EVENTANA:v talto igual numero:valor {:v.setAlto(valor); RESULT= v;:}
-                   |EVENTANA:v tancho igual numero:valor {:v.setAncho(valor); RESULT= v;:}                   
-                   |tid igual cadena :valor {:Ventana v = new Ventana(); v.setId(valor); RESULT= v;:}
-                   |ttipo igual cadena:valor {:Ventana v = new Ventana(); v.setTipo(valor); RESULT= v;:}
-                   |tcolor igual cadena:valor {:Ventana v = new Ventana(); v.setColor(valor); RESULT= v;:}
-                   |tinicial igual cadena:valor {:Ventana v = new Ventana(); v.setAccioninicial(valor); RESULT= v;:}
-                   |tfinal igual cadena:valor {:Ventana v = new Ventana(); v.setAccionfinal(valor); RESULT= v;:}
-                   |talto igual numero:valor {:Ventana v = new Ventana(); v.setAlto(valor); RESULT= v;:}
-                   |tancho igual numero:valor {:Ventana v = new Ventana(); v.setAncho(valor); RESULT= v;:}
+VENTANA::= menorque tventana:i EVENTANA:vent mayorque  LCONTENEDOR:l
+           menorque slash tventana mayorque
+           {: vent.setLinea(ileft); vent.setColumna(iright); vent.setElementos(l); RESULT= vent;:}  
+          |menorque tventana:i /*EVENTANA:vent*/ mayorque  LCONTENEDOR:l
+           menorque slash tventana mayorque
+           {: Ventana v =  new Ventana(ileft, iright); v.setElementos(l); RESULT  = v;:}                 
 ;
 
-CONTENIDO::= CONTENIDO:l CONTENEDOR {:RESULT = l;:}
+EVENTANA::=  EVENTANA:v tid igual cadena:valor {:v.setId(valor); RESULT= v;:}
+            |EVENTANA:v ttipo igual cadena:valor {:v.setTipo(valor); RESULT= v;:}
+            |EVENTANA:v tcolor igual cadena:valor {:v.setColor(valor); RESULT= v;:}
+            |EVENTANA:v talto igual numero:valor {:v.setAlto(valor); RESULT= v;:}
+            |EVENTANA:v tancho igual numero:valor {:v.setAncho(valor); RESULT= v;:}                   
+            |EVENTANA:v tinicial igual ACCION:valor {:v.setAccioninicial(valor); RESULT= v;:}
+            |EVENTANA:v tfinal igual ACCION:valor{:v.setAccionfinal(valor); RESULT= v;:}                   
+            |tid igual cadena :valor {:Ventana v = new Ventana(); v.setId(valor); RESULT= v;:}
+            |ttipo igual cadena:valor {:Ventana v = new Ventana(); v.setTipo(valor); RESULT= v;:}
+            |tcolor igual cadena:valor {:Ventana v = new Ventana(); v.setColor(valor); RESULT= v;:}
+            |talto igual numero:valor {:Ventana v = new Ventana(); v.setAlto(valor); RESULT= v;:}
+            |tancho igual numero:valor {:Ventana v = new Ventana(); v.setAncho(valor); RESULT= v;:}
+            |tinicial igual ACCION:valor {:Ventana v = new Ventana(); v.setAccioninicial(valor); RESULT= v;:}
+            |tfinal igual ACCION:valor {:Ventana v = new Ventana(); v.setAccionfinal(valor); RESULT= v;:}                   
+;
+
+
+
+
+
+LCONTENEDOR::= LCONTENEDOR:l CONTENEDOR:v {:l.add(v);RESULT = l;:}
             | CONTENEDOR:c {: ArrayList<NodoXML> l = new ArrayList<NodoXML>(); l.add(c); RESULT = l;:}
             | error
 ;
 
-CONTENEDOR::= menorque:i contenedor mayorque 
+/**Contenedor perros.*/
+CONTENEDOR::= menorque contenedor:i ECONTENEDOR:cont mayorque LCOMPONENTES:lista
             menorque slash contenedor mayorque 
-            {: RESULT = new Contenedor(ileft,iright);:}            
+            {: cont.setLinea(ileft); cont.setColumna(iright); cont.setListaComponentes(lista); RESULT =cont;:}            
+        |menorque contenedor:i ECONTENEDOR:cont mayorque 
+            menorque slash contenedor mayorque 
+            {: cont.setLinea(ileft); cont.setColumna(iright); RESULT =cont;:}                    
 ;
 
+ECONTENEDOR::= ECONTENEDOR:v tid igual cadena:valor {:v.setId(valor); RESULT= v;:}
+            |ECONTENEDOR:v tx igual numero:valor {:v.setX(valor); RESULT= v;:}
+            |ECONTENEDOR:v ty igual numero:valor {:v.setY(valor); RESULT= v;:}
+            |ECONTENEDOR:v talto igual numero:valor {:v.setAlto(valor); RESULT= v;:}
+            |ECONTENEDOR:v tancho igual numero:valor {:v.setAncho(valor); RESULT= v;:}                   
+            |ECONTENEDOR:v tcolor igual cadena:valor {:v.setColor(valor); RESULT= v;:}
+            |ECONTENEDOR:v tborde igual BOOL:valor {:v.setBorde(valor); RESULT= v;:}
+            |tid igual cadena :valor {:Contenedor v = new Contenedor(); v.setId(valor); RESULT= v;:}                   
+            |tx igual numero:valor {:Contenedor v = new Contenedor(); v.setX(valor); RESULT= v;:}
+            |ty igual numero:valor {:Contenedor v = new Contenedor(); v.setY(valor); RESULT= v;:}
+            |talto igual numero:valor {:Contenedor v = new Contenedor(); v.setAlto(valor); RESULT= v;:}
+            |tancho igual numero:valor {:Contenedor v = new Contenedor(); v.setAncho(valor); RESULT= v;:} 
+            |tcolor igual cadena:valor {:Contenedor v = new Contenedor(); v.setColor(valor); RESULT= v;:}
+            |tborde igual BOOL:valor {:Contenedor v = new Contenedor(); v.setBorde(valor); RESULT= v;:}
+;
+
+BOOL::= verdadero:valor {:RESULT = valor;:}
+        |falso:valor{:RESULT = valor;:}
+;
+
+LCOMPONENTES::= LCOMPONENTES:l COMPONENTE:c {: l.add(c); RESULT = l;:}
+            | COMPONENTE:c {:ArrayList<NodoXML> l = new ArrayList<NodoXML>(); l.add(c); RESULT = l;:}            
+;
+
+COMPONENTE::= TEXTO:valor {:RESULT = valor;:}
+            |CONTROL:valor {:RESULT = valor;:}
+            |error
+;
+
+TEXTO::= menorque ttexto:i ETEXTO:nodo mayorque cadena:cad 
+         menorque slash ttexto mayorque {: nodo.setTexto(cad); nodo.setLinea(ileft); nodo.setColumna(iright); RESULT = nodo;:}
+; 
+
+ETEXTO::=    ETEXTO:v tnombre igual cadena:valor {:v.setNombre(valor); RESULT= v;:}
+            |ETEXTO:v tx igual numero:valor {:v.setX(valor); RESULT= v;:}
+            |ETEXTO:v ty igual numero:valor {:v.setY(valor); RESULT= v;:}
+            |ETEXTO:v tcolor igual cadena:valor {:v.setColor(valor); RESULT= v;:}
+            |ETEXTO:v tfuente igual cadena:valor {:v.setFuente(valor); RESULT= v;:}
+            |ETEXTO:v ttamanio igual numero:valor {:v.setTam(valor); RESULT= v;:}                   
+            |ETEXTO:v tnegrita igual BOOL:valor {:v.setNegrita(valor); RESULT= v;:}
+            |ETEXTO:v tcursiva igual BOOL:valor {:v.setCursiva(valor); RESULT= v;:}
+            |tnombre igual cadena :valor {:Texto v = new Texto(); v.setNombre(valor); RESULT= v;:}
+            |tx igual numero:valor {:Texto v = new Texto(); v.setX(valor); RESULT= v;:}
+            |ty igual numero:valor {:Texto v = new Texto(); v.setY(valor); RESULT= v;:}
+            |tcolor igual cadena:valor {:Texto v = new Texto(); v.setColor(valor); RESULT= v;:}
+            |tfuente igual cadena:valor {:Texto v = new Texto(); v.setFuente(valor); RESULT= v;:}
+            |ttamanio igual numero:valor {:Texto v = new Texto(); v.setTam(valor); RESULT= v;:} 
+            |tnegrita igual BOOL:valor {:Texto v = new Texto(); v.setNegrita(valor); RESULT= v;:}
+            |tcursiva igual BOOL:valor {:Texto v = new Texto(); v.setCursiva(valor); RESULT= v;:}            
+;
+
+/*
+		<Control tipo = "texto" Nombre = "CTNombre" X = 40 Y = 20 Alto = 10 Ancho = 100>
+			<Defecto>Ingrese aqui su nombre</Defecto>
+		</Control>
+*/        
+
+CONTROL::= menorque tcontrol:i ECONTROL:cont mayorque CONTCONTROL:tag
+            menorque slash tcontrol mayorque {:cont.setLinea(ileft); cont.setColumna(iright); cont.setTag(tag); RESULT = cont;:}
+;
+
+ECONTROL::= 
+        ECONTROL:control ttipo igual cadena:valor{: control.setTipo(valor); RESULT = control;:} 
+        |ECONTROL:control tnombre igual cadena:valor{: control.setNombre(valor); RESULT = control;:}
+        |ECONTROL:control tx igual numero:valor{: control.setX(valor); RESULT = control;:}
+        |ECONTROL:control ty igual numero:valor{: control.setY(valor); RESULT = control;:} 
+        |ECONTROL:control talto igual numero:valor{: control.setAlto(valor); RESULT = control;:} 
+        |ECONTROL:control tancho igual numero:valor{: control.setAncho(valor); RESULT = control;:}
+        |ECONTROL:control tfuente igual cadena:valor{: control.setFuente(valor); RESULT = control;:}
+        |ECONTROL:control ttamanio igual numero:valor{: control.setTamanio(valor); RESULT = control;:} 
+        |ECONTROL:control tcolor igual cadena:valor{: control.setColor(valor); RESULT = control;:} 
+        |ECONTROL:control tnegrita igual BOOL:valor{: control.setNegrita(valor); RESULT = control;:}
+        |ECONTROL:control tcursiva igual BOOL:valor{: control.setCursiva(valor); RESULT = control;:}
+        |ECONTROL:control tmaximo igual numero:valor{: control.setMaximo(valor); RESULT = control;:}
+        |ECONTROL:control tminimo igual numero:valor{: control.setMinimo(valor); RESULT = control;:} 
+        |ECONTROL:control taccion igual ACCION:valor{: control.setAccion(valor); RESULT = control;:}
+        |ttipo igual cadena:valor{: Controlador control = new Controlador(); control.setTipo(valor); RESULT = control;:} 
+        |tnombre igual cadena:valor{: Controlador control = new Controlador(); control.setNombre(valor); RESULT = control;:}
+        |tx igual numero:valor{: Controlador control = new Controlador(); control.setX(valor); RESULT = control;:}
+        |ty igual numero:valor{: Controlador control = new Controlador(); control.setY(valor); RESULT = control;:} 
+        |talto igual numero:valor{: Controlador control = new Controlador(); control.setAlto(valor); RESULT = control;:} 
+        |tancho igual numero:valor{: Controlador control = new Controlador(); control.setAncho(valor); RESULT = control;:}
+        |tfuente igual cadena:valor{: Controlador control = new Controlador(); control.setFuente(valor); RESULT = control;:}
+        |ttamanio igual numero:valor{: Controlador control = new Controlador(); control.setTamanio(valor); RESULT = control;:} 
+        |tcolor igual cadena:valor{: Controlador control = new Controlador(); control.setColor(valor); RESULT = control;:} 
+        |tnegrita igual BOOL:valor{: Controlador control = new Controlador(); control.setNegrita(valor); RESULT = control;:}
+        |tcursiva igual BOOL:valor{: Controlador control = new Controlador(); control.setCursiva(valor); RESULT = control;:}
+        |tmaximo igual numero:valor{: Controlador control = new Controlador(); control.setMaximo(valor); RESULT = control;:}
+        |tminimo igual numero:valor{: Controlador control = new Controlador(); control.setMinimo(valor); RESULT = control;:} 
+        |taccion igual ACCION:valor{: Controlador control = new Controlador(); control.setAccion(valor); RESULT = control;:}
+        ;
 
 
+ACCION::= llavei cadena:valor llaved {: RESULT = valor;:}
+;
 
+CONTCONTROL::= DEFECTO:valor{:RESULT = valor;:}
+            | LDATOS:valor {:RESULT = valor;:}
+            | error
+;
 
+DEFECTO::= 
+            menorque defecto:i  mayorque cadena:valor
+            menorque slash defecto mayorque {:RESULT = new Defecto(valor, ileft, iright);:}
+            ;
+
+LDATOS::= 
+            menorque listadatos:i  mayorque  DATOS:valor
+            menorque slash listadatos mayorque {:RESULT = new LDato(valor, ileft, iright);:}
+            | menorque listadatos:i  ACCION:accion mayorque  DATOS:valor
+            menorque slash listadatos mayorque {:RESULT = new LDato(valor,accion, ileft, iright);:}                
+            ;
+DATOS::= DATOS:l DATO:dato {: l.add(dato); RESULT = l;:}
+        | DATO:dato {:ArrayList<Dato> l = new ArrayList<Dato>(); l.add(dato); RESULT = l;:}
+;
+
+DATO::= 
+            menorque dato:i  mayorque cadena:valor 
+            menorque slash dato mayorque {:RESULT = new Dato(valor, ileft, iright);:}
+            ;
