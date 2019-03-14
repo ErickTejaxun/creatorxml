@@ -100,7 +100,7 @@ parser code
         a.setDescripcion("Se esperaba: " +esperados); 
         a.setTipo("Sintactico");
         Imprimir("Linea: "+linea + "\tColumna: " + columna);
-        erroresSinglenton.add(a);    
+        singlenton.addErrores(a);    
 
     }
     
@@ -128,13 +128,15 @@ terminal String menorque, mayorque, slash, igual, llaved, llavei,tid, ttipo,
 timportar,  tcolor, tinicial, tventana, tx, ty, tancho, tborde, falso, verdadero,
 contenedor, tnombre, tfuente, ttamanio, tnegrita, trecursiva, ttexto, tcontrol, tmaximo, 
 tminimo, tmultimedia, tenviar, tboton, taccion, treferencia, defecto, dato, listadatos,talto,tcursiva , tfinal,
-path, autoreproduccion, cadena, id, numero, control;
+tpath, tautoreproduccion, cadena, id, numero, control, coma , mas, menos, multi, potencia, or, and,
+mayorigual, menorigual, diferente,igualigual, pari, pard
+
+;
 
 /*
 * Aquí están los no terminales
 */
 non terminal INICIO;
-non terminal LEXP, EXP;
 non terminal String BOOL,ACCION;
 non terminal Contenedor CONTENEDOR, ECONTENEDOR;
 non terminal ArrayList<NodoXML> LCONTENEDOR, LIMPORTAR , LVENTANA;
@@ -146,12 +148,21 @@ non terminal NodoXML COMPONENTE, CONTCONTROL, DEFECTO, LDATOS;
 non terminal Controlador CONTROL, ECONTROL;
 non terminal Dato DATO;
 non terminal ArrayList<Dato> DATOS;
-
+non terminal Multimedia EMULTI, MULTIMEDIA;
+non terminal Boton BOTON, EBOTON;
+non terminal Enviar ENVIAR, EENVIAR;
+non terminal String LPARAMETROS, EXPL,  EXPR , OPR,  EXP,  LLAMADA ;
 /* Precedencia 
 precedence left suma, resta;
-precedence left multi, div;
+precedence left multi, slash;
 precedence left potencia;
 */
+/* Precedencia */
+precedence left mas, menos;
+precedence left multi, slash, potencia;
+precedence left and;
+precedence left or;
+
 /* ­­­­­­­­­­­­­­ Definición de la gramatica  ­­­­­­­­­­­ */
 start with INICIO; // indicamos con qué producción debe empezar la gramatica.    
 
@@ -242,6 +253,9 @@ LCOMPONENTES::= LCOMPONENTES:l COMPONENTE:c {: l.add(c); RESULT = l;:}
 
 COMPONENTE::= TEXTO:valor {:RESULT = valor;:}
             |CONTROL:valor {:RESULT = valor;:}
+            |MULTIMEDIA:valor {:RESULT = valor;:}
+            |BOTON:valor {:RESULT = valor;:}
+            |ENVIAR:valor {:RESULT = valor;:}
             |error
 ;
 
@@ -273,8 +287,52 @@ ETEXTO::=    ETEXTO:v tnombre igual cadena:valor {:v.setNombre(valor); RESULT= v
 		</Control>
 */        
 
-CONTROL::= menorque tcontrol:i ECONTROL:cont mayorque CONTCONTROL:tag
-            menorque slash tcontrol mayorque {:cont.setLinea(ileft); cont.setColumna(iright); cont.setTag(tag); RESULT = cont;:}
+CONTROL::=
+            menorque tcontrol:i ECONTROL:cont mayorque 
+            menorque slash tcontrol mayorque 
+                {:               
+                    cont.setLinea(ileft); 
+                    cont.setColumna(iright);  
+                    RESULT = cont;
+                :}
+        | menorque tcontrol:i ECONTROL:cont mayorque CONTCONTROL:tag
+            menorque slash tcontrol mayorque 
+                {:
+                    if(tag instanceof Defecto)
+                    {
+                        cont.setDefecto_((Defecto)tag);
+                    }
+                    if(tag instanceof LDato)
+                    {
+                        cont.setLdatos_((LDato)tag);
+                    }                    
+                    cont.setLinea(ileft); 
+                    cont.setColumna(iright);  
+                    RESULT = cont;
+                :}
+        | menorque tcontrol:i ECONTROL:cont mayorque CONTCONTROL:tag1 CONTCONTROL:tag2
+            menorque slash tcontrol mayorque 
+                {:
+                    if(tag1 instanceof Defecto)
+                    {
+                        cont.setDefecto_((Defecto)tag1);
+                    }
+                    if(tag1 instanceof LDato)
+                    {
+                        cont.setLdatos_((LDato)tag1);
+                    }
+                    if(tag2 instanceof Defecto)
+                    {
+                        cont.setDefecto_((Defecto)tag2);
+                    }
+                    if(tag2 instanceof LDato)
+                    {
+                        cont.setLdatos_((LDato)tag2);
+                    }                                         
+                    cont.setLinea(ileft); 
+                    cont.setColumna(iright);  
+                    RESULT = cont;
+                :}                
 ;
 
 ECONTROL::= 
@@ -309,7 +367,42 @@ ECONTROL::=
         ;
 
 
-ACCION::= llavei cadena:valor llaved {: RESULT = valor;:}
+ACCION::= llavei LPARAMETROS:valor llaved {: RESULT = valor;:}
+;
+
+LPARAMETROS::= LPARAMETROS:l coma EXPL:valor {:RESULT = l+valor;:}
+            | EXPL:valor{:RESULT = valor;:}
+;
+
+EXPL::=  EXPL:valor1 or EXPL:valor2 {:RESULT = valor1 + "||" + valor2;:}
+        |EXPL:valor1 and EXPL:valor2 {:RESULT = valor1 + "&&" + valor2;:}
+        |EXPR:valor {:RESULT =valor;:}
+;
+
+EXPR::= EXP:valor1 OPR:op EXP:valor2 {:RESULT = valor1 + op + valor2;:}
+        |EXP:valor {:RESULT = valor;:}
+;
+OPR::= menorque:v {:RESULT = v;:}
+    | mayorque:v {:RESULT = v;:}
+    | mayorigual:v {:RESULT = v;:}
+    | menorigual:v {:RESULT = v;:}
+    | igualigual:v {:RESULT = v;:}
+    | diferente:v {:RESULT = v;:}
+;
+
+EXP ::=  EXP:valor1 mas EXP:valor2 {:RESULT =valor1 +"+" + valor2;:}
+        |EXP:valor1 menos EXP:valor2 {:RESULT =valor1 +"-" + valor2;:}
+        |EXP:valor1 multi EXP:valor2 {:RESULT =valor1 +"*" + valor2;:}
+        |EXP:valor1 slash EXP:valor2 {:RESULT =valor1 +"/" + valor2;:}
+        |EXP:valor1 potencia EXP:valor2 {:RESULT =valor1 +"^" + valor2;:}
+        |numero:valor {:RESULT = valor;:}
+        |id:valor {:RESULT = valor;:}
+        |LLAMADA:valor {:RESULT = valor;:} 
+        |BOOL:valor {:RESULT = valor;:}
+;
+
+LLAMADA::= id:nombre pari LPARAMETROS:parametros pard {: RESULT = nombre +"(" + parametros +")";:}
+    |id:nombre pari pard {: RESULT = nombre +"("  +")";:}
 ;
 
 CONTCONTROL::= DEFECTO:valor{:RESULT = valor;:}
@@ -336,3 +429,87 @@ DATO::=
             menorque dato:i  mayorque cadena:valor 
             menorque slash dato mayorque {:RESULT = new Dato(valor, ileft, iright);:}
             ;
+
+/*Multimedia*/
+MULTIMEDIA::= 
+            menorque tmultimedia:i  EMULTI:multi mayorque 
+            menorque slash tmultimedia mayorque {:multi.setLinea(ileft); multi.setColumna(iright); RESULT = multi;:}
+;
+
+EMULTI::= 
+         EMULTI:control ttipo igual cadena:valor{: control.setTipo(valor); RESULT = control;:} 
+        |EMULTI:control tpath igual cadena:valor{: control.setPath(valor); RESULT = control;:} 
+        |EMULTI:control tnombre igual cadena:valor{: control.setNombre(valor); RESULT = control;:}
+        |EMULTI:control tx igual numero:valor{: control.setX(valor); RESULT = control;:}
+        |EMULTI:control ty igual numero:valor{: control.setY(valor); RESULT = control;:} 
+        |EMULTI:control talto igual numero:valor{: control.setAlto(valor); RESULT = control;:} 
+        |EMULTI:control tancho igual numero:valor{: control.setAncho(valor); RESULT = control;:}
+        |EMULTI:control tautoreproduccion igual BOOL:valor{: control.setAutoreproduccion(valor); RESULT = control;:}
+        |ttipo igual cadena:valor{: Multimedia control = new Multimedia(); control.setTipo(valor); RESULT = control;:} 
+        |tpath igual cadena:valor{: Multimedia control = new Multimedia(); control.setPath(valor); RESULT = control;:} 
+        |tnombre igual cadena:valor{: Multimedia control = new Multimedia(); control.setNombre(valor); RESULT = control;:}
+        |tx igual numero:valor{: Multimedia control = new Multimedia(); control.setX(valor); RESULT = control;:}
+        |ty igual numero:valor{: Multimedia control = new Multimedia(); control.setY(valor); RESULT = control;:} 
+        |talto igual numero:valor{: Multimedia control = new Multimedia(); control.setAlto(valor); RESULT = control;:} 
+        |tancho igual numero:valor{: Multimedia control = new Multimedia(); control.setAncho(valor); RESULT = control;:}
+        |tautoreproduccion igual BOOL:valor{: Multimedia control = new Multimedia(); control.setAutoreproduccion(valor); RESULT = control;:}
+        |error
+        ;
+
+
+/*Boton*/
+BOTON::= 
+            menorque tboton:i  EBOTON:boton mayorque cadena:cad
+            menorque slash tboton mayorque {:boton.setTexto(cad);boton.setLinea(ileft); boton.setColumna(iright); RESULT = boton;:}
+|               menorque tboton:i  EBOTON:boton mayorque TEXTO:cad
+            menorque slash tboton mayorque {:boton.setTxt(cad);boton.setLinea(ileft); boton.setColumna(iright); RESULT = boton;:}            
+;
+
+EBOTON::=                 
+         EBOTON:boton tnombre igual cadena:valor{: boton.setNombre(valor); RESULT = boton;:}
+        |EBOTON:boton tx igual numero:valor{: boton.setX(valor); RESULT = boton;:}
+        |EBOTON:boton ty igual numero:valor{: boton.setY(valor); RESULT = boton;:} 
+        |EBOTON:boton talto igual numero:valor{: boton.setAlto(valor); RESULT = boton;:} 
+        |EBOTON:boton tancho igual numero:valor{: boton.setAncho(valor); RESULT = boton;:}        
+        |EBOTON:boton treferencia igual cadena:valor{: boton.setReferencia(valor); RESULT = boton;:}
+        |EBOTON:boton taccion igual ACCION:valor{:boton.setAccion(valor); RESULT = boton;:}
+        |EBOTON:boton tfuente igual cadena:valor{:boton.setFuente(valor); RESULT = boton;:}           
+        |tnombre igual cadena:valor{: Boton boton = new Boton(); boton.setNombre(valor); RESULT = boton;:}
+        |tx igual numero:valor{: Boton boton = new Boton(); boton.setX(valor); RESULT = boton;:}
+        |ty igual numero:valor{: Boton boton = new Boton(); boton.setY(valor); RESULT = boton;:} 
+        |talto igual numero:valor{: Boton boton = new Boton(); boton.setAlto(valor); RESULT = boton;:} 
+        |tancho igual numero:valor{: Boton boton = new Boton(); boton.setAncho(valor); RESULT = boton;:}
+        |treferencia igual cadena:valor{: Boton boton = new Boton(); boton.setReferencia(valor); RESULT = boton;:}
+        |taccion igual ACCION:valor{: Boton boton = new Boton(); boton.setAccion(valor); RESULT = boton;:}
+        |tfuente igual cadena:valor{: Boton boton = new Boton(); boton.setFuente(valor); RESULT = boton;:}
+        |error
+        ;
+
+
+
+ENVIAR::=       /*Enviar, papus*/
+        menorque tenviar:i  EENVIAR:boton mayorque cadena:cad
+        menorque slash tenviar mayorque {:boton.setTexto(cad);boton.setLinea(ileft); boton.setColumna(iright); RESULT = boton;:}
+        |menorque tenviar:i  EENVIAR:boton mayorque TEXTO:txt
+        menorque slash tenviar mayorque {:boton.setTxt(txt);boton.setLinea(ileft); boton.setColumna(iright); RESULT = boton;:}
+;
+
+EENVIAR::=                 
+         EENVIAR:enviar tnombre igual cadena:valor{: enviar.setNombre(valor); RESULT = enviar;:}
+        |EENVIAR:enviar tx igual numero:valor{: enviar.setX(valor); RESULT = enviar;:}
+        |EENVIAR:enviar ty igual numero:valor{: enviar.setY(valor); RESULT = enviar;:} 
+        |EENVIAR:enviar talto igual numero:valor{: enviar.setAlto(valor); RESULT = enviar;:} 
+        |EENVIAR:enviar tancho igual numero:valor{: enviar.setAncho(valor); RESULT = enviar;:}        
+        |EENVIAR:enviar treferencia igual cadena:valor{: enviar.setReferencia(valor); RESULT = enviar;:}
+        |EENVIAR:enviar taccion igual ACCION:valor{:enviar.setAccion(valor); RESULT = enviar;:}
+        |EENVIAR:enviar tfuente igual cadena:valor{:enviar.setFuente(valor); RESULT = enviar;:}           
+        |tnombre igual cadena:valor{: Enviar enviar = new Enviar(); enviar.setNombre(valor); RESULT = enviar;:}
+        |tx igual numero:valor{: Enviar enviar = new Enviar(); enviar.setX(valor); RESULT = enviar;:}
+        |ty igual numero:valor{: Enviar enviar = new Enviar(); enviar.setY(valor); RESULT = enviar;:} 
+        |talto igual numero:valor{: Enviar enviar = new Enviar(); enviar.setAlto(valor); RESULT = enviar;:} 
+        |tancho igual numero:valor{: Enviar enviar = new Enviar(); enviar.setAncho(valor); RESULT = enviar;:}
+        |treferencia igual cadena:valor{: Enviar enviar = new Enviar(); enviar.setReferencia(valor); RESULT = enviar;:}
+        |taccion igual ACCION:valor{: Enviar enviar = new Enviar(); enviar.setAccion(valor); RESULT = enviar;:}
+        |tfuente igual cadena:valor{: Enviar enviar = new Enviar(); enviar.setFuente(valor); RESULT = enviar;:}
+        |error
+        ;

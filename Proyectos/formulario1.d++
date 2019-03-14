@@ -7,7 +7,7 @@
 <importar>\formulas.fs</importar>
 <importar>\ventas.fs</importar>
 
-<ventana  id = "index" tipo="principal" alto = 500 ancho = 300 accioninicial = { "funcion()"} color = "#004fff" >
+<ventana  id = "index" tipo="principal" alto = 500 ancho = 300 accioninicial = { funcion(5,2)} color = "#004fff" >
 	<contenedor id = "cont1" x = 0  y = 0>
 	## Inicio de contenenedor
 	## Erick Tejaxun 
@@ -35,6 +35,14 @@
 		</Texto>
 		<Control tipo = "texto" Nombre = "CTNombre" X = 100 Y = 20 Alto = 10 Ancho = 100>
 			<Defecto>Ingrese aqui su nombre</Defecto>
+			<ListaDatos>
+				<Dato>Fiat</Dato>
+				<Dato>Mitsubishi</Dato>
+				<Dato>Toyota</Dato>
+				<Dato>Jeep</Dato>
+				<Dato>Roll Roys</Dato>
+				<Dato>Ford</Dato>
+			</ListaDatos>				
 		</Control>
 		###################### Playa
 		<Texto Nombre = "lblPaisaje1" X = 10 Y = 250>
@@ -49,6 +57,46 @@
 				<Dato>Desierto</Dato>
 				<Dato>Oceano</Dato>
 			</ListaDatos>	
-			</Control>	
+			<defecto>Selva</defecto>
+			</Control>
+		<Control tipo = "desplegable" Nombre = "CDAuto" X = 150 Y = 250 Alto = 50 Ancho = 100>
+			<ListaDatos>
+				<Dato>Fiat</Dato>
+				<Dato>Mitsubishi</Dato>
+				<Dato>Toyota</Dato>
+				<Dato>Jeep</Dato>
+				<Dato>Roll Roys</Dato>
+				<Dato>Ford</Dato>
+			</ListaDatos>	
+		</Control>				
+		<control tipo ="numerico" nombre ="cdedad"  x = 200 y = 250 alto = 50 ancho = 100>
+		</control>
+		<control tipo ="textoarea" nombre ="cded2ad"  x = 200 y = 250 alto = 50 ancho = 100>
+		</control>
+		<Multimedia Path = "Ackermann.mp3" tipo = "Musica" X = 450 Y = 50 Alto = 50 Ancho = 100 Nombre = "AudioIngles">
+		</Multimedia>
+		<multimedia tipo = "musica" path ="\tequieroputa.mp3" nombre = "rola1" x = 100 y = 200 >
+		</multimedia>
+		<multimedia tipo = "musica" path ="\tequieroputa.mp3" nombre = "rola1" x = 100 y = 200 >
+		</multimedia>
+		<multimedia tipo = "musica" path ="\tequieroputa.mp3" nombre = "rola1" x = 100 y = 200 >
+		</multimedia>
+		<Boton Nombre = "btnHM" X = 300 Y = 450 Alto = 50 Ancho = 100  accion = {VerMasculino()}>
+			Ver Respuesta
+		</Boton>
+		<Boton Nombre = "btnPar" X = 300 Y = 550 Alto = 50 Ancho = 100 Accion = {VerPar(26)}>
+			Ver Respuesta
+		</Boton>	
+					<Texto Nombre = "lblImpar" X = 10 Y = 650>
+			Ingrese si 27 es par o impar
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTImpar" X = 150 Y = 650 Alto = 50 Ancho = 100>
+		</Control>
+		<Boton Nombre = "btnImpar" X = 300 Y = 650 Alto = 50 Ancho = 100 Accion = {VerImpar(27)}>
+			Ver Respuesta
+		</Boton>
+		<Enviar Nombre = "btnEnviar" X = 75 Y = 30 Alto = 70 Ancho = 40 Referencia = "VentanaReportes">
+			Contestar
+		</Enviar>		
 	</contenedor>
 </ventana>

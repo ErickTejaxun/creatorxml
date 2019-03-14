@@ -18,12 +18,13 @@ public class Controlador extends NodoXML
     public String nombre = "", id = ""; //Obligatorio
     public String x = ""; // Obligatorio
     public String y = ""; // Obligatorio
-    public String defecto = "\"\"";
+    public String defecto = "";
     /*Opcionales*/
     public String alto, ancho, fuente ="\"Arial\"", tamanio="14", 
             color, negrita="falso", cursiva="falso",maximo, minimo, accion;
     
-    public NodoXML tag;
+    public Defecto defecto_;
+    public LDato ldatos_;
     
     public Controlador()
     {
@@ -47,14 +48,30 @@ public class Controlador extends NodoXML
         this.defecto = defecto;
     }
 
-    public void setTag(NodoXML t)
+    public void setTag(Defecto t)
     {
-        tag = t;
+        defecto_ = t;
+    }
+
+    public void setDefecto_(Defecto defecto_) {
+        this.defecto_ = defecto_;
+    }
+
+    public void setLdatos_(LDato ldatos_) {
+        this.ldatos_ = ldatos_;
+    }
+
+    public NodoXML getDefecto_() {
+        return defecto_;
+    }
+
+    public NodoXML getLdatos_() {
+        return ldatos_;
     }
     
     public NodoXML getTag()
     {
-        return tag;
+        return defecto_;
     }
     
     public String getTipo() {
@@ -208,38 +225,105 @@ public class Controlador extends NodoXML
         {
             case "texto":                
                 /*Vemos lo de defecto*/
-                if(tag instanceof Defecto)
+                if(defecto_ !=null)
                 {
-                    defecto = tag.ejecutar(ventana).valor.toString();
+                    defecto = defecto_.ejecutar(ventana).valor.toString();
                 }
+                if(ldatos_!=null)
+                {
+                    singlenton.addErrores(new error("Semantico", linea, columna, nombre,"El controlador texto no debe tener una lista de posibles valores. "));
+                }                
                 valor = ventana.contenedorActual +".CrearCajaTexto(" +alto +","+ ancho +","+ fuente +","+ tamanio +","+ color +","+ x+","+ y+","+ negrita +","+ cursiva+",\""+ defecto.trim() +"\",\""+ nombre+"\");";
+                break;
+            case "textoarea":
+                /*Vemos lo de defecto*/
+                if(defecto_ !=null)
+                {
+                    defecto = defecto_.ejecutar(ventana).valor.toString();
+                }
+                if(ldatos_!=null)
+                {
+                    singlenton.addErrores(new error("Semantico", linea, columna, nombre,"El controlador texto no debe tener una lista de posibles valores. "));
+                }                
+                valor = ventana.contenedorActual +".crearareaTexto(" +alto +","+ ancho +","+ fuente +","+ tamanio +",\""+ color +"\","+ x+","+ y+","+ negrita +","+ cursiva+",\""+ defecto.trim() +"\",\""+ nombre+"\");";                                
                 break;
             case "numerico":                
                 /*Vemos lo de defecto*/
-                if(tag instanceof Defecto)
+                if(defecto_ !=null)
                 {
-                    defecto = tag.ejecutar(ventana).valor.toString();
+                    defecto = defecto_.ejecutar(ventana).valor.toString();
                     if(isNumero(defecto))
                     {
                         valor = ventana.contenedorActual +".CrearControlNumerico(" +alto +","+ ancho +","+ maximo +","+ minimo +","+ x +","+ y+","+ defecto+",\""+ nombre+"\");";
+                        if(ldatos_!=null)
+                        {
+                            singlenton.addErrores(new error("Semantico", linea, columna, nombre,"El controlador texto no debe tener una lista de posibles valores. "));
+                        }                         
                     }
                     else
                     {
                         singlenton.addErrores(new error("Semantico",columna,linea,"Defecto, control numerico", "Se requiere un valor númerico."));            
                     }
                 }
+                else
+                {
+                    defecto="0";
+                    if(isNumero(defecto))
+                    {
+                        valor = ventana.contenedorActual +".CrearControlNumerico(" +alto +","+ ancho +","+ maximo +","+ minimo +","+ x +","+ y+","+ defecto+",\""+ nombre+"\");";
+                        if(ldatos_!=null)
+                        {
+                            singlenton.addErrores(new error("Semantico", linea, columna, nombre,"El controlador texto no debe tener una lista de posibles valores. "));
+                        }                         
+                    }
+                    else
+                    {
+                        singlenton.addErrores(new error("Semantico",columna,linea,"Defecto, control numerico", "Se requiere un valor númerico."));            
+                    }                    
+                }
                 //CrearControlNumerico(Alto, Ancho, Maximo, Minimo, X, Y, defecto, nombre)                
                 break; 
             case "desplegable":                
                 /*Vemos lo de defecto*/
-                if(tag instanceof LDato)
+                if(defecto_ != null)
                 {
-                   tag.ejecutar(ventana);
+                   defecto= defecto_.ejecutar(ventana).valor.toString();                   
+                }                
+                boolean flag = false;
+                int posicion = 0;
+                
+                for(Dato d : ldatos_.lista)
+                {                    
+                    if(d.defecto.equalsIgnoreCase(defecto))
+                    {
+                        flag = true;                        
+                        break;
+                    }
+                    posicion++;                    
                 }
-                //CrearDesplegable(Alto, Ancho, lista, X, Y, Defecto, nombre)
-                valor = ventana.contenedorActual +".CrearDesplegable(" +alto +","+ ancho +",lista"+ (singlenton.contadorListas-1)  +","+ x +","+ y +","+defecto+",\""+ nombre+"\");";
-                //CrearControlNumerico(Alto, Ancho, Maximo, Minimo, X, Y, defecto, nombre)                
-                break;                
+                /*Si el flag es false, se agrega el valor defecto a la lista, si no, lo agregamos*/                
+                if(!flag)
+                {
+                    if(!defecto.equals("\"\""))
+                    {
+                        ldatos_.lista.add(new Dato(defecto));
+                    }                    
+                    defecto = "lista"+singlenton.contadorListas +"["+(posicion-1) +"]";
+                }
+                else
+                {
+                    defecto = "lista"+singlenton.contadorListas +"["+posicion +"]";
+                }
+                
+                if(ldatos_ !=null)
+                {
+                    ldatos_.ejecutar(ventana);
+                }                                
+                valor = ventana.contenedorActual +".CrearDesplegable(" +alto +","+ ancho +",lista"+ (singlenton.contadorListas-1)  +","+ x +","+ y +","+defecto+",\""+ nombre+"\");";                
+                break;
+                default:
+                        singlenton.addErrores(new error("Semantico", linea, columna, tipo,"El tipo de controlador no es válido"));
+                    break;
         }
         ventana.addCuerpoFinal(valor.toString());
     }

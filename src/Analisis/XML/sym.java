@@ -10,16 +10,20 @@ public class sym {
   /* terminals */
   public static final int slash = 4;
   public static final int tcursiva = 39;
+  public static final int igualigual = 57;
   public static final int tnegrita = 24;
+  public static final int tpath = 41;
   public static final int tminimo = 29;
   public static final int tinicial = 12;
   public static final int listadatos = 37;
+  public static final int coma = 47;
   public static final int treferencia = 34;
   public static final int igual = 5;
   public static final int contenedor = 20;
   public static final int tid = 8;
   public static final int ttamanio = 23;
   public static final int llavei = 7;
+  public static final int tautoreproduccion = 42;
   public static final int llaved = 6;
   public static final int mayorque = 3;
   public static final int taccion = 33;
@@ -27,27 +31,36 @@ public class sym {
   public static final int tcolor = 11;
   public static final int numero = 45;
   public static final int defecto = 35;
+  public static final int pari = 58;
+  public static final int menos = 49;
+  public static final int pard = 59;
   public static final int control = 46;
   public static final int EOF = 0;
   public static final int trecursiva = 25;
+  public static final int mas = 48;
   public static final int tfinal = 40;
   public static final int verdadero = 19;
   public static final int error = 1;
   public static final int talto = 38;
   public static final int tcontrol = 27;
+  public static final int or = 52;
+  public static final int menorigual = 55;
   public static final int menorque = 2;
   public static final int ttexto = 26;
+  public static final int potencia = 51;
   public static final int id = 44;
   public static final int falso = 18;
   public static final int tborde = 17;
   public static final int tfuente = 22;
+  public static final int multi = 50;
   public static final int tenviar = 31;
-  public static final int path = 41;
+  public static final int mayorigual = 54;
   public static final int dato = 36;
   public static final int tboton = 32;
+  public static final int diferente = 56;
+  public static final int and = 53;
   public static final int tnombre = 21;
   public static final int tmultimedia = 30;
-  public static final int autoreproduccion = 42;
   public static final int timportar = 10;
   public static final int ty = 15;
   public static final int tventana = 13;
@@ -97,12 +110,25 @@ public class sym {
   "talto",
   "tcursiva",
   "tfinal",
-  "path",
-  "autoreproduccion",
+  "tpath",
+  "tautoreproduccion",
   "cadena",
   "id",
   "numero",
-  "control"
+  "control",
+  "coma",
+  "mas",
+  "menos",
+  "multi",
+  "potencia",
+  "or",
+  "and",
+  "mayorigual",
+  "menorigual",
+  "diferente",
+  "igualigual",
+  "pari",
+  "pard"
   };
 }
 

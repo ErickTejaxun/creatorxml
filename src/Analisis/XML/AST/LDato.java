@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author erick
  */
 public class LDato extends NodoXML
-{
+{    
     public String accion;
     public ArrayList<Dato> lista ;
     public LDato(ArrayList<Dato> l)
@@ -44,7 +44,7 @@ public class LDato extends NodoXML
         int contador = 0;
         for(Dato d: lista)
         {
-            valor += d.ejecutar(ventana).valor.toString();
+            valor += "\""+ d.ejecutar(ventana).valor.toString()+"\"";
             if(contador < lista.size()-1)
             {
                 valor+=",";
