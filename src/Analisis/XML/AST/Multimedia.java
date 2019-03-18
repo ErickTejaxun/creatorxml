@@ -5,7 +5,8 @@
  */
 package Analisis.XML.AST;
 
-import CreatorXml201213050.Interfaz;
+import Recursos.singlenton;
+import CreatorXml201213050.InterfazIDE;
 import Recursos.error;
 
 /**
@@ -39,7 +40,7 @@ public class Multimedia extends NodoXML
         tipo = "";
     }
     
-    public void generarCodigo(Interfaz ventana)
+    public void generarCodigo(InterfazIDE ventana)
     {
         boolean flag = true ; // Pasa saber si trae todos los obligatorios
         if(tipo.equals(""))
@@ -181,7 +182,7 @@ public class Multimedia extends NodoXML
     
                    
     @Override
-    public NodoXML ejecutar(Interfaz ventana) 
+    public NodoXML ejecutar(InterfazIDE ventana) 
     {
        generarCodigo(ventana);
        return this;

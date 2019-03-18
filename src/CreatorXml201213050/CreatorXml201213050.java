@@ -17,7 +17,7 @@ public class CreatorXml201213050
      */
     public static void main(String[] args) 
     {
-        Interfaz nueva = new Interfaz();
+        InterfazIDE nueva = new InterfazIDE();
         nueva.show();
     }
     

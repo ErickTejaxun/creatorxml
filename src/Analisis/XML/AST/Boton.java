@@ -5,7 +5,8 @@
  */
 package Analisis.XML.AST;
 
-import CreatorXml201213050.Interfaz;
+import Recursos.singlenton;
+import CreatorXml201213050.InterfazIDE;
 import Recursos.error;
 
 /**
@@ -29,7 +30,7 @@ public class Boton extends NodoXML
         columna = 0;
     }    
     
-    public void generarCodigo(Interfaz ventana)
+    public void generarCodigo(InterfazIDE ventana)
     {
         boolean flag = true;
         if(nombre.equals(""))
@@ -47,9 +48,13 @@ public class Boton extends NodoXML
             flag = false;
             singlenton.addErrores(new error("Semantico",linea,columna, "Y", "El botón debe tener un una posición en y."));                                   
         }  
+        if(this.txt!=null)
+        {
+            texto = txt.texto;
+        }
         if(flag)
         {
-            valor = "var bot"+nombre+"_"+ventana.contenedorActual+"="+ventana.contenedorActual+".crearBoton("
+            valor = "var boton_"+nombre+"_"+ventana.contenedorActual+"="+ventana.contenedorActual+".crearBoton("
                     +"\""+fuente+"\","+"14,"+"\"#000000\","+x+","+y+","+referencia+",\""+texto+"\","+alto+","+ancho+");";
             //Var btnIngresar_Inicio = ContBtn_Inicio.CrearBoton("Arial", 14, "#000000", 25, 30, nulo, "Ingresar", 70, 50);   
             //                             Contenedor.CrearBoton(Fuente, Tamaño, Color, X, Y,Referencia, valor, Alto, Ancho)
@@ -161,7 +166,7 @@ public class Boton extends NodoXML
     
     
     @Override
-    public NodoXML ejecutar(Interfaz ventana) 
+    public NodoXML ejecutar(InterfazIDE ventana) 
     {
         generarCodigo(ventana);
         return this;

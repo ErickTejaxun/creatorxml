@@ -5,7 +5,8 @@
  */
 package Analisis.XML.AST;
 
-import CreatorXml201213050.Interfaz;
+import Recursos.singlenton;
+import CreatorXml201213050.InterfazIDE;
 import Recursos.error;
 
 /**
@@ -218,7 +219,7 @@ public class Controlador extends NodoXML
         this.columna = columna;
     }
             
-    public void generarCodigo(Interfaz ventana)
+    public void generarCodigo(InterfazIDE ventana)
     {
 
         switch(tipo.toLowerCase())
@@ -344,7 +345,7 @@ public class Controlador extends NodoXML
     }
 
     @Override
-    public NodoXML ejecutar(Interfaz ventana) 
+    public NodoXML ejecutar(InterfazIDE ventana) 
     {
         generarCodigo(ventana);
         return this;

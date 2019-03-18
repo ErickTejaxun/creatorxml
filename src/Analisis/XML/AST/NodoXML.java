@@ -5,7 +5,7 @@
  */
 package Analisis.XML.AST;
 import Recursos.*;
-import CreatorXml201213050.Interfaz;
+import CreatorXml201213050.InterfazIDE;
 
 /**
  *
@@ -15,5 +15,5 @@ public abstract class NodoXML
 {
     public Object valor = "";
     public int linea, columna;    
-    public abstract NodoXML ejecutar(Interfaz ventana);
+    public abstract NodoXML ejecutar(InterfazIDE ventana);
 }

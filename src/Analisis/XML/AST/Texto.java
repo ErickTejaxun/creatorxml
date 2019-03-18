@@ -5,7 +5,8 @@
  */
 package Analisis.XML.AST;
 
-import CreatorXml201213050.Interfaz;
+import Recursos.singlenton;
+import CreatorXml201213050.InterfazIDE;
 import Recursos.error;
 
 /**
@@ -37,7 +38,7 @@ public class Texto extends NodoXML
         columna = c;
     }        
     
-    public void generarCodigo(Interfaz ventana)
+    public void generarCodigo(InterfazIDE ventana)
     {        
         boolean flag = true;
         if(nombre.equals(""))// || id.equals(""))
@@ -179,7 +180,7 @@ public class Texto extends NodoXML
     
     
     @Override
-    public NodoXML ejecutar(Interfaz ventana) 
+    public NodoXML ejecutar(InterfazIDE ventana) 
     {
         generarCodigo(ventana);        
         return this;

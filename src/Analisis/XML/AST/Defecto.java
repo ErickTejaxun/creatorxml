@@ -5,7 +5,7 @@
  */
 package Analisis.XML.AST;
 
-import CreatorXml201213050.Interfaz;
+import CreatorXml201213050.InterfazIDE;
 
 /**
  *
@@ -27,7 +27,7 @@ public class Defecto extends NodoXML
     }
     
     @Override
-    public NodoXML ejecutar(Interfaz ventana) 
+    public NodoXML ejecutar(InterfazIDE ventana) 
     {
         valor = defecto;
         return this;

@@ -65,7 +65,7 @@ import Recursos.*;
 
 
 espacio = \t|\f|" "|\r|\n    // ER para capturar espacios, salto de línea, tabulaciones.
-numero = ([0-9][0-9]*)       // ER para capturar números.
+numero = ([0-9][0-9]*) ("." [0-9][0-9]*)?       // ER para capturar números.
 /*decimal= {numero}"."{numero}*/ // Expresión 
 /*rgb  = ("#"{id}| "#"{digito} | "#"{digito}{id})*/
 letra = ([a-zA-Z]|"ñ"|"á"|"é"|"í"|"ó"|"ú")
@@ -402,7 +402,13 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
                 yypushback(1);                
                 addLexema("cadena",cadena, yyline, yychar);     
                 Imprimir("Saliendo de estado cadena.");
-                return new Symbol(sym.cadena, yychar, yyline, cadena.trim());            
+                if(!cadena.trim().equals(""))
+                {
+                    Imprimir("Retornando cadena ------------" + cadena + "*******************");
+                    return new Symbol(sym.cadena, yychar, yyline, cadena.trim());
+                }   
+                yybegin(YYINITIAL);
+                Imprimir("No se retornó cadena.");
             default:
                 if(yytext().equals("\n"))
                 {

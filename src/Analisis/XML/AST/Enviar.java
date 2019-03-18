@@ -5,7 +5,8 @@
  */
 package Analisis.XML.AST;
 
-import CreatorXml201213050.Interfaz;
+import Recursos.singlenton;
+import CreatorXml201213050.InterfazIDE;
 import Recursos.error;
 
 /**
@@ -30,7 +31,7 @@ public class Enviar extends NodoXML
         columna = 0;
     }    
     
-    public void generarCodigo(Interfaz ventana)
+    public void generarCodigo(InterfazIDE ventana)
     {
         boolean flag = true;
         if(nombre.equals(""))
@@ -50,14 +51,12 @@ public class Enviar extends NodoXML
         }  
         if(flag)
         {
-            valor = "var bot"+nombre+"_"+ventana.contenedorActual+"="+ventana.contenedorActual+".crearBoton("
+            valor = "var boton_"+nombre+"_"+ventana.contenedorActual+"="+ventana.contenedorActual+".crearBoton("
                     +"\""+fuente+"\","+"14,"+"\"#000000\","+x+","+y+","+referencia+",\""+texto+"\","+alto+","+ancho+");";
-            //Var btnIngresar_Inicio = ContBtn_Inicio.CrearBoton("Arial", 14, "#000000", 25, 30, nulo, "Ingresar", 70, 50);   
-            //                             Contenedor.CrearBoton(Fuente, Tamaño, Color, X, Y,Referencia, valor, Alto, Ancho)
         }
         if(!accion.equals(""))
         {
-            valor+= "\nbot"+nombre+"_"+ventana.contenedorActual+".alclic("+accion+");";
+            valor+= "\nboton_"+nombre+"_"+ventana.contenedorActual+".alclic("+accion+");";
         }
         ventana.addCuerpoFinal(valor.toString());
     }
@@ -161,7 +160,7 @@ public class Enviar extends NodoXML
     }
     
     @Override
-    public NodoXML ejecutar(Interfaz ventana) 
+    public NodoXML ejecutar(InterfazIDE ventana) 
     {
         generarCodigo(ventana);
         return this;

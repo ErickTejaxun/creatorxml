@@ -5,7 +5,8 @@
  */
 package Analisis.XML.AST;
 
-import CreatorXml201213050.Interfaz;
+import Recursos.singlenton;
+import CreatorXml201213050.InterfazIDE;
 import java.util.ArrayList;
 
 /**
@@ -37,7 +38,7 @@ public class LDato extends NodoXML
         columna = c;
     }    
     
-    public void generarCodigo(Interfaz ventana)
+    public void generarCodigo(InterfazIDE ventana)
     {
         valor = "var lista"+singlenton.getContadorLista() +" = [";
         String valores = "";
@@ -57,7 +58,7 @@ public class LDato extends NodoXML
     
     
     @Override
-    public NodoXML ejecutar(Interfaz ventana) 
+    public NodoXML ejecutar(InterfazIDE ventana) 
     {      
         generarCodigo(ventana);
         return this;

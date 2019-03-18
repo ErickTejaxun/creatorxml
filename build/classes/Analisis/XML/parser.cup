@@ -126,9 +126,9 @@ parser code
 
 terminal String menorque, mayorque, slash, igual, llaved, llavei,tid, ttipo,
 timportar,  tcolor, tinicial, tventana, tx, ty, tancho, tborde, falso, verdadero,
-contenedor, tnombre, tfuente, ttamanio, tnegrita, trecursiva, ttexto, tcontrol, tmaximo, 
+contenedor, tnombre, tfuente, ttamanio, tnegrita, ttexto, tcontrol, tmaximo, 
 tminimo, tmultimedia, tenviar, tboton, taccion, treferencia, defecto, dato, listadatos,talto,tcursiva , tfinal,
-tpath, tautoreproduccion, cadena, id, numero, control, coma , mas, menos, multi, potencia, or, and,
+tpath, tautoreproduccion, cadena, id, numero, coma , mas, menos, multi, potencia, or, and,
 mayorigual, menorigual, diferente,igualigual, pari, pard
 
 ;
@@ -152,6 +152,7 @@ non terminal Multimedia EMULTI, MULTIMEDIA;
 non terminal Boton BOTON, EBOTON;
 non terminal Enviar ENVIAR, EENVIAR;
 non terminal String LPARAMETROS, EXPL,  EXPR , OPR,  EXP,  LLAMADA ;
+non terminal CONTENIDO;
 /* Precedencia 
 precedence left suma, resta;
 precedence left multi, slash;
@@ -397,6 +398,7 @@ EXP ::=  EXP:valor1 mas EXP:valor2 {:RESULT =valor1 +"+" + valor2;:}
         |EXP:valor1 potencia EXP:valor2 {:RESULT =valor1 +"^" + valor2;:}
         |numero:valor {:RESULT = valor;:}
         |id:valor {:RESULT = valor;:}
+        |cadena:valor {:RESULT = valor;:}
         |LLAMADA:valor {:RESULT = valor;:} 
         |BOOL:valor {:RESULT = valor;:}
 ;
@@ -459,10 +461,20 @@ EMULTI::=
 
 /*Boton*/
 BOTON::= 
-            menorque tboton:i  EBOTON:boton mayorque cadena:cad
-            menorque slash tboton mayorque {:boton.setTexto(cad);boton.setLinea(ileft); boton.setColumna(iright); RESULT = boton;:}
-|               menorque tboton:i  EBOTON:boton mayorque TEXTO:cad
-            menorque slash tboton mayorque {:boton.setTxt(cad);boton.setLinea(ileft); boton.setColumna(iright); RESULT = boton;:}            
+            menorque tboton:i  EBOTON:boton mayorque CONTENIDO:valor menorque slash tboton mayorque 
+            {:
+                if(valor instanceof String)
+                {
+                    boton.setTexto((String)valor);    
+                }
+                else
+                {
+                    boton.setTxt((Texto)valor);
+                }                
+                boton.setLinea(ileft); 
+                boton.setColumna(iright); 
+                RESULT = boton;
+            :}           
 ;
 
 EBOTON::=                 
@@ -488,10 +500,21 @@ EBOTON::=
 
 
 ENVIAR::=       /*Enviar, papus*/
-        menorque tenviar:i  EENVIAR:boton mayorque cadena:cad
-        menorque slash tenviar mayorque {:boton.setTexto(cad);boton.setLinea(ileft); boton.setColumna(iright); RESULT = boton;:}
-        |menorque tenviar:i  EENVIAR:boton mayorque TEXTO:txt
-        menorque slash tenviar mayorque {:boton.setTxt(txt);boton.setLinea(ileft); boton.setColumna(iright); RESULT = boton;:}
+        menorque tenviar:i  EENVIAR:boton mayorque CONTENIDO:valor
+        menorque slash tenviar mayorque 
+        {:
+            if(valor instanceof String)
+            {
+                boton.setTexto((String)valor);    
+            }
+            else
+            {
+                boton.setTxt((Texto)valor);
+            }             
+            boton.setLinea(ileft); 
+            boton.setColumna(iright); 
+            RESULT = boton;
+        :}
 ;
 
 EENVIAR::=                 
@@ -513,3 +536,7 @@ EENVIAR::=
         |tfuente igual cadena:valor{: Enviar enviar = new Enviar(); enviar.setFuente(valor); RESULT = enviar;:}
         |error
         ;
+
+CONTENIDO::= cadena:valor{:RESULT = valor;:}
+            |TEXTO:valor{:RESULT = valor;:}
+;

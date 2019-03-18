@@ -5,7 +5,7 @@
  */
 package Analisis.XML.AST;
 
-import CreatorXml201213050.Interfaz;
+import Recursos.singlenton;
 import Recursos.error;
 import java.util.ArrayList;
 
@@ -129,7 +129,7 @@ public class Ventana extends NodoXML
     
     
     
-    public void generarCodigo(Interfaz ventana)
+    public void generarCodigo(CreatorXml201213050.InterfazIDE ventana)
     {
         boolean flag = true;
         if(tipo.equals(""))// || id.equals(""))
@@ -144,7 +144,7 @@ public class Ventana extends NodoXML
         }  
         if(flag)
         {
-            if(tipo.equals("principal"))
+            if(tipo.toLowerCase().equals("principal"))
             {
                 String idVentana = "ventana" + ventana.contadorVentanas+ "_" + id ;
                 valor = "var "+idVentana+ "= crearventana(";
@@ -155,7 +155,7 @@ public class Ventana extends NodoXML
                 ventana.addCuerpoInicio((String) valor);
             }
             else 
-            if(tipo.equals("secundaria"))
+            if(tipo.toLowerCase().equals("secundaria"))
             {
                 String idVentana = "ventana" + ventana.contadorVentanas+ "_" + id ;
                 valor = "var "+idVentana+ "= crearventana(";
@@ -188,11 +188,26 @@ public class Ventana extends NodoXML
             {
                 elem.ejecutar(ventana);
             }
+            
+            
+            
+            if(!accioninicial.equals(""))
+            {
+                ventana.addCuerpoFinal("ventana" + ventana.contadorVentanas+ "_" + id +".alcargar("+accioninicial+");");
+            }                
+            if(!accionfinal.equals(""))
+            {
+                ventana.addCuerpoFinal("ventana" + ventana.contadorVentanas+ "_" + id +".alcargar("+accionfinal+");");
+            }              
+            if(tipo.toLowerCase().equals("principal"))
+            {
+                ventana.addCuerpoFinal("ventana" + ventana.contadorVentanas+ "_" + id +".alcargar();");                
+            }
         }
     }
     
     @Override
-    public NodoXML ejecutar(Interfaz ventana) 
+    public NodoXML ejecutar(CreatorXml201213050.InterfazIDE ventana) 
     {
         generarCodigo(ventana);              
         return this;

@@ -5,7 +5,8 @@
  */
 package Analisis.XML.AST;
 
-import CreatorXml201213050.Interfaz;
+import Recursos.singlenton;
+import CreatorXml201213050.InterfazIDE;
 import Recursos.error;
 import java.util.ArrayList;
 
@@ -53,7 +54,7 @@ public class Contenedor extends NodoXML
     }
     
 
-    public void generarCodigo(Interfaz ventana)
+    public void generarCodigo(InterfazIDE ventana)
     {
         //    public String id; // Obligatoria
         //    public String x; // Obligatoria
@@ -194,7 +195,7 @@ public class Contenedor extends NodoXML
     
     
     @Override
-    public NodoXML ejecutar(Interfaz ventana) 
+    public NodoXML ejecutar(InterfazIDE ventana) 
     {
         generarCodigo(ventana);        
         return this;
