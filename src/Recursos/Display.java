@@ -39,7 +39,7 @@ public class Display
         }        
         if(valor instanceof Integer)
         {
-            System.out.println((Integer)valor);
+            //System.out.println((Integer)valor);
             retornos.add(new IntExp((Integer)valor));
         }  
         if(valor instanceof Boolean)

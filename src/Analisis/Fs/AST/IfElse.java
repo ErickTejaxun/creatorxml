@@ -56,7 +56,7 @@ public class IfElse extends Sentencia{
                     }
                     else
                     {
-                       valor =  s.ejecutar(ent);                       
+                       valor =  s.ejecutar(ent).valor;                       
                     }                    
                     if(valor instanceof Retorno)
                     {                                                
@@ -66,18 +66,8 @@ public class IfElse extends Sentencia{
             }
             else
             {
-                valor = ifelse.ejecutar(entorno).valor;                
-                if(valor instanceof Retorno)
-                {   
-                    System.out.println("------------------------------PUTA MADRE1------------------------" + ((Retorno)valor).ejecutar(entorno));
-                    //Object resultado = ((Nodo)valor).ejecutar(entorno).valor;
-                    //Display.agregarRetorno((Nodo)resultado);                    
-                    return this;
-                } 
-                if(valor instanceof IfElse)
-                {
-                    System.out.println("------------------------------PUTA MADRE------------------------");
-                }
+                valor = ifelse.ejecutar(entorno);
+                /*Falso*/
             }
         }
         else

@@ -134,7 +134,7 @@ public class Bloque extends Sentencia{
             }
             else
             {     
-                valor = sentencia.ejecutar(entorno);
+                valor = sentencia.ejecutar(entorno).valor;
             }
                 
             /*Verificamos el resultado.*/

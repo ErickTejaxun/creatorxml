@@ -66,6 +66,7 @@ public class If extends Sentencia{
                         Object r = ((Nodo)valor).ejecutar(entorno);
                         Display.agregarRetorno(((Nodo)r).valor);
                         valor = (Nodo)r;
+                        return this;
                     }  
                     else
                     {

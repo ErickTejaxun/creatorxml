@@ -20,6 +20,18 @@ funcion ackermann(var m, var n) {
     }
 }
 
+
+funcion estado(var a)
+{
+  si (a == 10)
+  {
+    retornar 100;
+  }
+  retornar 0;
+}
+
+/**/
 imprimir(fibonaci(10));
 imprimir(factorial(6));
-imprimir(ackermann(1,1));
+imprimir(estado(10));
+imprimir(ackermann(0,10));
