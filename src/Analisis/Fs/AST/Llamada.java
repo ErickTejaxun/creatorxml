@@ -5,13 +5,15 @@
  */
 package Analisis.Fs.AST;
 
+import Recursos.error;
+import Recursos.singlenton;
 import java.util.ArrayList;
 
 /**
  *
  * @author erick
  */
-public class Llamada extends Sentencia {
+public class Llamada extends Exp {
     public ArrayList<Exp> parametros;    
     public String id;
     public Llamada(String i, ArrayList<Exp> p)
@@ -20,56 +22,49 @@ public class Llamada extends Sentencia {
         parametros = p;
     }
     
+    public Llamada(int l, int c, String i, ArrayList<Exp> p)
+    {
+        this.linea  = l;
+        this.columna = c;
+        id = i;
+        parametros = p;
+        
+    }
+        
     public void setValor(Entorno entorno)
     {
-        ArrayList<String> listaTipos = new ArrayList<String>();
-        ArrayList<Object> listaValores = new ArrayList<Object>();
-        Object valor;
+        
+        valor = "";
+        /*Obtener el id de la funcion a llamar*/
+        Entorno entornoLocal = new Entorno(entorno, entorno.ventana);
+        String idMetodo = id;
         for(Exp e : parametros)
         {
-            valor = e.ejecutar(entorno).valor;
-            listaValores.add(valor);
-            if(valor instanceof String)
-            {
-                listaTipos.add("string");
-            }
-            if(valor instanceof Integer)
-            {
-                listaTipos.add("int");
-            }
-            if(valor instanceof Boolean)
-            {
-                listaTipos.add("boolean");               
-            }
-            if(valor instanceof Double)
-            {
-                listaTipos.add("double");                
-            }
-            if(valor instanceof Simbolo)// Es un objeto
-            {
-                listaTipos.add(((Simbolo) valor).tipo);
-            }
+            idMetodo+="$var";
         }
-        /*
-        Ahora ya tenemos el nombre de la funcion a llamar y también la lista de tipos de parametros        
-        */
-        String idMetodo = id;
-        for(String tipo : listaTipos)
+        Simbolo s = entorno.ventana.entornoGlobal.getSimbolo(idMetodo);
+        if(s==null)
         {
-            idMetodo += "$" + tipo;
+            singlenton.addErrores(new error("semantico",linea,columna, id,"El metodo no existe."));
+            return;
         }
-        /*Ahora ya tenemos el id del metodo buscado*/
-        Simbolo metodo = entorno.getSimbolo(idMetodo);
-        /*Ahora verificamos si existe con el id que generamos, si no existe habría que verificar los tipos y en caso
-        sea necesario, realizar casteos a los valores necesarios.*/
-        if(metodo!=null)
-        {
-            if(metodo.valor instanceof Sentencia)
+        if(s.valor instanceof Metodo)
+        {            
+            int indice = 0;
+            for(Exp parametro :parametros)
             {
-                
+                ((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice)).exp = parametro;
+                ((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice)).ejecutar(entornoLocal);
+                indice++;
             }
-        }
-        
+            /*Primero declaramos los valores*/
+            
+            valor = ((Metodo)s.valor).bloque.ejecutar(entornoLocal).valor;
+            if(valor == null)
+            {
+                valor ="";
+            }
+        }                
     }
     
     @Override
@@ -81,9 +76,10 @@ public class Llamada extends Sentencia {
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         setValor(entorno);                
-        entorno.ventana.setSalida(valor.toString());
-        System.out.println(valor.toString());
+//        entorno.ventana.setSalida(valor.toString());
+//        System.out.println(valor.toString());
         return this;
     }
 }

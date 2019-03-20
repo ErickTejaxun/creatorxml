@@ -29,6 +29,7 @@ public class BoolExp extends Exp{
     }
     @Override
     public Nodo ejecutar(Entorno entorno) {
+        valor = "";
         setValor();
         return this;
     }

@@ -13,45 +13,50 @@ import java.util.ArrayList;
  */
 public class Metodo extends Sentencia{
 
-    public ArrayList<Sentencia> sentencias ;
-    public ArrayList<Sentencia> declaracionParametros;
+    
+    public ArrayList<Nodo> declaracionParametros;
     public ArrayList<Exp> listaParametros;
+    public Bloque bloque;
     public String id;    
     public String tipo;
     
-    
-    public Metodo(String i, String t, ArrayList<Sentencia> s)
+    public Metodo(int l, int c, String id,ArrayList<Nodo> ls, Bloque b)
     {
-        id = i;
-        sentencias = s;
-        tipo = t;
-        
+        this.linea = l;
+        this.columna = c;
+        this.id = id;
+        this.declaracionParametros = ls;
+        this.bloque =b;
     }
     
-    public void setListaParametros(ArrayList<Exp> l)
+    public Metodo(int l, int c, String id,Bloque b)
     {
-        listaParametros = l;
-    }
-    
-    public Metodo(ArrayList<Sentencia> s)
-    {
-        id = "";
-        sentencias = s;
-    }
+        this.linea = l;
+        this.columna = c;
+        this.id = id;
+        this.declaracionParametros = new ArrayList<Nodo>();
+        this.bloque =b;
+    }    
 
-    public void setSentencias(ArrayList<Sentencia> sentencias) {
-        this.sentencias = sentencias;
-    }
 
     public void setId(String id) {
         this.id = id;
     }
         
-    
-    public void add(Sentencia s)
+    public void setValor(Entorno entorno)
     {
-        sentencias.add(s);
+        Simbolo metodoSimbolo = new Simbolo();
+        String idMetodo = this.id;
+        for(Nodo n : declaracionParametros)
+        {
+            idMetodo+= "$var";
+        }
+        metodoSimbolo.setId(idMetodo);
+        metodoSimbolo.setTipo("metodo");
+        metodoSimbolo.setValor(this);
+        entorno.insertarSimbolo(metodoSimbolo);
     }
+
     @Override
     public Nodo generar3D(Entorno entorno) 
     {
@@ -60,18 +65,9 @@ public class Metodo extends Sentencia{
     }    
     @Override
     public Nodo ejecutar(Entorno entorno) 
-    {
-        for (Sentencia sentencia : sentencias) 
-        {
-            if(sentencia instanceof Metodo)
-            {
-                sentencia.ejecutar(new Entorno(entorno,entorno.ventana));
-            }
-            else
-            {
-                sentencia.ejecutar(entorno);
-            }
-        }
+    {        
+        valor = "";
+        setValor(entorno);
         return this;
     }
     

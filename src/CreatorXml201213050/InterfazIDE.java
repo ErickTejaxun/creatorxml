@@ -57,7 +57,7 @@ public class InterfazIDE extends javax.swing.JFrame {
     public String cadenaImportaciones = "";
     public int contadorPrincipal = 0;
     public String cadenaCuerpo = "";
-        
+    public Entorno entornoGlobal = new Entorno(null,this);
     
     /**
      Contadores de elementos     
@@ -1097,6 +1097,7 @@ public class InterfazIDE extends javax.swing.JFrame {
     {
         todosErrores.clear(); 
         singlenton.listaErrores.clear();
+        entornoGlobal.tablaSimbolos.clear();
         listaxml.clear();
         textAreaConsola.setText("");
         cadenaImportaciones = cadenaCuerpo = "";
@@ -1533,7 +1534,7 @@ public class InterfazIDE extends javax.swing.JFrame {
     
     public void ejecutarFs(Nodo nodo)
     {        
-        nodo.ejecutar(new Entorno(null,this));
+        nodo.ejecutar(entornoGlobal);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

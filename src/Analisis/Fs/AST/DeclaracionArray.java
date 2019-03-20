@@ -130,8 +130,9 @@ public class DeclaracionArray  extends Sentencia{
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         setValor(entorno);
-        return null;
+        return this;
     }
     
 }

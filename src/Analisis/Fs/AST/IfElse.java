@@ -14,9 +14,9 @@ import Recursos.Display;
 public class IfElse extends Sentencia{
     public Exp cond;    
     public Bloque bloque;
-    public Sentencia ifelse;
+    public Nodo ifelse;
     
-    public IfElse(Exp c, Bloque b, Sentencia el)
+    public IfElse(Exp c, Bloque b, Nodo el)
     {
         cond = c;
         bloque = b;
@@ -31,6 +31,7 @@ public class IfElse extends Sentencia{
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         /*Ejecucion del if*/
         Object condicion = cond.ejecutar(entorno).valor;
         if(condicion instanceof Boolean)
@@ -38,7 +39,7 @@ public class IfElse extends Sentencia{
             if((Boolean)condicion)
             {
                 Entorno ent = new Entorno(entorno, entorno.ventana);
-                for(Sentencia s: bloque.sentencias)
+                for(Nodo s: bloque.sentencias)
                 {                    
                     if(s instanceof Romper)
                     {

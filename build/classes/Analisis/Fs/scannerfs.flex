@@ -195,6 +195,10 @@ sinosi = (sino){comentario}{si}
                 addLexema("reservada", yytext(), yyline, yychar);            
                 return  new Symbol(sym.exclam, yychar, yyline, yytext());
             } 
+    "?"   {
+                addLexema("reservada", yytext(), yyline, yychar);            
+                return  new Symbol(sym.interrogacion, yychar, yyline, yytext());
+            }             
     ","   {
                 addLexema("reservada", yytext(), yyline, yychar);            
                 return  new Symbol(sym.coma, yychar, yyline, yytext());
@@ -206,12 +210,21 @@ sinosi = (sino){comentario}{si}
     "nulo"   {
                 addLexema("reservada", yytext(), yyline, yychar);            
                 return  new Symbol(sym.nulo, yychar, yyline, yytext());
-            }                                           
+            }  
+    "retornar"   {
+                addLexema("reservada", yytext(), yyline, yychar);    
+                //System.out.println("------------------------------retornar-------------------");        
+                return  new Symbol(sym.retornar, yychar, yyline, yytext());
+            }                                                     
 
-    "break"   {
+    "detener"   {
                 addLexema("reservada", yytext(), yyline, yychar);            
-                return  new Symbol(sym.tbreak, yychar, yyline, yytext());
+                return  new Symbol(sym.detener, yychar, yyline, yytext());
             }
+    "funcion"   {
+                addLexema("reservada", yytext(), yyline, yychar);            
+                return  new Symbol(sym.funcion, yychar, yyline, yytext());
+            }            
     "continue"   {
                 addLexema("reservada", yytext(), yyline, yychar);            
                 return  new Symbol(sym.tcontinuar, yychar, yyline, yytext());
@@ -258,10 +271,18 @@ sinosi = (sino){comentario}{si}
                 addLexema("reservada", yytext(), yyline, yychar);  	        
                 return new Symbol(sym.seleccion, yychar, yyline, yytext());             
             }            
-    "case"  {  
+    "caso"  {  
                 addLexema("reservada", yytext(), yyline, yychar);  	        
                 return new Symbol(sym.caso, yychar, yyline, yytext());             
-            }            
+            }  
+    "selecciona"  {  
+                addLexema("reservada", yytext(), yyline, yychar);  	        
+                return new Symbol(sym.selecciona, yychar, yyline, yytext());             
+            }   
+    "defecto"  {  
+                addLexema("reservada", yytext(), yyline, yychar);  	        
+                return new Symbol(sym.defecto, yychar, yyline, yytext());             
+            }                               
     "{"  {  
                 addLexema("simbolo", yytext(), yyline, yychar);  	        
                 return new Symbol(sym.llaveI, yychar, yyline, yytext());             
@@ -274,7 +295,10 @@ sinosi = (sino){comentario}{si}
                 addLexema("simbolo", yytext(), yyline, yychar);  	        
                 return new Symbol(sym.dospuntos, yychar, yyline, yytext());             
             }   
-
+    "."  {  
+                addLexema("simbolo", yytext(), yyline, yychar);  	        
+                return new Symbol(sym.punto, yychar, yyline, yytext());             
+            } 
     {id}  {  
                 
                 addLexema("Identificador", yytext(), yyline, yychar);  	        

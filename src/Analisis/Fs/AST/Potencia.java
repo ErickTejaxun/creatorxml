@@ -170,6 +170,7 @@ public class Potencia extends Exp{
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         setValor(entorno);
         return this;
     }

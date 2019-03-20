@@ -13,9 +13,9 @@ import Recursos.singlenton;
  * @author erick
  */
 public class Igual extends Exp{
-    public Exp left, right;    
+    public Nodo left, right;    
     
-    public Igual(Exp l, Exp r)
+    public Igual(Nodo l, Nodo r)
     {
         left = l;
         right = r;
@@ -164,7 +164,8 @@ public class Igual extends Exp{
     }    
     @Override
     public Nodo ejecutar(Entorno entorno) 
-    {        
+    {      
+        valor = "";
         setValor(entorno);
         return this;
     }

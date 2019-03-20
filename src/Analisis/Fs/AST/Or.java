@@ -69,6 +69,7 @@ public class Or extends Exp
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         setValor(entorno);
         return this;
     }

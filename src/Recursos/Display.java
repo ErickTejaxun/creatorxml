@@ -15,7 +15,27 @@ import java.util.ArrayList;
 public class Display 
 {
     public static ArrayList<Object> display = new ArrayList<Object>();
-    public static int puntero = 0;
+    public static ArrayList<Object> displayMetodo = new ArrayList<Object>();
+    public static int puntero = 0; 
+    
+ 
+    public static void quitarMetodo()
+    {
+        if(!displayMetodo.isEmpty())
+        {
+            displayMetodo.remove(display.size()-1);
+        }
+    }
+    
+    public static Object metodoActual()
+    {
+        if(!displayMetodo.isEmpty())
+        {
+            return displayMetodo.get(displayMetodo.size()-1);
+        }
+        return null;
+    }    
+    
     
     public static Object esValido()
     {

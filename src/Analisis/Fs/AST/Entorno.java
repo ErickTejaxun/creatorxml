@@ -45,9 +45,10 @@ public class Entorno
     
     public boolean insertarSimbolo(Simbolo simbolo)
     {
-        if(existeSimbolo(simbolo.id))
+        if(existeSimbolo2(simbolo.id))
         {
             singlenton.addErrores(new error("semantico",linea,columna,simbolo.id,"La variable buscada ya existe en el ámbito."));
+            //System.out.println(simbolo +"-----Valor----" + simbolo.valor.toString());
             return false;
         }
         else
@@ -72,6 +73,11 @@ public class Entorno
             if(simbolo.valor instanceof Simbolo)
             {
                 tipo = ((Simbolo)simbolo.valor).tipo;
+            }
+            else 
+            if(simbolo.valor instanceof Hashtable)
+            {
+                tipo = "objeto";
             }
             simbolo.tipo = tipo;
             tablaSimbolos.put(simbolo.id, simbolo);
@@ -143,6 +149,22 @@ public class Entorno
         return false;
     }
     
+    
+    public boolean existeSimbolo2(String id)
+    {
+        Entorno ent = this;
+        while(ent!=null)
+        {
+            Simbolo sim = ent.tablaSimbolos.get(id);
+            if(sim !=null)
+            {
+                return true;
+            } 
+            break;
+        }
+        return false;
+    }
+
     
     public boolean existeSimbolo(String id)
     {

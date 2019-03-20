@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class While extends Sentencia{
     public Exp cond;
     public Bloque bloque;
-    public ArrayList<Sentencia> instrucciones;
+    public ArrayList<Nodo> instrucciones;
     public While(Exp c, Bloque b)
     {
         cond = c;
@@ -28,6 +28,7 @@ public class While extends Sentencia{
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         /*Ejecucion del if*/
         Display.add(this);
         Object condicion = cond.ejecutar(entorno).valor;
@@ -35,7 +36,7 @@ public class While extends Sentencia{
         {
             while((Boolean)condicion)
             {                           
-                for(Sentencia sentencia:instrucciones)
+                for(Nodo sentencia:instrucciones)
                 {  
                     /*Verificamos is hay un break;*/
                     if((While)Display.instruccionActual() != this)

@@ -26,6 +26,7 @@ public class Continuar extends Sentencia{
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {        
+        valor = "";
         return this;
     }
 }

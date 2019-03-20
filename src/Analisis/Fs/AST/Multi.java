@@ -13,8 +13,8 @@ import Recursos.singlenton;
  * @author erick
  */
 public class Multi extends Exp{
-    public Exp left, right;       
-    public Multi(Exp l,  Exp r)
+    public Nodo left, right;       
+    public Multi(Nodo l,  Nodo r)
     {
         left = l;        
         right = r;
@@ -140,6 +140,7 @@ public class Multi extends Exp{
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         setValor(entorno);
         return this;
     }

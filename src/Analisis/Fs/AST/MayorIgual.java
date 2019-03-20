@@ -176,7 +176,9 @@ public class MayorIgual extends Exp{
         return this;
     }       
     @Override
-    public Nodo ejecutar(Entorno entorno) {
+    public Nodo ejecutar(Entorno entorno) 
+    {
+        valor = "";
         setValor(entorno);
         return this;
     }

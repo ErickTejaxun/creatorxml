@@ -14,26 +14,27 @@ import java.util.ArrayList;
  */
 public class Bloque extends Sentencia{
 
-    public ArrayList<Sentencia> sentencias ;
+    public ArrayList<Nodo> sentencias ;
     public String id;
+    public Metodo actual;
     public Bloque(String i)
     {
         id = i;
-        sentencias = new ArrayList<Sentencia>();
+        sentencias = new ArrayList<Nodo>();
     }
     public Bloque()
     {
         id = "";
-        sentencias = new ArrayList<Sentencia>();
+        sentencias = new ArrayList<Nodo>();
     }  
     
-    public Bloque(ArrayList<Sentencia> s)
+    public Bloque(ArrayList<Nodo> s)
     {
         id = "";
         sentencias = s;
     }
 
-    public void setSentencias(ArrayList<Sentencia> sentencias) {
+    public void setSentencias(ArrayList<Nodo> sentencias) {
         this.sentencias = sentencias;
     }
 
@@ -42,14 +43,14 @@ public class Bloque extends Sentencia{
     }
         
     
-    public void add(Sentencia s)
+    public void add(Nodo s)
     {
         sentencias.add(s);
     }
     @Override
     public Nodo generar3D(Entorno entorno) 
     {
-        for(Sentencia s: sentencias)
+        for(Nodo s: sentencias)
         {
             s.generar3D(entorno);
         }
@@ -59,7 +60,26 @@ public class Bloque extends Sentencia{
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
-        for (Sentencia sentencia : sentencias) 
+        valor = "";
+        primeraPasada(entorno.ventana.entornoGlobal);
+        ejecutarInstrucciones(entorno);        
+        return this;
+    }
+    
+    public void primeraPasada(Entorno entorno)
+    {
+        for (Nodo sentencia : sentencias) 
+        {
+            if(sentencia instanceof Metodo)
+            {
+                sentencia.ejecutar(entorno);
+            }
+        }        
+    }
+        
+    public void ejecutarInstrucciones(Entorno entorno)
+    {
+        for (Nodo sentencia : sentencias) 
         {
             if(sentencia instanceof Bloque)
             {
@@ -70,7 +90,7 @@ public class Bloque extends Sentencia{
                 if(Display.esValido()!=null)
                 {
                     Display.quitar();
-                    return this;
+                    return;
                 }
                 else
                 {
@@ -91,12 +111,26 @@ public class Bloque extends Sentencia{
                     entorno.ventana.setSalida("Error semantico, continue no se encuentra dentro de un ciclo");
                 }                                
             }
-            else
+            else if(sentencia instanceof Retorno)
             {
-                sentencia.ejecutar(entorno);
-            }            
-        }
-        return this;
+                valor = sentencia.ejecutar(entorno).valor;              
+                return;
+            }   
+            else 
+            if(sentencia instanceof Llamada)
+            {
+                valor = sentencia.ejecutar(new Entorno(entorno, entorno.ventana)).valor;
+            }
+            else
+            {     
+                valor = sentencia.ejecutar(entorno);
+                if(((Nodo)valor).valor3!=null)
+                {
+                    valor = sentencia.ejecutar(entorno).valor;
+                    return;
+                }
+            }
+        }        
     }
     
 }

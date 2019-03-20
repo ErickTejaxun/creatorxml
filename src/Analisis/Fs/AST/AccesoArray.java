@@ -15,50 +15,60 @@ import java.util.ArrayList;
  */
 public class AccesoArray  extends Exp
 {
-    public String id;
+    public Exp acceso;
     public Exp exp;
     
-    public AccesoArray(int l, int c, String i, Exp e)
+    public AccesoArray(int l, int c, Exp i, Exp e)
     {
         this.linea = l;
         this.columna = c;
-        this.id = i.toLowerCase();
+        this.acceso = i;
         this.exp = e;
     }
 
     public void setValor(Entorno entorno)
     {
         Object pos = exp.ejecutar(entorno).valor;
+        Object variable = acceso.ejecutar(entorno);
         if((pos instanceof Integer)||(pos instanceof Double))
-        {
-            int p = (Integer)pos;
-            Simbolo sim = entorno.getSimbolo(id);
-            if(sim!=null)
+        {            
+            if(variable instanceof idExp)
             {
-                if(sim.valor!=null)
+                variable = ((idExp)variable).id;
+                int p = (Integer)pos;
+                Simbolo sim = entorno.getSimbolo(variable.toString());
+                if(sim!=null)
                 {
-                    if(sim.valor instanceof ArrayList)
+                    if(sim.valor!=null)
                     {
-                        ArrayList<Object> l = (ArrayList<Object>) sim.valor;
-                        if( p > l.size()-1)
+                        if(sim.valor instanceof ArrayList)
                         {
-                            singlenton.addErrores(new error("semantico",linea,columna,id,"Error de índice, sobrepasado."));
+                            ArrayList<Object> l = (ArrayList<Object>) sim.valor;
+                            if( p > l.size()-1)
+                            {
+                                singlenton.addErrores(new error("semantico",linea,columna,variable.toString(),"Error de índice, sobrepasado."));
+                            }
+                            else
+                            {
+                                valor = l.get(p);
+                            }
                         }
                         else
                         {
-                            valor = l.get(p);
+                            singlenton.addErrores(new error("semantico",linea,columna,variable.toString(),"La variable no es de tipo arreglo."));
                         }
                     }
-                    else
-                    {
-                        singlenton.addErrores(new error("semantico",linea,columna,id,"La variable no es de tipo arreglo."));
-                    }
-                }
-            }            
+                }                 
+            }
+            else
+            if(variable instanceof AccesoArray)
+            {
+                System.out.println("Segundo acceso");
+            }
         }
         else
         {
-            singlenton.addErrores(new error("semantico",linea,columna,id,"Se requiere de un valor númerico para poder acceder a dicha posición."));
+            singlenton.addErrores(new error("semantico",linea,columna,variable.toString(),"Se requiere de un valor númerico para poder acceder a dicha posición."));
         }
     }
     
@@ -72,6 +82,7 @@ public class AccesoArray  extends Exp
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         setValor(entorno);
         return this;
     }

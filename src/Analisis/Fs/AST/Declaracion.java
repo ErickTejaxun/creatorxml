@@ -6,6 +6,7 @@
 package Analisis.Fs.AST;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  *
@@ -13,9 +14,11 @@ import java.util.ArrayList;
  */
 public class Declaracion  extends Sentencia{
     public ArrayList<String> lista;
+    public ArrayList<Atributo> listaAtributos;
     public String tipo;
     public Exp exp;
     
+   
     public Declaracion(ArrayList<String> i, String t, Exp e)
     {
         lista = i;
@@ -37,14 +40,21 @@ public class Declaracion  extends Sentencia{
         this.tipo = "undefined";
     }
     
+    
     public Declaracion(int l, int c, ArrayList<String> i, Exp e)
     {
         this.linea = l;
         this.columna = c;
         this.lista = i;
         this.exp = e;
-        this.tipo = "undefined";        
+        this.tipo = "undefined";
+        if(e instanceof Atributo)
+        {
+            this.tipo = "objeto";
+        }
     }
+    
+    
     
     public void setValor(Entorno entorno)
     {
@@ -58,7 +68,7 @@ public class Declaracion  extends Sentencia{
                 valor = entorno.insertarSimbolo(new Simbolo(name, tipo, "var","nada"));                         
             }
             valor = exp.ejecutar(entorno).valor;
-            determinarTipo(valor);            
+            determinarTipo(valor);                       
             valor = entorno.insertarSimbolo(new Simbolo(lista.get(lista.size()-1),tipo , "var",exp.ejecutar(entorno).valor));                        
         }   
         else
@@ -104,6 +114,11 @@ public class Declaracion  extends Sentencia{
         {
             this.tipo="string";                
         }else
+        if(valor instanceof Hashtable)
+        {
+            this.tipo = "objeto";
+        }
+        else
         {
             if(valor instanceof Simbolo)
             {
@@ -122,8 +137,9 @@ public class Declaracion  extends Sentencia{
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         setValor(entorno);
-        return null;
+        return this;
     }
     
 }

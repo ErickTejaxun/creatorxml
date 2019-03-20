@@ -15,6 +15,12 @@ public class idExp extends Exp{
     {
         id = i;
     }
+    public idExp(int l, int c, String i)
+    {
+        this.linea = l;
+        this.columna = c;
+        this.id = i;
+    }
     
     public void setValor(Entorno entorno)
     {
@@ -29,6 +35,7 @@ public class idExp extends Exp{
     @Override
     public Nodo generar3D(Entorno entorno) 
     {
+        valor = "";
         valor2 = (String) id;
         return this;
     }    

@@ -13,8 +13,8 @@ import Recursos.singlenton;
  * @author erick
  */
 public class Div extends Exp{
-    public Exp left, right;       
-    public Div(Exp l, Exp r)
+    public Nodo left, right;       
+    public Div(Nodo l, Nodo r)
     {
         left = l;        
         right = r;
@@ -138,6 +138,7 @@ public class Div extends Exp{
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         setValor(entorno);
         return this;
     }

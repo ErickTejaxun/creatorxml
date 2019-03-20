@@ -31,6 +31,7 @@ public class Imprimir extends Sentencia {
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         setValor(entorno);                
         entorno.ventana.setSalida(valor.toString());
         System.out.println(valor.toString());

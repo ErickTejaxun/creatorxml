@@ -12,12 +12,12 @@ import Recursos.Display;
  * @author erick
  */
 public class For extends Sentencia{    
-    public Sentencia inicio; // Asignacion inicial.
+    public Nodo inicio; // Asignacion inicial.
     public Exp cond;// Condicion a verificar
     public Nodo actualizacion; // Aumento o decremento
     public Bloque bloque; // bloque de instrucciones
     
-    public For(Sentencia i, Exp c, Nodo a, Bloque b)
+    public For(Nodo  i, Exp c, Nodo a, Bloque b)
     {
         this.inicio = i;
         this.cond = c;
@@ -35,6 +35,7 @@ public class For extends Sentencia{
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         /*Ejecucion del if*/
         inicio.ejecutar(entorno);
         Object condicion = cond.ejecutar(entorno).valor;
@@ -44,7 +45,7 @@ public class For extends Sentencia{
         {
             while((Boolean)condicion)
             {                           
-                for(Sentencia sentencia:bloque.sentencias)
+                for(Nodo sentencia:bloque.sentencias)
                 {                      
                     if((For)Display.instruccionActual() != this)
                     {

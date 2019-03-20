@@ -36,14 +36,14 @@ public class If extends Sentencia{
     public Nodo ejecutar(Entorno entorno) 
     {
         
-        
+        valor = "";
         Object condicion = cond.ejecutar(entorno).valor;
         if(condicion instanceof Boolean)
         {
             if((Boolean)condicion)
             {                
                 Entorno ent = new Entorno(entorno, entorno.ventana);
-                for(Sentencia s: bloque.sentencias)
+                for(Nodo s: bloque.sentencias)
                 {                    
                     if(s instanceof Romper)
                     {
@@ -59,7 +59,12 @@ public class If extends Sentencia{
                     }
                     else
                     {
-                        s.ejecutar(ent);
+                       valor =  s.ejecutar(ent);
+                       if(s instanceof Retorno)
+                       {
+                           return this;
+                       }
+                       
                     }                    
                 }
             }                        

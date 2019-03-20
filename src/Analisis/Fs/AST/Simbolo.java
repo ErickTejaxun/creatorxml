@@ -28,6 +28,10 @@ public class Simbolo  implements Cloneable
         this.id = id;
         this.tipo = tipo;
     }
+    public Simbolo()
+    {
+        
+    }
     
     public Simbolo(String id, String tipo, String rol, Object valor)
     {        

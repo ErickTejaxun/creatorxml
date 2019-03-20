@@ -114,10 +114,10 @@ parser code
 
 /*Terminales*/
 
-terminal String suma, multi, resta, div, or, and,si,sino/*,sinosi*/, corcheted, corchetei;
-terminal String desigual, igualigual, igual, mayor, menor, mayorigual,  menorigual, exclam, mientras, aumento, decremento, para;
+terminal String suma, multi, resta, div, or, and,si,sino/*,sinosi*/, corcheted, corchetei, punto, interrogacion, selecciona, defecto, retornar;
+terminal String desigual, igualigual, igual, mayor, menor, mayorigual,  menorigual, exclam, mientras, aumento, decremento, para, funcion;
 terminal String tint, tchar, tbool, tstring, tdouble, imprimir,cadena, nulo, masigual, menosigual, multiigual, divigual,coma;
-terminal String puntocoma, llaveI, llaveD, pard, pari, identificador, tbreak,tcontinuar, dospuntos, caso,seleccion, var, potencia;
+terminal String puntocoma, llaveI, llaveD, pard, pari, identificador, detener,tcontinuar, dospuntos, caso,seleccion, var, potencia;
 terminal Boolean falso, verdadero;
 terminal Integer entero;
 terminal Double decimal;
@@ -128,13 +128,21 @@ terminal char caracter;
 * Aquí están los no terminales
 */
 non terminal INICIO;
-non terminal Exp  EXP, EXPL, EXPC, AUMENTO, DECREMENTO,  ACTUALIZACION, ACCESO;
+non terminal Exp  EXP, EXPL, EXPC, AUMENTO, DECREMENTO,  ACTUALIZACION, ACCESO, SSELECCION;
 non terminal String TIPO, TASIGNACION;
-non terminal Sentencia  INSTRUCCION, DECLARACION,ASIGNACION, IMPRIMIR , IF  , ELSE ,WHILE,FOR;
+non terminal /*Sentencia*/ Nodo  INSTRUCCION, DECLARACION,ASIGNACION, IMPRIMIR , IF  , ELSE ,WHILE,FOR;
 non terminal Sentencia BREAK,SWITCH, CONTINUE, METODO;
 non terminal Bloque BLOQUE, INSTRUCCIONES;
-non terminal ArrayList<Exp> PARAMETROS, LARREGLO;
+non terminal ArrayList<Exp>  LARREGLO;
+non terminal ArrayList<Exp> LVALORES;
+non terminal ArrayList<Nodo> PARAMETROS;
 non terminal ArrayList<String> LID;
+non terminal Atributo LATRIBUTO;
+non terminal Nodo SELECCIONAR;
+non terminal Caso CASO, DEFECTO;
+non terminal ArrayList<Caso> LCASO;
+non terminal Nodo RETORNAR;
+non terminal Llamada LLAMADA;
 
 /* Precedencia 
 precedence left suma, resta;
@@ -145,6 +153,7 @@ precedence left potencia;
 precedence left and;
 precedence left or;
 precedence left exclam;
+precedence left interrogacion;
 
 
 
@@ -159,17 +168,43 @@ BLOQUE::= llaveI INSTRUCCIONES:met llaveD {: RESULT = met;:}
 
 INSTRUCCIONES::= INSTRUCCIONES:met INSTRUCCION:valor{: met.add(valor); RESULT = met;:}
                 |INSTRUCCIONES:met BLOQUE:valor{: met.add(valor); RESULT = met;:}
+                |INSTRUCCIONES:met METODO:valor{: met.add(valor); RESULT = met;:}
+                |INSTRUCCIONES:met LLAMADA:valor puntocoma{: met.add(valor); RESULT = met;:}
                 |INSTRUCCION:valor {: Bloque met = new Bloque(); met.add(valor); RESULT = met; :}
-                |BLOQUE:valor {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}                                
+                |BLOQUE:valor {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}   
+                |METODO:valor {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}   
+                |LLAMADA:valor puntocoma {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}   
 ;
 
-METODO::= TIPO:tipo identificador:nombre pari PARAMETROS:parametros pard BLOQUE:instrucciones
+METODO::= funcion:i identificador:nombre pari PARAMETROS:parametros pard BLOQUE:instrucciones
             {:
-                RESULT = null;
-            :}          
+                RESULT = new Metodo(ileft, iright, nombre, parametros, instrucciones );
+            :} 
+    |  funcion:i identificador:nombre pari  pard BLOQUE:instrucciones
+            {:
+                RESULT = new Metodo(ileft, iright, nombre,  instrucciones );
+            :}                      
 ;
 
-BREAK::= tbreak puntocoma{:RESULT  = new Romper();:}
+PARAMETROS::= PARAMETROS:l coma var identificador:valor 
+        {:
+            ArrayList<String> ln = new ArrayList<String>();
+            ln.add(valor);
+            l.add(new Declaracion(valorleft, valorright, ln)); 
+            RESULT =l;       
+        :}
+        |var identificador:valor 
+            {: 
+            ArrayList<Nodo> l = new ArrayList<Nodo>(); 
+            ArrayList<String> ln = new ArrayList<String>();
+            ln.add(valor);
+            l.add(new Declaracion(valorleft, valorright, ln)); 
+            RESULT =l;
+            :}
+;
+
+
+BREAK::= detener:i puntocoma{:RESULT  = new Romper(ileft, iright);:}
 ;
 
 CONTINUE::= tcontinuar puntocoma {: RESULT = new Continuar();:}
@@ -200,21 +235,23 @@ INSTRUCCION::= DECLARACION:inst puntocoma{:RESULT = inst;:}
               |ASIGNACION:inst puntocoma{:RESULT = inst;:}
               |IMPRIMIR:inst puntocoma{:RESULT = inst;:}
               |IF:inst{: RESULT = inst;:}              
-              |WHILE:wile {:RESULT = wile;:}
-              /*
+              |WHILE:wile {:RESULT = wile;:}              
               |AUMENTO:aument puntocoma {:RESULT = aument;:}
-              |DECREMENTO:dec puntocoma {:RESULT = dec;:}
-              */
+              |DECREMENTO:dec puntocoma {:RESULT = dec;:}              
               |FOR:fr {:RESULT = fr;:}
               |SWITCH:sw {:RESULT = sw;:} 
               |BREAK:valor {:RESULT = valor;:}
               |CONTINUE:valor {:RESULT = valor;:}
+              |SELECCIONAR:valor {:RESULT = valor;:}
+              |RETORNAR:valor puntocoma {:RESULT = valor;:}
 ;
 
 IMPRIMIR::= imprimir pari EXPL:valor pard {:RESULT = new Imprimir(valor);:}
 ;
 
-ASIGNACION::= identificador:nombre TASIGNACION:tipo EXPL:valor {:RESULT = new Asignacion(nombre, valor,tipo);:}
+ASIGNACION::= identificador:nombre TASIGNACION:tipo EXPL:valor {:RESULT = new Asignacion(new idExp(nombreleft, nombreright, nombre), valor,tipo);:}
+            |ACCESO:acceso TASIGNACION:tipo EXPL:valor {:RESULT = new Asignacion(acceso, valor,tipo);:}
+
 ;
 
 TASIGNACION::= igual:valor{:RESULT = valor;:}
@@ -229,6 +266,7 @@ DECLARACION::=  LID:l {:RESULT  = new Declaracion(lleft, lright, l);:}
               | LID:l igual EXPL:valor {:RESULT = new Declaracion(lleft, lright,l, valor);:}
               | LID:l igual corchetei LARREGLO:valor corcheted {:RESULT = new DeclaracionArray(lleft, lright,l, valor);:}
               | LID:l igual corchetei  corcheted {:RESULT = new DeclaracionArray(lleft, lright,l, new ArrayList<Exp>() );:}
+              | LID:l igual llaveI LATRIBUTO:atributos llaveD{:RESULT = new Declaracion(lleft, lright, l, atributos);:}
 ;
 
 LARREGLO::= LARREGLO:l coma EXPL:valor {:l.add(valor); RESULT = l;:}
@@ -240,7 +278,8 @@ LID::= LID:lista coma identificador:valor {: lista.add(valor); RESULT = lista;:}
 ;
 
 EXPL ::= EXPL:valor1 and EXPL:valor2 {: RESULT = new And(valor1,valor2);:}
-        |EXPL:valor1 or EXPL:valor2 {: RESULT = new Or(valor1,valor2);:}        
+        |EXPL:valor1 or EXPL:valor2 {: RESULT = new Or(valor1,valor2);:}  
+        |SSELECCION:seleccion{:RESULT = seleccion;:}       
         |EXPC:valor{:RESULT = valor;:}
 ;
 
@@ -275,11 +314,72 @@ EXP::=
        |caracter:valor {:RESULT = new CharExp(valor);:}       
        |AUMENTO:aum {:RESULT = aum;:}
        |DECREMENTO:dec {:RESULT = dec;:}   
-       |ACCESO:acceso {:RESULT = acceso;:}    
+       |ACCESO:acceso {:RESULT = acceso;:}   
+       |LLAMADA:llamada{:RESULT = llamada;:}       
        ;
 
-AUMENTO::= identificador:id aumento {:RESULT = new Aumento(idleft, idright ,new idExp(id));:};
-DECREMENTO::=identificador:id decremento {:RESULT = new Decremento(idleft, idright ,new idExp(id));:};
+SSELECCION::= EXPL:condicion interrogacion EXPL:valorv dospuntos EXPL:valorf
+            {:
+                RESULT = new SSeleccion(condicionleft, condicionright, condicion, valorv, valorf);
+            :}
+;
 
-ACCESO::= identificador:nombre corchetei EXPL:expresion corcheted {: RESULT = new  AccesoArray(nombreright,nombreleft ,nombre, expresion);:}
+AUMENTO::= identificador:id aumento {:RESULT = new Aumento(idleft, idright ,new idExp(id));:}
+          |ACCESO:acceso aumento {:RESULT = new Aumento(accesoleft, accesoright ,acceso);:}
+;
+DECREMENTO::=identificador:id decremento {:RESULT = new Decremento(idleft, idright ,new idExp(id));:}
+        |ACCESO:acceso decremento {:RESULT = new Decremento(accesoleft, accesoright ,acceso);:}
+;
+
+ACCESO::= ACCESO:acceso corchetei EXPL:expresion corcheted {:RESULT = new  AccesoArray(expresionright,expresionleft ,acceso, expresion);:}
+        |identificador:nombre corchetei EXPL:expresion corcheted {: RESULT = new  AccesoArray(nombreright,nombreleft ,new idExp(nombre), expresion);:}  
+        |identificador:nombre1 punto identificador:nombre2 {: RESULT = new Acceso(nombre1right,nombre1left ,new idExp(nombre1), new idExp(nombre2));:}     
+;
+
+LATRIBUTO::= LATRIBUTO:t coma identificador:nombre dospuntos EXPL:valor 
+            {:
+                t.addAtributo(nombre,valor);
+                RESULT = t;
+            :}  
+            
+            |identificador:nombre dospuntos EXPL:valor 
+            {:
+                RESULT = new Atributo(nombreleft, nombreright, nombre, valor);
+            :}  
+;
+
+//Seleccion(int l, int c, Nodo condicion, ArrayList<Caso> lista)
+SELECCIONAR::= selecciona:i pari EXPL:condicion pard llaveI LCASO:lista llaveD 
+            {:
+                RESULT = new Seleccion(ileft, iright, condicion, lista);
+            :}
+            | selecciona:i pari EXPL:condicion pard llaveI LCASO:lista DEFECTO:defecto llaveD 
+            {:
+                lista.add(defecto);
+                RESULT = new Seleccion(ileft, iright, condicion, lista);
+            :}
+;
+
+LCASO::= LCASO:l CASO:caso {:l.add(caso); RESULT = l;:}
+        |CASO:caso {:ArrayList<Caso> l = new ArrayList<Caso>(); l.add(caso); RESULT = l;:}
+;
+
+
+CASO::= caso:i EXPL:condicion dospuntos BLOQUE:bloque {:RESULT = new Caso(ileft, iright, condicion, bloque);:}
+;
+
+DEFECTO::= defecto:i dospuntos BLOQUE:bloque {:RESULT = new Caso(ileft, iright, null, bloque);:}
+;
+
+RETORNAR::=  retornar:i EXPL:expresion {:RESULT = new Retorno(ileft, iright, expresion);:}
+;
+
+LLAMADA::= identificador:i pari LVALORES:valores pard 
+            {:
+                RESULT = new Llamada(ileft, iright, i, valores);
+            :}
+;
+
+LVALORES::= LVALORES:l coma EXPL:valor {:l.add(valor); RESULT = l;:}
+        |EXPL:valor {:ArrayList<Exp> l = new ArrayList<Exp>(); l.add(valor); RESULT = l;:}
 ;

@@ -11,7 +11,8 @@ package Analisis.Fs.AST;
  */
 public abstract class Nodo 
 {
-    public Object valor;
+    public Object valor="";
+    public Object valor3;
     public String valor2;
     public int linea, columna;    
     public abstract Nodo generar3D(Entorno entorno);

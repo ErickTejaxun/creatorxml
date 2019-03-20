@@ -31,6 +31,7 @@ public class StringExp extends Exp{
     @Override
     public Nodo generar3D(Entorno entorno) 
     {
+        valor = "";
         setValor();
         valor2 = valor+"";
         return this;

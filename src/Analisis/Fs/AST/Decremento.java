@@ -13,49 +13,91 @@ import Recursos.singlenton;
  * @author erick
  */
 public class Decremento extends Exp{    
-    public idExp id;
-    public Decremento(idExp i)
+    public Nodo id;
+    
+    public Decremento(Nodo i)
     {
         id = i;        
     }
-    public Decremento(int l, int c, idExp i)
+    public Decremento(int l, int c, Nodo i)
     {
         id = i;        
         linea = l;
         columna = c;
     }
-        
+     
+    
+    
     public void setValor(Entorno entorno)
     {
-        Object v1 = id.ejecutar(entorno).valor;        
-        int operacion = 0;
-        if(v1 instanceof Integer)
-        {
-            operacion += 1;
-        }
-        if(v1 instanceof Double)
-        {
-            operacion += 2;
-        }
-
-        
-        
-        switch(operacion)
+        String nombre = "";
+        if(id instanceof idExp)
         {
             
-            case 1: // int                                   
-                valor = entorno.actualizarSimbolo(id.id, Integer.parseInt(v1.toString())-1);
-                valor = Integer.parseInt(v1.toString())-1;
-                break;
-            case 2: // double                                                          
-                valor = entorno.actualizarSimbolo(id.id, Double.parseDouble(v1.toString()) - 1);
-                valor = Double.parseDouble(v1.toString()) - 1;                
-                break;                
-            default:
-                //entorno.ventana.setSalida("Error de tipos en aumento linea:"+linea + "\tColumna:"+columna);
-                singlenton.addErrores(new error("semantico",linea,columna,id.id +" --","Error de tipos en la operación decremento."));
-                break;
-        }      
+            Object v1 = id.ejecutar(entorno).valor;        
+            int operacion = 0;
+            if(v1 instanceof Integer)
+            {
+                operacion += 1;
+            }
+            if(v1 instanceof Double)
+            {
+                operacion += 2;
+            }            
+            nombre = ((idExp)id).id;
+            switch(operacion)
+            {
+
+                case 1: // int                                   
+                    valor = entorno.actualizarSimbolo(nombre, Integer.parseInt(v1.toString())-1);
+                    valor = Integer.parseInt(v1.toString())-1;
+                    break;
+                case 2: // double                                                          
+                    valor = entorno.actualizarSimbolo(nombre, Double.parseDouble(v1.toString()) - 1);
+                    valor = Double.parseDouble(v1.toString()) - 1;                
+                    break;                
+                default:
+                    //entorno.ventana.setSalida("Error de tipos en aumento linea:"+linea + "\tColumna:"+columna);
+                    singlenton.addErrores(new error("semantico",linea,columna, nombre +" --","Error de tipos en la operación decremento."));
+                    break;
+            }              
+        }
+        if(id instanceof AccesoArray)
+        {            
+            Object v1 = id.ejecutar(entorno).valor;        
+            if((v1 instanceof Integer) || (v1 instanceof Double))
+            {
+                
+                Asignacion tmp = new Asignacion(id, new Resta(id, new IntExp(1)), "=");
+                tmp.ejecutar(entorno);
+                valor = id.ejecutar(entorno).valor;                
+            }   
+            else
+            {
+                singlenton.addErrores(new error("semantico",linea,columna, nombre +" --","Error de tipos en la operación decremento."));
+            }              
+        }
+        if(id instanceof Acceso)
+        {            
+            Object v1 = id.ejecutar(entorno).valor;
+            if((v1 instanceof Integer))
+            {                
+                Asignacion tmp = new Asignacion(id, new Resta(new IntExp((Integer)v1), new IntExp(1)), "=");
+                tmp.ejecutar(entorno);
+                valor = id.ejecutar(entorno).valor;
+            }   
+            else
+            if((v1 instanceof Double))
+            {                
+                Asignacion tmp = new Asignacion(id, new Resta(new DoubleExp((Double)v1), new IntExp(1)), "=");
+                tmp.ejecutar(entorno);
+                valor = id.ejecutar(entorno).valor;
+            }               
+            else
+            {
+                 singlenton.addErrores(new error("semantico",linea,columna, nombre +" --","Error de tipos en la operación decremento."));
+            }
+        }        
     }
     @Override
     public Nodo generar3D(Entorno entorno) 
@@ -66,6 +108,7 @@ public class Decremento extends Exp{
     @Override
     public Nodo ejecutar(Entorno entorno) 
     {
+        valor = "";
         setValor(entorno);
         return this;
     }
