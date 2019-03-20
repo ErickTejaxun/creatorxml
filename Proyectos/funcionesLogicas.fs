@@ -1,5 +1,5 @@
 funcion Hanoi(var discos, var origen, var auxiliar, var destino) {
-    Imprimir("discos :"+discos +" origen:"+origen +" auxiliar:"+auxiliar+" destino:"+destino);
+    //Imprimir("discos :"+discos +" origen:"+origen +" auxiliar:"+auxiliar+" destino:"+destino);
     
     si (discos == 1)     
     {
@@ -12,7 +12,7 @@ funcion Hanoi(var discos, var origen, var auxiliar, var destino) {
         Hanoi(discos - 1, auxiliar, origen, destino);
     }
 }
-hanoi(3,1,2,3);
+
 
 
 funcion hofstaderFemenina(var n) {
@@ -62,23 +62,15 @@ funcion VerImpar(var b)
     imprimir("El numero " + b + " es: " + (impar(b) == 0 ? "Par" : "Impar"));
 }
 
-funcion ackerman(var m, var n) 
-{   
-  si(m == 0) 
-  {  	
-  	retornar n + 1; 
-  }
-  sino
-  {
-	si (n == 0) 
-	{ 		
-		retornar ackerman(m - 1, 1); 
-	} 
-	sino 
-	{		
-		retornar ackerman(m - 1, (ackerman(m, n - 1))); 
-	} 
-  }
+funcion ackermann(var m, var n) {
+    si (m == 0) {
+    	   Imprimir("Retornando n+1" + (n+1));
+        retornar (n + 1);
+    } sino si (m > 0 && n == 0) {
+        retornar ackermann(m - 1, 1);
+    } sino {
+        retornar ackermann(m - 1, ackermann(m, n - 1));
+    }
 }
 
 funcion entero(var valor)
@@ -143,14 +135,15 @@ funcion decision(var v)
 	     }
 	}
 }
-/*
-imprimir(decision(12));
+
+/*imprimir(decision(12));
 imprimir(factorial(12));
 imprimir("Erick");
 VerImpar(20);
 vermasculino();
 verfemenina();
+hanoi(3,1,2,3);
 */
-//imprimir(ackerman(2,2));
+imprimir(ackermann(3,2));
 
      

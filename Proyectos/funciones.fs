@@ -171,22 +171,26 @@ funcion fibonaci(var n){
 funcion VerPotencia(var num, var pot){
     Imprimir("La potencia de " + num + " a la " + pot + " es " + potencia(num, pot));
 }
-
+verpotencia(5,5);
 funcion VerFactorial(var num){
     Imprimir("El factorial de " + num + " es " + Factorial(num));
 }
+verfactorial(10);
 
 funcion VerInvertido(var num){
     Imprimir("El numero invertido de " + num + " es " + invertirNumero(num));
 }
+verinvertido(100);
 
 funcion VerMCD(var num, var p){
     Imprimir("El numero MCD de " + num + "a la " + p + " es " + sacar_mcd(num, p));
 }
+vermcd(100,3);
 
 funcion VerFibonacci(var num){
     Imprimir("El Fibonacci de " + num + " es " + Fibonaci(num));
 }
+verfibonacci(10);
 
 funcion Paisaje(var clasificacion){
 	Selecciona(clasificacion / 10){
@@ -250,4 +254,3 @@ funcion Paisaje(var clasificacion){
 		}
 	}
 }
-Paisaje(20);

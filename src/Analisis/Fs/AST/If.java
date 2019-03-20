@@ -63,6 +63,7 @@ public class If extends Sentencia{
                     }                    
                     if(valor instanceof Retorno)
                     {
+                        valor = ((Retorno)valor).ejecutar(entorno).valor;
                         return this;
                     }  
                     else

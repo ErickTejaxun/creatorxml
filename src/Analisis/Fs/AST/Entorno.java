@@ -81,7 +81,7 @@ public class Entorno
             }
             simbolo.tipo = tipo;
             tablaSimbolos.put(simbolo.id, simbolo);
-            System.out.println("Declaración de nueva variable :"+simbolo.id + "\ttipo:"+ simbolo.tipo +"\tvalor:"+simbolo.valor.toString());
+            //System.out.println("Declaración de nueva variable :"+simbolo.id + "\ttipo:"+ simbolo.tipo +"\tvalor:"+simbolo.valor.toString());
         }
         return false;
     }
