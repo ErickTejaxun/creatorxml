@@ -68,7 +68,7 @@ public class Declaracion  extends Sentencia{
                 valor = entorno.insertarSimbolo(new Simbolo(name, tipo, "var","nada"));                         
             }
             valor = exp.ejecutar(entorno).valor;
-            determinarTipo(valor);                       
+            determinarTipo(valor);             
             valor = entorno.insertarSimbolo(new Simbolo(lista.get(lista.size()-1),tipo , "var",exp.ejecutar(entorno).valor));                        
         }   
         else

@@ -91,7 +91,7 @@ sinosi = (sino){comentario}{si}
     }
     {comentario} 
     {
-        Imprimir(yytext());
+        //Imprimir(yytext());
     }
     "++"   {
                 addLexema("reservada", yytext(), yyline, yychar);            

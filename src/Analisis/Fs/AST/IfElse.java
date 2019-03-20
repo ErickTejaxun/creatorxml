@@ -55,13 +55,30 @@ public class IfElse extends Sentencia{
                     }
                     else
                     {
-                        s.ejecutar(ent);
+                       valor =  s.ejecutar(ent);                        
                     }                    
-                }                            
+                    if(valor instanceof Retorno)
+                      {
+                          return this;
+                      }   
+                    else
+                    {
+                        valor = ((Nodo)valor).valor;
+                    }                    
+                } 
+                
             }
             else
             {
-                ifelse.ejecutar(entorno);
+                valor = ifelse.ejecutar(entorno);
+                if(valor instanceof Retorno)
+                {
+                    return this;
+                } 
+                else
+                {
+                    valor = ((Nodo)valor).valor;
+                }                
             }
         }
         else

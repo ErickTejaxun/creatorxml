@@ -121,15 +121,21 @@ public class Bloque extends Sentencia{
             {
                 valor = sentencia.ejecutar(new Entorno(entorno, entorno.ventana)).valor;
             }
+            else                 
+            if (sentencia instanceof Metodo)
+            {
+                /*Ni merga*/
+            }
             else
             {     
-                valor = sentencia.ejecutar(entorno);
-                if(((Nodo)valor).valor3!=null)
-                {
-                    valor = sentencia.ejecutar(entorno).valor;
-                    return;
-                }
+                valor = sentencia.ejecutar(entorno).valor;
             }
+                        
+            if(valor instanceof Retorno)
+            {
+                valor = ((Nodo)valor).ejecutar(entorno).valor;
+                return;
+            }            
         }        
     }
     

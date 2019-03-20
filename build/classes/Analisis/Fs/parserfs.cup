@@ -378,6 +378,10 @@ LLAMADA::= identificador:i pari LVALORES:valores pard
             {:
                 RESULT = new Llamada(ileft, iright, i, valores);
             :}
+            | identificador:i pari  pard 
+            {:
+                RESULT = new Llamada(ileft, iright, i, new ArrayList<Exp>());
+            :}            
 ;
 
 LVALORES::= LVALORES:l coma EXPL:valor {:l.add(valor); RESULT = l;:}

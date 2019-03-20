@@ -495,7 +495,8 @@ public class InterfazIDE extends javax.swing.JFrame {
     }//GEN-LAST:event_botonBuscarActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        iniciarDebuger();
+        //iniciarDebuger();
+        Hanoi(3,1,2,3);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
@@ -1097,6 +1098,7 @@ public class InterfazIDE extends javax.swing.JFrame {
     {
         todosErrores.clear(); 
         singlenton.listaErrores.clear();
+        mostrarErrores(singlenton.listaErrores); 
         entornoGlobal.tablaSimbolos.clear();
         listaxml.clear();
         textAreaConsola.setText("");
@@ -1537,6 +1539,19 @@ public class InterfazIDE extends javax.swing.JFrame {
         nodo.ejecutar(entornoGlobal);
     }
     
+    public void Hanoi(int discos, int origen, int auxiliar, int destino) 
+    {
+        Imprimir("discos :"+discos +" origen:"+origen +" auxiliar:"+auxiliar+" destino:"+destino);
+        if (discos == 1)     
+        {
+            Imprimir("mover disco de " + origen + " a " + destino);
+        } else 
+        {
+            Hanoi(discos - 1, origen, destino, auxiliar);
+            Imprimir("mover disco de " + origen + " a " + destino);
+            Hanoi(discos - 1, auxiliar, origen, destino);
+        }
+    }    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem abrirCarpeta;
     private javax.swing.JTree arbolDirectorio;

@@ -1182,7 +1182,7 @@ public class scannerfs implements java_cup.runtime.Scanner {
           case 112: break;
           case 55: 
             { addLexema("reservada", yytext(), yyline, yychar);    
-                System.out.println("------------------------------retornar-------------------");        
+                //System.out.println("------------------------------retornar-------------------");        
                 return  new Symbol(sym.retornar, yychar, yyline, yytext());
             } 
             // fall through

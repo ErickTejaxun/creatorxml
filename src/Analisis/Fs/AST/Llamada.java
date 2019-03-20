@@ -48,22 +48,27 @@ public class Llamada extends Exp {
             singlenton.addErrores(new error("semantico",linea,columna, id,"El metodo no existe."));
             return;
         }
+        System.out.println("----------------LLAMADA---------------------");
         if(s.valor instanceof Metodo)
         {            
             int indice = 0;
             for(Exp parametro :parametros)
             {
-                ((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice)).exp = parametro;
-                ((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice)).ejecutar(entornoLocal);
+                Declaracion dec = ((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice));
+                dec.exp = parametro;
+                dec.ejecutar(entornoLocal);
+                //((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice)).exp = parametro;
+                //((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice)).ejecutar(entornoLocal);
                 indice++;
             }
-            /*Primero declaramos los valores*/
-            
+            /*Primero declaramos los valores*/            
             valor = ((Metodo)s.valor).bloque.ejecutar(entornoLocal).valor;
             if(valor == null)
             {
                 valor ="";
             }
+            //hanoi(3,1,2,3)
+            //funcion Hanoi(var discos, var origen, var auxiliar, var destino)
         }                
     }
     
@@ -78,8 +83,6 @@ public class Llamada extends Exp {
     {
         valor = "";
         setValor(entorno);                
-//        entorno.ventana.setSalida(valor.toString());
-//        System.out.println(valor.toString());
         return this;
     }
 }

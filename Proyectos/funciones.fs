@@ -1,7 +1,7 @@
 suma(10*5,30);
 suma(10,30);
 imprimir("-------------------");
-imprimir(fibonaci(11));
+imprimir(fibonaci(15));
 imprimir("-------------------");
 var contador = 2 ;
 contador++;

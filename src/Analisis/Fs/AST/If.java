@@ -59,13 +59,16 @@ public class If extends Sentencia{
                     }
                     else
                     {
-                       valor =  s.ejecutar(ent);
-                       if(s instanceof Retorno)
-                       {
-                           return this;
-                       }
-                       
+                       valor =  s.ejecutar(ent);                       
                     }                    
+                    if(valor instanceof Retorno)
+                    {
+                        return this;
+                    }  
+                    else
+                    {
+                        valor = ((Nodo)valor).valor;
+                    }
                 }
             }                        
         }

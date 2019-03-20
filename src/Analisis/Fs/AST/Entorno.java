@@ -81,70 +81,7 @@ public class Entorno
             }
             simbolo.tipo = tipo;
             tablaSimbolos.put(simbolo.id, simbolo);
-            
-            
-           //Comprobación de tipos perros
-           /* boolean flag = false;
-            String tipo1 = simbolo.tipo;
-            String tipo2 = "";
-            if(simbolo.valor instanceof String)
-            {
-                tipo2 = "string";
-            }                
-            if(simbolo.valor instanceof Integer)
-            {
-                tipo2 = "int";
-            }  
-            if(simbolo.valor instanceof Boolean)
-            {
-                tipo2 = "bool";
-            } 
-           switch(tipo1)
-           {
-               case "string":
-                   if(simbolo.valor instanceof String)
-                   {                       
-                       flag = true;
-                   }                   
-                   break;
-               case "int":
-                   if(simbolo.valor instanceof Integer)
-                   {                       
-                       flag = true;
-                   }                   
-                   if(simbolo.valor instanceof Double)
-                   {
-                       simbolo.valor = ((Double)simbolo.valor).intValue();
-                       flag = true;
-                   }                          
-                   break;
-               case "double":
-                   if(simbolo.valor instanceof Integer)
-                   {
-                       simbolo.valor = (Double)simbolo.valor;
-                       flag = true;
-                   }                   
-                   if(simbolo.valor instanceof Double)
-                   {                       
-                       flag = true;
-                   }                    
-                   break;                   
-               case "bool":
-                   if(simbolo.valor instanceof Boolean)
-                   {
-                       flag = true;
-                   }                   
-                   break;               
-               
-           }
-           if(flag)
-           {
-               tablaSimbolos.put(simbolo.id, simbolo);
-           }
-           else
-           {
-               ventana.setSalida("Error Semantico: Se esperaba un valor :" +simbolo.tipo + " Enviando:" + tipo2);
-           }*/
+            System.out.println("Declaración de nueva variable :"+simbolo.id + "\ttipo:"+ simbolo.tipo +"\tvalor:"+simbolo.valor.toString());
         }
         return false;
     }

@@ -34,7 +34,7 @@ public class Imprimir extends Sentencia {
         valor = "";
         setValor(entorno);                
         entorno.ventana.setSalida(valor.toString());
-        System.out.println(valor.toString());
+        //System.out.println(valor.toString());
         return this;
     }
 }
