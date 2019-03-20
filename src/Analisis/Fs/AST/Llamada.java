@@ -82,8 +82,7 @@ public class Llamada extends Exp {
                     {
                         valores.add( new idExp(((Simbolo)resultado).id));
                     }                    
-                }
-                
+                }                
             }
             for(Nodo parametro :valores)
             {
@@ -91,29 +90,14 @@ public class Llamada extends Exp {
                 Declaracion dec = ((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice));
                 dec.exp = (Exp)parametro;
                 dec.ejecutar(entornoLocal);
-                //((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice)).exp = parametro;
-                //((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice)).ejecutar(entornoLocal);
                 indice++;
-            }            
-            System.out.println(llamada+")");
-//            for(Exp parametro :parametros)
-//            {
-//                Declaracion dec = ((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice));
-//                dec.exp = parametro;
-//                dec.ejecutar(entornoLocal);
-//                //((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice)).exp = parametro;
-//                //((Declaracion)((Metodo)s.valor).declaracionParametros.get(indice)).ejecutar(entornoLocal);
-//                indice++;
-//            }
-            /*Primero declaramos los valores*/            
+            }                        
             valor = ((Metodo)s.valor).bloque.ejecutar(entornoLocal).valor;
             if(valor == null)
             {
                 valor ="";
             }
-            //hanoi(3,1,2,3)
-            //funcion Hanoi(var discos, var origen, var auxiliar, var destino)
-            //Hanoi(discos - 1, origen, destino, auxiliar);
+
         }                
     }
     

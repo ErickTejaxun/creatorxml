@@ -143,6 +143,7 @@ non terminal Caso CASO, DEFECTO;
 non terminal ArrayList<Caso> LCASO;
 non terminal Nodo RETORNAR;
 non terminal Llamada LLAMADA;
+non terminal Nodo NATIVA;
 
 /* Precedencia 
 precedence left suma, resta;
@@ -175,6 +176,13 @@ INSTRUCCIONES::= INSTRUCCIONES:met INSTRUCCION:valor{: met.add(valor); RESULT = 
                 |METODO:valor {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}   
                 |LLAMADA:valor puntocoma {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}   
 ;
+
+
+NATIVA::=  id:nombre punto id:funcion pari pard 
+            {:
+
+            :}
+;          
 
 METODO::= funcion:i identificador:nombre pari PARAMETROS:parametros pard BLOQUE:instrucciones
             {:

@@ -6,6 +6,7 @@
 package Analisis.Fs.AST;
 
 import Recursos.Display;
+import Recursos.singlenton;
 
 /**
  *
@@ -37,7 +38,7 @@ public class IfElse extends Sentencia{
         if(condicion instanceof Boolean)
         {            
             if((Boolean)condicion)
-            {
+            {                
                 Entorno ent = new Entorno(entorno, entorno.ventana);
                 for(Nodo s: bloque.sentencias)
                 {                    
@@ -55,30 +56,28 @@ public class IfElse extends Sentencia{
                     }
                     else
                     {
-                       valor =  s.ejecutar(ent);                        
+                       valor =  s.ejecutar(ent);                       
                     }                    
                     if(valor instanceof Retorno)
-                      {
-                          return this;
-                      }   
-                    else
-                    {
-                        valor = ((Nodo)valor).valor;
-                    }                    
-                } 
-                
+                    {                                                
+                        return this;
+                    }  
+                }
             }
             else
             {
-                valor = ifelse.ejecutar(entorno);
+                valor = ifelse.ejecutar(entorno).valor;                
                 if(valor instanceof Retorno)
-                {
+                {   
+                    System.out.println("------------------------------PUTA MADRE1------------------------" + ((Retorno)valor).ejecutar(entorno));
+                    //Object resultado = ((Nodo)valor).ejecutar(entorno).valor;
+                    //Display.agregarRetorno((Nodo)resultado);                    
                     return this;
                 } 
-                else
+                if(valor instanceof IfElse)
                 {
-                    valor = ((Nodo)valor).valor;
-                }                
+                    System.out.println("------------------------------PUTA MADRE------------------------");
+                }
             }
         }
         else

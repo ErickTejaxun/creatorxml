@@ -63,8 +63,9 @@ public class If extends Sentencia{
                     }                    
                     if(valor instanceof Retorno)
                     {
-                        valor = ((Retorno)valor).ejecutar(entorno).valor;
-                        return this;
+                        Object r = ((Nodo)valor).ejecutar(entorno);
+                        Display.agregarRetorno(((Nodo)r).valor);
+                        valor = (Nodo)r;
                     }  
                     else
                     {

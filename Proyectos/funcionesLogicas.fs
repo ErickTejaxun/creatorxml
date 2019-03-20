@@ -142,8 +142,9 @@ imprimir("Erick");
 VerImpar(20);
 vermasculino();
 verfemenina();
-hanoi(3,1,2,3);
-*/
-imprimir(ackermann(3,2));
+
+*/hanoi(3,1,2,3);
+
+imprimir(ackermann(2,2));
 
      

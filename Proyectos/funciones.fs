@@ -1,8 +1,11 @@
-suma(10*5,30);
+imprimir("-------------------");
+imprimir(fibonaci(10));
+imprimir("-------------------");
+
+
+
+Imprimir("Resultado: " + suma2(10*5,30));
 suma(10,30);
-imprimir("-------------------");
-imprimir(fibonaci(15));
-imprimir("-------------------");
 var contador = 2 ;
 contador++;
 contador--;
@@ -32,6 +35,7 @@ imprimir("----------------------------------");
 imprimir("El valor de z es " + z);
 imprimir("sumatoria x+y+z = " + (x+y));
 imprimir("El valor de flag es " + flag);
+
 /*
 En la siguiente parte de codigo, se imprimirá "veradero" si flag es falso.
 */
@@ -129,6 +133,10 @@ funcion suma(var x, var y)
 	imprimir(x+y);
 	
 }
+funcion suma2(var x, var y)
+{
+	retornar x+y;
+}
 
 funcion factorial(var n) {
     //imprimir("Factorial ... " + n);
@@ -185,7 +193,7 @@ verinvertido(100);
 funcion VerMCD(var num, var p){
     Imprimir("El numero MCD de " + num + "a la " + p + " es " + sacar_mcd(num, p));
 }
-vermcd(100,3);
+
 
 funcion VerFibonacci(var num){
     Imprimir("El Fibonacci de " + num + " es " + Fibonaci(num));
@@ -254,3 +262,5 @@ funcion Paisaje(var clasificacion){
 		}
 	}
 }
+
+vermcd(100,3);

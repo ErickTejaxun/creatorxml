@@ -29,8 +29,7 @@ public class Retorno extends Nodo
     public Nodo ejecutar(Entorno entorno) 
     {
         valor = "";
-        valor = expresion.ejecutar(entorno).valor;
-        valor3 = this;     
+        valor = expresion.ejecutar(entorno).valor;          
         return this;
     }
     

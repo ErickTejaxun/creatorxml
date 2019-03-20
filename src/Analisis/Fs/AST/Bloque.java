@@ -85,7 +85,8 @@ public class Bloque extends Sentencia{
             {
                 sentencia.ejecutar(new Entorno(entorno,entorno.ventana));
             }
-            else if(sentencia instanceof Romper)
+            else 
+            if(sentencia instanceof Romper)
             {
                 if(Display.esValido()!=null)
                 {
@@ -97,7 +98,8 @@ public class Bloque extends Sentencia{
                     entorno.ventana.setSalida("Error semantico, break no se encuentra dentro de un ciclo");
                 }                
             }
-            else if(sentencia instanceof Continuar)
+            else 
+            if(sentencia instanceof Continuar)
             {                
                 if(Display.esValido()!=null)
                 {
@@ -111,15 +113,19 @@ public class Bloque extends Sentencia{
                     entorno.ventana.setSalida("Error semantico, continue no se encuentra dentro de un ciclo");
                 }                                
             }
-            else if(sentencia instanceof Retorno)
+            else 
+            if(sentencia instanceof Retorno)
             {
-                valor = sentencia.ejecutar(entorno).valor;              
-                return;
+                Object r = sentencia.ejecutar(entorno);
+                Display.agregarRetorno(((Nodo)r).valor);
+                valor = (Nodo)r;
+                //return;
             }   
             else 
             if(sentencia instanceof Llamada)
             {
-                valor = sentencia.ejecutar(new Entorno(entorno, entorno.ventana)).valor;
+                //valor = sentencia.ejecutar(new Entorno(entorno, entorno.ventana)).valor;
+                valor = sentencia.ejecutar(entorno);
             }
             else                 
             if (sentencia instanceof Metodo)
@@ -128,14 +134,21 @@ public class Bloque extends Sentencia{
             }
             else
             {     
-                valor = sentencia.ejecutar(entorno).valor;
+                valor = sentencia.ejecutar(entorno);
             }
-                        
+                
+            /*Verificamos el resultado.*/
             if(valor instanceof Retorno)
             {
-                valor = ((Nodo)valor).ejecutar(entorno).valor;
+                //valor = ((Retorno)valor).ejecutar(entorno).valor;
+                valor = Display.getRetornoActual().ejecutar(entorno).valor;
+                //valor = ((Nodo)valor).ejecutar(entorno).valor;
                 return;
-            }            
+            }   
+//            else
+//            {
+//                valor = ((Nodo)valor).ejecutar(entorno).valor;
+//            }
         }        
     }
     
