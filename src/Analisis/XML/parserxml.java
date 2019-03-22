@@ -5,7 +5,6 @@
 
 package Analisis.XML;
 
-import Recursos.singlenton;
 import java_cup.runtime.*;
 import Recursos.*;
 import java.util.ArrayList;

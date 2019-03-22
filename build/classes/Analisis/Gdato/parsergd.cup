@@ -1,0 +1,179 @@
+package Analisis.Gdato; // Paquete
+import Analisis.Fs.AST.Simbolo;
+import java_cup.runtime.*; 
+import Recursos.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import Analisis.XML.AST.*;
+import java.util.Hashtable;
+
+parser code
+{:      
+    //public ArrayList<NodoXML> lista = new ArrayList<NodoXML>();
+    public ArrayList<error> listaErrores = new ArrayList<error>();
+    public ArrayList<Simbolo> lista;
+    /*
+    public void syntax_error(Symbol s)
+    {
+        System.err.println("El analizador se recupero tras el error\nError en la Línea " + (s.right+1) +" Columna "+(s.left+1)+ ". Identificador "
+        +s.value + " no reconocido." );        
+        listaErrores.add(new error("Sintactico",s.value.toString(), s.right+1, s.left+1));
+    }*/
+
+    /**Metodo al que se llama en el momento en que ya no es posible una recuperación de errores.
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        System.err.println("El analizador No se recupero tras el error\nError en la Línea " + (s.right+1)+ "Columna "+(s.left+1)+". Identificador " +
+        s.value + " no reconocido.");            
+    }*/
+
+    public LinkedList<Integer> posibles=new LinkedList();
+
+       /* Reporte de error encontrado. */
+    public void report_error(String message, Object info) 
+    {
+        int linea = 0;
+        int columna = 0;
+        java_cup.runtime.Symbol s = null;
+        StringBuilder m = new StringBuilder("Error Sintactico");
+
+        if (info instanceof java_cup.runtime.Symbol) 
+        {
+            s = ((java_cup.runtime.Symbol) info);
+            if (s.left >= 0) 
+            {                
+                columna = s.left+1;
+                if (s.right >= 0)
+                {
+                    linea = s.right + 1;
+                }                    
+            }
+        }
+
+        m.append(" Se esperaba: "+message);
+        //System.err.println(m.toString());
+        //System.out.println("Error");
+        //System.out.println("Error linea:"+linea+", col:"+columna);
+        LinkedList<String> toks = new LinkedList();
+
+        if(!expected_token_ids().isEmpty())
+        {
+            Imprimir("No esta vacia "+ expected_token_ids().size());
+            error a = new error();
+            a.setLinea(linea);
+            a.setColumna(columna);
+            a.setValor(s.value.toString());
+            a.setDescripcion("Sintactico");
+            a.setPath("-------");
+            for(int w=0; w<expected_token_ids().size(); w++)
+            { 
+                if(expected_token_ids().get(w) !=sym.error)
+                {
+                    int tok = (int)expected_token_ids().get(w);                        
+                    toks.add( symbol_name_from_id(tok) );
+                }
+            }
+        }
+
+        Imprimir(expected_token_ids().size());
+
+        error a = new error();
+        a.setLinea(linea);
+        a.setColumna(columna);
+        a.setValor(s.value.toString());
+        a.setDescripcion("Sintactico");
+        a.setPath("----");       
+        for(int w=0; w<expected_token_ids().size(); w++)
+        { 
+            if(expected_token_ids().get(w)!=sym.error)
+            {
+                int tok = (int)expected_token_ids().get(w);
+                toks.add( symbol_name_from_id(tok) );
+            }
+        }
+        String esperados = "";
+        for(String id : toks)
+        {
+            if(!esperados.equals(""))
+            {
+                esperados += ", ";
+            }
+            esperados += id;
+            
+        }
+        a.setDescripcion("Se esperaba: " +esperados); 
+        a.setTipo("Sintactico");
+        Imprimir("Linea: "+linea + "\tColumna: " + columna);
+        singlenton.addErrores(a);    
+
+    }
+    
+    public String symbol_name_from_id(int id){
+        return sym.terminalNames[id];
+    }
+
+    public void report_fatal_error(String message, Object info) 
+    {        
+        report_error(message, info);
+        //System.exit(0);
+    }  
+
+    public void Imprimir(Object str)  
+    {
+        System.out.println(str);
+    }
+    
+:}
+
+
+/*Terminales*/
+
+terminal String menorque, mayorque, slash, principal, lista, id, cadena;
+
+
+
+/*
+* Aquí están los no terminales
+*/
+non terminal INICIO;
+non terminal Simbolo REGISTRO;
+non terminal Hashtable<String, Object> ATRIBUTO, LATRIBUTO;
+non terminal ArrayList<Simbolo> LREGISTRO;
+
+
+/* ­­­­­­­­­­­­­­ Definición de la gramatica  ­­­­­­­­­­­ */
+start with INICIO; // indicamos con qué producción debe empezar la gramatica.    
+
+INICIO::= 
+        menorque lista mayorque LREGISTRO:l menorque slash lista mayorque
+        {:            
+            lista = l;
+        :}
+
+;
+
+LREGISTRO::= LREGISTRO:l REGISTRO:r {: l.add(r); RESULT = l;:}
+    |REGISTRO:r {: ArrayList<Simbolo> l = new ArrayList<Simbolo>(); l.add(r); RESULT = l;:}
+;
+
+REGISTRO::= menorque principal mayorque LATRIBUTO:atributos  menorque slash principal mayorque
+{:
+    Simbolo sim = new Simbolo();
+    sim.id = atributos.toString();
+    sim.valor = atributos;
+    sim.tipo = "objeto";
+    RESULT = sim;
+:}
+;
+
+LATRIBUTO::= 
+            LATRIBUTO:t menorque id:nombre mayorque cadena:valor  menorque slash id:nombre2 mayorque
+            {:
+                t.put(nombre,valor);
+            :}
+            |menorque id:nombre mayorque cadena:valor  menorque slash id:nombre2 mayorque
+            {:
+                Hashtable<String, Object> t = new Hashtable<String,Object>();
+                t.put(nombre, valor);
+                RESULT = t;
+            :}
+;

@@ -77,7 +77,13 @@ public class Div extends Exp{
                 {
                     case "int":
                     case "double":
-                        valor = Double.parseDouble(v1.toString()) / Double.parseDouble(v2.toString());  
+                        Double t = Double.parseDouble(v2.toString());
+                        if(t ==0)
+                        {
+                            singlenton.addErrores(new error("semantico",linea,columna,tipo1 +" / " +tipo2,"N/0 indeterminado"));
+                            break;
+                        }
+                        valor = Double.parseDouble(v1.toString()) / t;  
                         break;
                     default:
                         //ntorno.ventana.setSalida("Error de tipos operación suma, linea:"+linea + "\tColumna:"+columna);
@@ -91,7 +97,13 @@ public class Div extends Exp{
                 {
                     case "int":
                     case "double":
-                        valor = Double.parseDouble(v1.toString()) / Double.parseDouble(v2.toString());  
+                        Double t = Double.parseDouble(v2.toString());
+                        if(t ==0)
+                        {
+                            singlenton.addErrores(new error("semantico",linea,columna,tipo1 +" / " +tipo2,"N/0 indeterminado"));
+                            break;
+                        }
+                        valor = Double.parseDouble(v1.toString()) / t;                         
                         break;
                     default:
                         //entorno.ventana.setSalida("Error de tipos operación suma, linea:"+linea + "\tColumna:"+columna);

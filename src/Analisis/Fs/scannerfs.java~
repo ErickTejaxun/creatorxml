@@ -1008,7 +1008,7 @@ public class scannerfs implements java_cup.runtime.Scanner {
             // fall through
           case 83: break;
           case 26: 
-            { Imprimir(yytext());
+            { //Imprimir(yytext());
             } 
             // fall through
           case 84: break;

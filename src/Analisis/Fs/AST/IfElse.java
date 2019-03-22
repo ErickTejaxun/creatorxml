@@ -66,7 +66,7 @@ public class IfElse extends Sentencia{
             }
             else
             {
-                valor = ifelse.ejecutar(entorno);
+                valor = ifelse.ejecutar(entorno).valor;
                 /*Falso*/
             }
         }

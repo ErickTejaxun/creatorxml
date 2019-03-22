@@ -240,7 +240,7 @@ public class InterfazIDE extends javax.swing.JFrame {
             .addGap(0, 467, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("DASM", jPanel2);
+        jTabbedPane1.addTab("Salida", jPanel2);
 
         jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
 

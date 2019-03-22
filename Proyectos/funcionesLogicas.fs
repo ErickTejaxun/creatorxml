@@ -64,7 +64,7 @@ funcion VerImpar(var b)
 
 funcion ackermann(var m, var n) {
     si (m == 0) {
-    	   Imprimir("Retornando n+1" + (n+1));
+    	   //Imprimir("Retornando n+1" + (n+1));
         retornar (n + 1);
     } sino si (m > 0 && n == 0) {
         retornar ackermann(m - 1, 1);
@@ -136,15 +136,15 @@ funcion decision(var v)
 	}
 }
 
-/*imprimir(decision(12));
+imprimir(decision(12));
 imprimir(factorial(12));
 imprimir("Erick");
 VerImpar(20);
 vermasculino();
 verfemenina();
 
-*/hanoi(3,1,2,3);
+hanoi(3,1,2,3);
 
-imprimir(ackermann(2,2));
+imprimir(ackermann(4,1));
 
      

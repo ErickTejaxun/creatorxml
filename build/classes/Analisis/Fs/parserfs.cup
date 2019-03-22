@@ -170,17 +170,19 @@ BLOQUE::= llaveI INSTRUCCIONES:met llaveD {: RESULT = met;:}
 INSTRUCCIONES::= INSTRUCCIONES:met INSTRUCCION:valor{: met.add(valor); RESULT = met;:}
                 |INSTRUCCIONES:met BLOQUE:valor{: met.add(valor); RESULT = met;:}
                 |INSTRUCCIONES:met METODO:valor{: met.add(valor); RESULT = met;:}
+                /*|INSTRUCCIONES:met NATIVA:valor puntocoma{: met.add(valor); RESULT = met;:}*/
                 |INSTRUCCIONES:met LLAMADA:valor puntocoma{: met.add(valor); RESULT = met;:}
                 |INSTRUCCION:valor {: Bloque met = new Bloque(); met.add(valor); RESULT = met; :}
                 |BLOQUE:valor {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}   
                 |METODO:valor {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}   
-                |LLAMADA:valor puntocoma {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}   
+                |LLAMADA:valor puntocoma {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:} 
+                /*|NATIVA:valor puntocoma{:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}  */
 ;
 
 
-NATIVA::=  id:nombre punto id:funcion pari pard 
+NATIVA::=  identificador:nombre punto identificador:funcion pari pard 
             {:
-
+                RESULT = new Nativa (nombreleft, nombreright, nombre, funcion);
             :}
 ;          
 
@@ -252,6 +254,7 @@ INSTRUCCION::= DECLARACION:inst puntocoma{:RESULT = inst;:}
               |CONTINUE:valor {:RESULT = valor;:}
               |SELECCIONAR:valor {:RESULT = valor;:}
               |RETORNAR:valor puntocoma {:RESULT = valor;:}
+              |NATIVA:valor puntocoma{:RESULT = valor;:}  
 ;
 
 IMPRIMIR::= imprimir pari EXPL:valor pard {:RESULT = new Imprimir(valor);:}
@@ -323,7 +326,8 @@ EXP::=
        |AUMENTO:aum {:RESULT = aum;:}
        |DECREMENTO:dec {:RESULT = dec;:}   
        |ACCESO:acceso {:RESULT = acceso;:}   
-       |LLAMADA:llamada{:RESULT = llamada;:}       
+       |LLAMADA:llamada{:RESULT = llamada;:}  
+       |NATIVA:valor {:RESULT =(Exp) valor;:}      
        ;
 
 SSELECCION::= EXPL:condicion interrogacion EXPL:valorv dospuntos EXPL:valorf
