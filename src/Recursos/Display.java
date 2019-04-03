@@ -20,15 +20,16 @@ import java.util.ArrayList;
 public class Display 
 {
     public static ArrayList<Object> display = new ArrayList<Object>();
-    public static ArrayList<Object> displayMetodo = new ArrayList<Object>();
-    public static int puntero = 0; 
+    public static ArrayList<Object> displayMetodo = new ArrayList<Object>();    
     public static ArrayList<Nodo> retornos = new ArrayList<Nodo>();
 
+    
+    public static int puntero = 0; 
     
  
     public static void agregarRetorno(Object valor)
     {
-        System.out.println(valor.toString());
+        //System.out.println(valor.toString());
         if(valor instanceof String)
         {
             retornos.add(new StringExp((String)valor));

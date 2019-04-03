@@ -11,20 +11,7 @@ parser code
 {:      
     //public ArrayList<NodoXML> lista = new ArrayList<NodoXML>();
     public ArrayList<error> listaErrores = new ArrayList<error>();
-    public ArrayList<Simbolo> lista;
-    /*
-    public void syntax_error(Symbol s)
-    {
-        System.err.println("El analizador se recupero tras el error\nError en la Línea " + (s.right+1) +" Columna "+(s.left+1)+ ". Identificador "
-        +s.value + " no reconocido." );        
-        listaErrores.add(new error("Sintactico",s.value.toString(), s.right+1, s.left+1));
-    }*/
-
-    /**Metodo al que se llama en el momento en que ya no es posible una recuperación de errores.
-    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
-        System.err.println("El analizador No se recupero tras el error\nError en la Línea " + (s.right+1)+ "Columna "+(s.left+1)+". Identificador " +
-        s.value + " no reconocido.");            
-    }*/
+    public ArrayList<Simbolo> listaDatos = new ArrayList<Simbolo>();
 
     public LinkedList<Integer> posibles=new LinkedList();
 
@@ -128,7 +115,7 @@ parser code
 /*Terminales*/
 
 terminal String menorque, mayorque, slash, principal, lista, id, cadena;
-
+terminal Double numero;
 
 
 /*
@@ -136,44 +123,65 @@ terminal String menorque, mayorque, slash, principal, lista, id, cadena;
 */
 non terminal INICIO;
 non terminal Simbolo REGISTRO;
-non terminal Hashtable<String, Object> ATRIBUTO, LATRIBUTO;
+non terminal Hashtable<String, Object> LATRIBUTO;
 non terminal ArrayList<Simbolo> LREGISTRO;
+non terminal VALOR;
 
 
 /* ­­­­­­­­­­­­­­ Definición de la gramatica  ­­­­­­­­­­­ */
 start with INICIO; // indicamos con qué producción debe empezar la gramatica.    
 
 INICIO::= 
-        menorque lista mayorque LREGISTRO:l menorque slash lista mayorque
+        menorque lista mayorque LREGISTRO:l 
+        menorque slash lista mayorque
         {:            
-            lista = l;
+            listaDatos = l;
         :}
 
 ;
 
-LREGISTRO::= LREGISTRO:l REGISTRO:r {: l.add(r); RESULT = l;:}
-    |REGISTRO:r {: ArrayList<Simbolo> l = new ArrayList<Simbolo>(); l.add(r); RESULT = l;:}
+LREGISTRO::= 
+        LREGISTRO:l REGISTRO:r 
+        {: 
+            l.add(r); 
+            RESULT = l;
+        :}
+        |REGISTRO:r 
+        {: 
+            ArrayList<Simbolo> l = new ArrayList<Simbolo>(); 
+            l.add(r); 
+            RESULT = l;
+        :}
 ;
 
-REGISTRO::= menorque principal mayorque LATRIBUTO:atributos  menorque slash principal mayorque
-{:
-    Simbolo sim = new Simbolo();
-    sim.id = atributos.toString();
-    sim.valor = atributos;
-    sim.tipo = "objeto";
-    RESULT = sim;
-:}
+REGISTRO::= menorque principal mayorque LATRIBUTO:atributos  
+            menorque slash principal mayorque
+        {:
+            Simbolo sim = new Simbolo();
+            sim.id = atributos.toString();
+            sim.valor = atributos;
+            sim.tipo = "objeto";
+            RESULT = sim;
+        :}
 ;
 
 LATRIBUTO::= 
-            LATRIBUTO:t menorque id:nombre mayorque cadena:valor  menorque slash id:nombre2 mayorque
+            LATRIBUTO:l 
+            menorque id:nombre mayorque VALOR:valor  
+            menorque slash id:nombre2 mayorque
             {:
-                t.put(nombre,valor);
+                l.put(nombre,valor);
+                RESULT = l;
             :}
-            |menorque id:nombre mayorque cadena:valor  menorque slash id:nombre2 mayorque
+          |menorque id:nombre mayorque VALOR:valor  
+           menorque slash id:nombre2 mayorque
             {:
-                Hashtable<String, Object> t = new Hashtable<String,Object>();
-                t.put(nombre, valor);
-                RESULT = t;
+                Hashtable<String, Object> l = new Hashtable<String, Object>();
+                l.put(nombre, valor);
+                RESULT = l;
             :}
+;
+
+VALOR::= cadena:valor{:RESULT = valor;:}
+        |numero:valor{:RESULT = valor;:}
 ;

@@ -42,38 +42,8 @@ public class If extends Sentencia{
         {
             if((Boolean)condicion)
             {                
-                Entorno ent = new Entorno(entorno, entorno.ventana);
-                for(Nodo s: bloque.sentencias)
-                {                    
-                    if(s instanceof Romper)
-                    {
-                        if((boolean)Display.esValido())
-                        {
-                            Display.quitar();
-                            return this;
-                        }
-                        else
-                        {
-                            entorno.ventana.setSalida("Error, break no válido.\tLinea"+linea+"\t:Columna"+columna);
-                        }
-                    }
-                    else
-                    {
-                       valor =  s.ejecutar(ent);                       
-                    }                    
-                    if(valor instanceof Retorno)
-                    {
-                        Object r = ((Nodo)valor).ejecutar(entorno);
-                        Display.agregarRetorno(((Nodo)r).valor);
-                        valor = (Nodo)r;
-                        return this;
-                    }  
-                    else
-                    {
-                        valor = ((Nodo)valor).valor;
-                    }
-                }
-            }                        
+                valor = bloque.ejecutar(entorno).valor;
+            }   
         }
         else
         {

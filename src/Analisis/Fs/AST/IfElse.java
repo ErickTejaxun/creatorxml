@@ -33,47 +33,27 @@ public class IfElse extends Sentencia{
     public Nodo ejecutar(Entorno entorno) 
     {
         valor = "";
-        /*Ejecucion del if*/
         Object condicion = cond.ejecutar(entorno).valor;
         if(condicion instanceof Boolean)
-        {            
+        {
             if((Boolean)condicion)
             {                
-                Entorno ent = new Entorno(entorno, entorno.ventana);
-                for(Nodo s: bloque.sentencias)
-                {                    
-                    if(s instanceof Romper)
-                    {
-                        if((boolean)Display.esValido())
-                        {
-                            Display.quitar();
-                            return this;
-                        }
-                        else
-                        {
-                            entorno.ventana.setSalida("Error, break no válido.\tLinea"+linea+"\t:Columna"+columna);
-                        }
-                    }
-                    else
-                    {
-                       valor =  s.ejecutar(ent).valor;                       
-                    }                    
-                    if(valor instanceof Retorno)
-                    {                                                
-                        return this;
-                    }  
-                }
+                valor = bloque.ejecutar(entorno).valor;
             }
             else
             {
                 valor = ifelse.ejecutar(entorno).valor;
-                /*Falso*/
+            }
+            
+            if(valor instanceof Retorno)
+            {
+                return this;
             }
         }
         else
         {
             entorno.ventana.setSalida("Error de tipo, se esperaba un tipo booleano\tLinea"+linea+"\t:Columna"+columna);
-        }        
+        }
         return this;
     }
     

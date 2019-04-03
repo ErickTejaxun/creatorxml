@@ -39,6 +39,7 @@ import Recursos.*;
     }    
     public void addLexema(String tipo, String valor, int linea, int columna)
     {        
+        Imprimir(valor +"\t"+ tipo);
         listaLexemas.add(new lexema(tipo, valor, linea, columna));	            
     } 
 
@@ -101,6 +102,7 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
     }
     "<"
         {
+                
                 addLexema("cadena",yytext(), yyline, yychar);
                 return new Symbol(sym.menorque,yychar, yyline, yytext());
         }                                         
@@ -124,15 +126,15 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
                 addLexema("cadena",yytext(), yyline, yychar);
                 return new Symbol(sym.lista,yychar, yyline, yytext());
         }  
-{cadenaComillas}                                                                                   
+    {cadenaComillas}                                                                                   
         {
                 addLexema("cadena",yytext(), yyline, yychar);
-                return new Symbol(sym.cadena,yychar, yyline, yytext());
+                return new Symbol(sym.cadena,yychar, yyline, yytext().substring(1,yytext().length()-1));
         }     
-{id}                                                                                   
+    {id}                                                                                   
         {
                 addLexema("cadena",yytext(), yyline, yychar);
-                return new Symbol(sym.id,yychar, yyline, yytext());
+                return new Symbol(sym.id,yychar, yyline, yytext().toLowerCase());
         }                                     
     .		
     {

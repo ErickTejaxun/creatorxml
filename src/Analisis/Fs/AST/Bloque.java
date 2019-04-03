@@ -62,7 +62,7 @@ public class Bloque extends Sentencia{
     {
         valor = "";
         primeraPasada(entorno.ventana.entornoGlobal);
-        ejecutarInstrucciones(entorno);        
+        ejecutarInstrucciones(new Entorno(entorno, entorno.ventana));        
         return this;
     }
     
@@ -74,82 +74,25 @@ public class Bloque extends Sentencia{
             {
                 sentencia.ejecutar(entorno);
             }
+            if(sentencia instanceof Importar)
+            {
+                
+            }            
         }        
     }
         
     public void ejecutarInstrucciones(Entorno entorno)
-    {
+    {        
+        //Display.add(this);        
         for (Nodo sentencia : sentencias) 
-        {
-            if(sentencia instanceof Bloque)
-            {
-                sentencia.ejecutar(new Entorno(entorno,entorno.ventana));
-            }
-            else 
-            if(sentencia instanceof Romper)
-            {
-                if(Display.esValido()!=null)
-                {
-                    Display.quitar();
-                    return;
-                }
-                else
-                {
-                    entorno.ventana.setSalida("Error semantico, break no se encuentra dentro de un ciclo");
-                }                
-            }
-            else 
-            if(sentencia instanceof Continuar)
-            {                
-                if(Display.esValido()!=null)
-                {
-                    if(Display.esValido() instanceof Continuar)
-                    {
-                        continue;
-                    }
-                }
-                else
-                {
-                    entorno.ventana.setSalida("Error semantico, continue no se encuentra dentro de un ciclo");
-                }                                
-            }
-            else 
-            if(sentencia instanceof Retorno)
-            {
-                Object r = sentencia.ejecutar(entorno);
-                Display.agregarRetorno(((Nodo)r).valor);
-                valor = (Nodo)r;
-                //return;
-            }   
-            else 
-            if(sentencia instanceof Llamada)
-            {
-                //valor = sentencia.ejecutar(new Entorno(entorno, entorno.ventana)).valor;
-                valor = sentencia.ejecutar(entorno);
-            }
-            else                 
-            if (sentencia instanceof Metodo)
-            {
-                /*Ni merga*/
-            }
-            else
-            {     
-                valor = sentencia.ejecutar(entorno).valor;
-            }
-                
-            /*Verificamos el resultado.*/
+        {             
+            valor = sentencia.ejecutar(entorno).valor;
             if(valor instanceof Retorno)
             {
-                //valor = ((Retorno)valor).ejecutar(entorno).valor;
                 valor = Display.getRetornoActual().ejecutar(entorno).valor;
-                //valor = ((Nodo)valor).ejecutar(entorno).valor;
-                return;
-            }   
-//            else
-//            {
-//                valor = ((Nodo)valor).ejecutar(entorno).valor;
-//            }
+            } 
         }        
+        Display.quitarMetodo();
     }
     
 }

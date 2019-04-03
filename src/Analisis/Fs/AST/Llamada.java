@@ -10,6 +10,7 @@ import Analisis.Gdato.scannergd;
 import Recursos.error;
 import Recursos.singlenton;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,13 +82,19 @@ public class Llamada extends Exp {
                     {
                         valores.add(new BoolExp((Boolean)resultado));
                     }   
-                    else
+                    else      
+                    if(resultado instanceof Simbolo)
                     {
-                        if(resultado instanceof Simbolo)
-                        {
-                            valores.add( new idExp(((Simbolo)resultado).id));
-                        }                    
-                    }                
+                        valores.add( new idExp(((Simbolo)resultado).id));
+                    }  
+                    else 
+                    if(resultado instanceof Hashtable)
+                    {
+                        Simbolo stemp = new Simbolo("item", "object", "var",resultado);
+                        entorno.insertarSimbolo(stemp);
+                        valores.add( new idExp( stemp.id));
+                    }
+                                  
                 }
                 for(Nodo parametro :valores)
                 {
@@ -113,9 +120,9 @@ public class Llamada extends Exp {
                 scannergd scannerdg_ = new scannergd(new java.io.FileReader((String)ruta));
                 parsergd_ = new parsergd(scannerdg_);
                 parsergd_.parse();              
-                if(parsergd_.lista!=null)
+                if(parsergd_.listaDatos!=null)
                 {
-                      valor = parsergd_.lista;
+                      valor = parsergd_.listaDatos;
                 }
         }
     }

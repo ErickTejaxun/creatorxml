@@ -116,7 +116,8 @@ parser code
 
 terminal String suma, multi, resta, div, or, and,si,sino/*,sinosi*/, corcheted, corchetei, punto, interrogacion, selecciona, defecto, retornar;
 terminal String desigual, igualigual, igual, mayor, menor, mayorigual,  menorigual, exclam, mientras, aumento, decremento, para, funcion;
-terminal String tint, tchar, tbool, tstring, tdouble, imprimir,cadena, nulo, masigual, menosigual, multiigual, divigual,coma;
+terminal String arrayarchivo;
+terminal String tint, tchar, tbool, tstring, tdouble, imprimir,cadena, nulo, masigual, menosigual, multiigual, divigual,coma,importar;
 terminal String puntocoma, llaveI, llaveD, pard, pari, identificador, detener,tcontinuar, dospuntos, caso,seleccion, var, potencia;
 terminal Boolean falso, verdadero;
 terminal Integer entero;
@@ -128,7 +129,7 @@ terminal char caracter;
 * Aquí están los no terminales
 */
 non terminal INICIO;
-non terminal Exp  EXP, EXPL, EXPC, AUMENTO, DECREMENTO,  ACTUALIZACION, ACCESO, SSELECCION;
+non terminal Exp  EXP, EXPL, EXPC, AUMENTO, DECREMENTO,  ACTUALIZACION, ACCESO, SSELECCION, ARRAYARCHIVO;
 non terminal String TIPO, TASIGNACION;
 non terminal /*Sentencia*/ Nodo  INSTRUCCION, DECLARACION,ASIGNACION, IMPRIMIR , IF  , ELSE ,WHILE,FOR;
 non terminal Sentencia BREAK,SWITCH, CONTINUE, METODO;
@@ -143,7 +144,8 @@ non terminal Caso CASO, DEFECTO;
 non terminal ArrayList<Caso> LCASO;
 non terminal Nodo RETORNAR;
 non terminal Llamada LLAMADA;
-non terminal Nodo NATIVA;
+non terminal Nodo NATIVA, IMPORTAR;
+
 
 /* Precedencia 
 precedence left suma, resta;
@@ -172,18 +174,37 @@ INSTRUCCIONES::= INSTRUCCIONES:met INSTRUCCION:valor{: met.add(valor); RESULT = 
                 |INSTRUCCIONES:met METODO:valor{: met.add(valor); RESULT = met;:}
                 /*|INSTRUCCIONES:met NATIVA:valor puntocoma{: met.add(valor); RESULT = met;:}*/
                 |INSTRUCCIONES:met LLAMADA:valor puntocoma{: met.add(valor); RESULT = met;:}
+                |INSTRUCCIONES:met IMPORTAR:valor puntocoma{: met.add(valor); RESULT = met;:}
                 |INSTRUCCION:valor {: Bloque met = new Bloque(); met.add(valor); RESULT = met; :}
                 |BLOQUE:valor {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}   
                 |METODO:valor {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}   
                 |LLAMADA:valor puntocoma {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:} 
+                |IMPORTAR:valor puntocoma {:Bloque met = new Bloque(); met.add(valor); RESULT = met;:} 
                 /*|NATIVA:valor puntocoma{:Bloque met = new Bloque(); met.add(valor); RESULT = met;:}  */
 ;
 
-
-NATIVA::=  identificador:nombre punto identificador:funcion pari pard 
+IMPORTAR::= importar:i pari EXPL:destino pard 
             {:
-                RESULT = new Nativa (nombreleft, nombreright, nombre, funcion);
+                RESULT = new Importar(iright,ileft, destino);
+            :};
+
+NATIVA::=  
+             NATIVA:origen punto identificador:funcion pari pard 
+             {:
+                RESULT= new Nativa(origenright, origenleft, origen, funcion);
+             :}
+            |NATIVA:origen punto identificador:funcion pari EXPL:metodo pard                         
+             {:
+                RESULT= new Nativa(origenright, origenleft, origen, metodo);
+             :}            
+            |identificador:nombre punto identificador:funcion pari pard 
+            {:
+                RESULT = new Nativa (nombreleft, nombreright, new idExp(nombre), funcion);
             :}
+            |identificador:nombre punto identificador:funcion pari EXPL:metodo  pard 
+            {:
+                RESULT = new Nativa (nombreleft, nombreright, new idExp(nombre), funcion, metodo);
+            :}            
 ;          
 
 METODO::= funcion:i identificador:nombre pari PARAMETROS:parametros pard BLOQUE:instrucciones
@@ -327,8 +348,16 @@ EXP::=
        |DECREMENTO:dec {:RESULT = dec;:}   
        |ACCESO:acceso {:RESULT = acceso;:}   
        |LLAMADA:llamada{:RESULT = llamada;:}  
-       |NATIVA:valor {:RESULT =(Exp) valor;:}      
+       |NATIVA:valor {:RESULT =(Exp) valor;:}   
+       |ARRAYARCHIVO:valor{:RESULT = valor;:}   
        ;
+
+ARRAYARCHIVO::= arrayarchivo:i pari EXPL:expresion pard
+                {:
+                    RESULT = new ArrayArchivo(iright, ileft, expresion);
+                :}
+;
+
 
 SSELECCION::= EXPL:condicion interrogacion EXPL:valorv dospuntos EXPL:valorf
             {:
@@ -344,6 +373,7 @@ DECREMENTO::=identificador:id decremento {:RESULT = new Decremento(idleft, idrig
 ;
 
 ACCESO::= ACCESO:acceso corchetei EXPL:expresion corcheted {:RESULT = new  AccesoArray(expresionright,expresionleft ,acceso, expresion);:}
+        |ACCESO:acceso punto identificador:nombre {:RESULT = new  Acceso(accesoright,accesoleft ,acceso, new idExp(nombre));:}                
         |identificador:nombre corchetei EXPL:expresion corcheted {: RESULT = new  AccesoArray(nombreright,nombreleft ,new idExp(nombre), expresion);:}  
         |identificador:nombre1 punto identificador:nombre2 {: RESULT = new Acceso(nombre1right,nombre1left ,new idExp(nombre1), new idExp(nombre2));:}     
 ;
@@ -396,6 +426,8 @@ LLAMADA::= identificador:i pari LVALORES:valores pard
             :}            
 ;
 
+
 LVALORES::= LVALORES:l coma EXPL:valor {:l.add(valor); RESULT = l;:}
         |EXPL:valor {:ArrayList<Exp> l = new ArrayList<Exp>(); l.add(valor); RESULT = l;:}
 ;
+

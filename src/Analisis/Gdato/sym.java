@@ -13,6 +13,7 @@ public class sym {
   public static final int mayorque = 3;
   public static final int slash = 4;
   public static final int EOF = 0;
+  public static final int numero = 9;
   public static final int lista = 6;
   public static final int principal = 5;
   public static final int error = 1;
@@ -26,7 +27,8 @@ public class sym {
   "principal",
   "lista",
   "id",
-  "cadena"
+  "cadena",
+  "numero"
   };
 }
 

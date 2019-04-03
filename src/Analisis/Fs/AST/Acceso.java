@@ -54,6 +54,56 @@ public class Acceso extends Exp
                 }
             }
         }
+        else
+        if(origen instanceof Acceso)
+        {
+            Object variable = origen.ejecutar(entorno).valor;
+            if(variable instanceof Simbolo)
+            {
+                
+            }
+        }
+        else 
+        if(origen instanceof AccesoArray)
+        {
+            Object variable = origen.ejecutar(entorno).valor;
+            if(variable instanceof Hashtable)
+            {
+                if(atributo instanceof idExp)
+                {
+                    String nombreAtributo = ((idExp)atributo).id;
+                    Object valorVarible = ((Hashtable)variable).get(nombreAtributo);
+                    if(valorVarible!=null)
+                    {
+                        valor = valorVarible;
+                    }                 
+                    else
+                    {
+                       singlenton.addErrores(new error("semantico",linea,columna, nombreAtributo ,"No se ha encontrado el atributo solicitado.")); 
+                    }
+                }
+            }
+            else
+            if(variable instanceof Simbolo)
+            {
+                if(((Simbolo)variable).valor instanceof Hashtable)
+                {
+                    if(atributo instanceof idExp)
+                    {
+                        String nombreAtributo = ((idExp)atributo).id;
+                        Object valorVarible = ((Hashtable)((Simbolo)variable).valor).get(nombreAtributo);
+                        if(valorVarible!=null)
+                        {
+                            valor = valorVarible;
+                        }                 
+                        else
+                        {
+                           singlenton.addErrores(new error("semantico",linea,columna, nombreAtributo ,"No se ha encontrado el atributo solicitado.")); 
+                        }
+                    }
+                }               
+            }
+        }
     }
     
     

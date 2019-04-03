@@ -39,6 +39,7 @@ import Recursos.*;
     }    
     public void addLexema(String tipo, String valor, int linea, int columna)
     {        
+        Imprimir(valor +"\t"+ tipo);
         listaLexemas.add(new lexema(tipo, valor, linea, columna));	            
     } 
 
@@ -66,7 +67,7 @@ import Recursos.*;
 
 espacio = \t|\f|" "|\r|\n    // ER para capturar espacios, salto de línea, tabulaciones.
 numero = ([0-9][0-9]*) ("." [0-9][0-9]*)?       // ER para capturar números.
-/*decimal= {numero}"."{numero}*/ // Expresión 
+decimal= {numero}"."{numero} // Expresión 
 /*rgb  = ("#"{id}| "#"{digito} | "#"{digito}{id})*/
 letra = ([a-zA-Z]|"ñ"|"á"|"é"|"í"|"ó"|"ú")
 InputCharacter = [^\r\n]
@@ -101,6 +102,7 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
     }
     "<"
         {
+                
                 addLexema("cadena",yytext(), yyline, yychar);
                 return new Symbol(sym.menorque,yychar, yyline, yytext());
         }                                         
@@ -124,16 +126,26 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
                 addLexema("cadena",yytext(), yyline, yychar);
                 return new Symbol(sym.lista,yychar, yyline, yytext());
         }  
-{cadenaComillas}                                                                                   
+    {cadenaComillas}                                                                                   
         {
                 addLexema("cadena",yytext(), yyline, yychar);
-                return new Symbol(sym.cadena,yychar, yyline, yytext());
+                return new Symbol(sym.cadena,yychar, yyline, yytext().substring(1,yytext().length()-1));
         }     
-{id}                                                                                   
+    {id}                                                                                   
         {
                 addLexema("cadena",yytext(), yyline, yychar);
-                return new Symbol(sym.id,yychar, yyline, yytext());
-        }                                     
+                return new Symbol(sym.id,yychar, yyline, yytext().toLowerCase());
+        }   
+    {numero}                                                                                   
+        {
+                addLexema("numero",yytext(), yyline, yychar);
+                return new Symbol(sym.numero,yychar, yyline, Double.parseDouble( yytext()));
+        }   
+    {decimal}                                                                                   
+        {
+                addLexema("numero",yytext(), yyline, yychar);
+                return new Symbol(sym.numero,yychar, yyline, Double.parseDouble( yytext()));
+        }                                                   
     .		
     {
             System.out.println("Caracter ilegal: " + yytext()+" Linea : "+yyline +" Columna: "+yychar); 

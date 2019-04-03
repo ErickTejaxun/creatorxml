@@ -26,7 +26,13 @@ public class Atributo extends  Exp
         this.linea = l;
         this.columna = c;
         t.put(i, e);        
-    }       
+    }   
+    public Atributo(String i)
+    {
+        linea = 0;
+        columna = 0;
+        id = i;        
+    }
     
     public void addAtributo(String id, Nodo e)
     {

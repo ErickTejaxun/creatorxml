@@ -5,6 +5,8 @@
  */
 package Analisis.Fs.AST;
 
+import Recursos.Display;
+
 /**
  *
  * @author erick
@@ -27,9 +29,9 @@ public class Retorno extends Nodo
 
     @Override
     public Nodo ejecutar(Entorno entorno) 
-    {
-        valor = "";
-        valor = expresion.ejecutar(entorno).valor;          
+    {        
+        Display.agregarRetorno(expresion.ejecutar(entorno).valor);
+        valor = this;
         return this;
     }
     

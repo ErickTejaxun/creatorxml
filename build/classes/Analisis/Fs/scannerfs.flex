@@ -221,6 +221,14 @@ sinosi = (sino){comentario}{si}
                 addLexema("reservada", yytext(), yyline, yychar);            
                 return  new Symbol(sym.detener, yychar, yyline, yytext());
             }
+    "crearArrayDesdeArchivo"   {
+                addLexema("reservada", yytext(), yyline, yychar);            
+                return  new Symbol(sym.arrayarchivo, yychar, yyline, yytext());
+            }            
+    "importar"   {
+                addLexema("reservada", yytext(), yyline, yychar);            
+                return  new Symbol(sym.importar, yychar, yyline, yytext());
+            }            
     "funcion"   {
                 addLexema("reservada", yytext(), yyline, yychar);            
                 return  new Symbol(sym.funcion, yychar, yyline, yytext());
