@@ -153,8 +153,8 @@ precedence left multi, div;*/
 precedence left suma, resta ;
 precedence left div, multi;
 precedence left potencia;
-precedence left and;
 precedence left or;
+precedence left and;
 precedence left exclam;
 precedence left interrogacion;
 
@@ -193,15 +193,15 @@ NATIVA::=
              {:
                 RESULT= new Nativa(origenright, origenleft, origen, funcion);
              :}
-            |NATIVA:origen punto identificador:funcion pari identificador:metodo pard                         
+            |NATIVA:origen punto identificador:funcion pari EXPL:metodo pard                         
              {:
-                RESULT= new Nativa(origenright, origenleft, origen, funcion, metodo);
+                RESULT= new Nativa(origenright, origenleft, origen, metodo);
              :}            
             |identificador:nombre punto identificador:funcion pari pard 
             {:
                 RESULT = new Nativa (nombreleft, nombreright, new idExp(nombre), funcion);
             :}
-            |identificador:nombre punto identificador:funcion pari identificador:metodo  pard 
+            |identificador:nombre punto identificador:funcion pari EXPL:metodo  pard 
             {:
                 RESULT = new Nativa (nombreleft, nombreright, new idExp(nombre), funcion, metodo);
             :}            

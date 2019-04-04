@@ -11,7 +11,11 @@ import Analisis.Gdato.parsergd;
 import Analisis.Gdato.scannergd;
 import Recursos.error;
 import Recursos.singlenton;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.StringReader;
+import java_cup.runtime.Scanner;
 
 /**
  *
@@ -37,8 +41,24 @@ public class ArrayArchivo extends Exp
         scannergd scannergd_;
         String pathReal = pathRaiz+"\\"+path.replace("/", "\\");
         try 
-        {
-            scannergd_ = new scannergd(new java.io.FileReader(pathReal));
+        {           
+            File archivo= new File(pathReal); 
+            java.util.Scanner sc = new java.util.Scanner(archivo); 
+            String data = "";
+            while (sc.hasNextLine())
+            {
+                if(data.equals(""))
+                {
+                    data = sc.nextLine();
+                }
+                else
+                {
+                    data = data + "\n" + sc.nextLine();
+                }
+            }        
+            data = data.replace("\"\"","\" \"");
+            //scannergd_ = new scannergd(new java.io.FileReader(pathReal));
+            scannergd_ = new scannergd(new BufferedReader(new StringReader(data)));
             parsergd_ = new parsergd(scannergd_);
             parsergd_.parse();
             if(!parsergd_.listaDatos.isEmpty())

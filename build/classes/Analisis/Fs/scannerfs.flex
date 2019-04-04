@@ -68,7 +68,7 @@ letra = ([a-zA-Z]|"ñ"|"á"|"é"|"í"|"ó"|"ú")
 InputCharacter = [^\r\n]
 LineTerminator = \r|\n|\r\n
 id = (({letra}|"_")({letra}|{numero}|"_")*)
-cadenaComillas = (("\"" [^] ~"\"") | ("\“" [^] ~"\”"))
+cadenaComillas = (("\"" [^] ~"\"") | ("\“" [^] ~"\”")|("\"" "\""))
 cadComillaSimple = ("'" [^] ~"'")
 comentario = {TraditionalComment} | {EndOfLineComment} | 
           {DocumentationComment}
@@ -224,7 +224,11 @@ sinosi = (sino){comentario}{si}
     "crearArrayDesdeArchivo"   {
                 addLexema("reservada", yytext(), yyline, yychar);            
                 return  new Symbol(sym.arrayarchivo, yychar, yyline, yytext());
-            }            
+            }    
+    "crearventana"   {
+                addLexema("reservada", yytext(), yyline, yychar);            
+                return  new Symbol(sym.crearventana, yychar, yyline, yytext());
+            }                     
     "importar"   {
                 addLexema("reservada", yytext(), yyline, yychar);            
                 return  new Symbol(sym.importar, yychar, yyline, yytext());
@@ -321,12 +325,19 @@ sinosi = (sino){comentario}{si}
                 
                 addLexema("Entero", yytext(), yyline, yychar);  	        
                 return new Symbol(sym.entero, yychar, yyline, Integer.parseInt(yytext()));             
-            }   
+            }               
     {cadenaComillas}  
             {  
                 
                 addLexema("Cadena", yytext(), yyline, yychar);  	        
-                return new Symbol(sym.cadena, yychar, yyline, yytext().substring(1, yytext().length()-1));             
+                if(yytext().equals("\"°\""))
+                {
+                    return new Symbol(sym.cadena, yychar, yyline,"");
+                }   
+                else
+                {
+                    return new Symbol(sym.cadena, yychar, yyline, yytext().substring(1, yytext().length()-1));
+                }          
             }   
     {cadComillaSimple}  
             {  

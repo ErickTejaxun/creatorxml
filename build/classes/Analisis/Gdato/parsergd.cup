@@ -115,7 +115,8 @@ parser code
 /*Terminales*/
 
 terminal String menorque, mayorque, slash, principal, lista, id, cadena;
-
+terminal Double decimal;
+terminal Integer numero;
 
 
 /*
@@ -123,8 +124,9 @@ terminal String menorque, mayorque, slash, principal, lista, id, cadena;
 */
 non terminal INICIO;
 non terminal Simbolo REGISTRO;
-non terminal Hashtable<String, String> LATRIBUTO;
+non terminal Hashtable<String, Object> LATRIBUTO;
 non terminal ArrayList<Simbolo> LREGISTRO;
+non terminal VALOR;
 
 
 /* ­­­­­­­­­­­­­­ Definición de la gramatica  ­­­­­­­­­­­ */
@@ -166,17 +168,22 @@ REGISTRO::= menorque principal mayorque LATRIBUTO:atributos
 
 LATRIBUTO::= 
             LATRIBUTO:l 
-            menorque id:nombre mayorque cadena:valor  
+            menorque id:nombre mayorque VALOR:valor  
             menorque slash id:nombre2 mayorque
             {:
                 l.put(nombre,valor);
                 RESULT = l;
             :}
-          |menorque id:nombre mayorque cadena:valor  
+          |menorque id:nombre mayorque VALOR:valor  
            menorque slash id:nombre2 mayorque
             {:
-                Hashtable<String, String> l = new Hashtable<String, String>();
+                Hashtable<String, Object> l = new Hashtable<String, Object>();
                 l.put(nombre, valor);
                 RESULT = l;
             :}
+;
+
+VALOR::= cadena:valor{:RESULT = valor;:}
+        |numero:valor{:RESULT = valor;:}
+        |decimal:valor{:RESULT = valor;:}
 ;

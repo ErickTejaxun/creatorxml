@@ -1,6 +1,12 @@
 funcion ReporteAritmetico(){
 	var contenido = CrearArrayDesdeArchivo("VentanaAritmetica.gdato");
 	var TodoCorrecto = contenido.filtrar(RevisionAritmetica);
+	/*var c = 0;
+	while(c<4)
+	{
+		imprimir(TodoCorrecto[c].ctnombre );
+		c++;
+	}*/
 	TodoCorrecto.Ascendente();
 	Imprimir("Los estudiantes que ganaron la evaluacion aritmetica son:");
 	Imprimir("Verificar que esten ordenados alfabeticamente");
@@ -10,16 +16,23 @@ funcion ReporteAritmetico(){
 	TodoCorrecto.map(ImprimirGanadores);
 }
 
+/*ReporteAritmetico();
+imprimir("----------------------");
 ReporteHistorico();
+imprimir("----------------------");
+ReporteIngles();
+imprimir("----------------------");*/
+ReporteLogico();
 funcion ReporteHistorico(){
-	var contenido = CrearArrayDesdeArchivo("VentanaHistoria.gdato");	
+	var contenido = CrearArrayDesdeArchivo("VentanaHistoria.gdato");
+	Imprimir("El primer alumno en contestar todo buen fue");
 	var TodoCorrecto = contenido.filtrar(RevisionHistoria);
 	Imprimir("El primer alumno en contestar todo buen fue ");
 	var primero = TodoCorrecto.Buscar(BuscarHistoria);
-	Imprimir(primero.CTNombre);	
+	Imprimir(primero.CTNombre);
     Imprimir("Todos Los estudiantes que ganaron la evaluacion de historia son: (Orden Descendente)");
     TodoCorrecto.Descendente();
-    /*TodoCorrecto.map(ImprimirGanadores);*/
+    TodoCorrecto.map(ImprimirGanadores);
 }
 
 funcion ReporteIngles(){
@@ -30,9 +43,22 @@ funcion ReporteIngles(){
 
 funcion ReporteLogico(){
 	var contenido = CrearArrayDesdeArchivo("VentanaLogica.gdato");
-	Imprimir("Imprimiendo nombres de los estudiantes que saben par e impar"); 
-	var concatenacion = contenido.map(EstudiantesParidad).Reduce(ObtencionParidad);
+	Imprimir("Imprimiendo nombres de los estudiantes que saben par e impar");
+	var c = 0;
+	while(c<10)
+	{
+		imprimir(contenido[c].ctnombre );
+		c++;
+	}
+	
+	//var concatenacion = contenido.map(EstudiantesParidad).Reduce(ObtencionParidad);
+	/*var concatenacion = */contenido.map(mapear);
 }
+funcion mapear(var item)
+{
+	Imprimir(item.CTNombre);
+}
+
 
 funcion RevisionAritmetica(var item){
 	retornar item.CPotencia == 3125 && item.CFactorial == 5040 && item.CInvertido == 743032153 && item.CFibonacci == 4181;

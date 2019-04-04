@@ -137,7 +137,7 @@ funcion decision(var v)
 }
 
 imprimir(decision(12));
-imprimir(factorial(12));
+imprimir(factorial(5));
 imprimir("Erick");
 VerImpar(20);
 vermasculino();
@@ -145,6 +145,6 @@ verfemenina();
 
 hanoi(3,1,2,3);
 
-imprimir(ackermann(4,1));
+imprimir(ackermann(3,1));
 
      

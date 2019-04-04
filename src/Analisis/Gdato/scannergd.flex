@@ -66,14 +66,14 @@ import Recursos.*;
 
 
 espacio = \t|\f|" "|\r|\n    // ER para capturar espacios, salto de línea, tabulaciones.
-numero = ([0-9][0-9]*) ("." [0-9][0-9]*)?       // ER para capturar números.
+numero = ([0-9][0-9]*)       // ER para capturar números.
 decimal= {numero}"."{numero} // Expresión 
 /*rgb  = ("#"{id}| "#"{digito} | "#"{digito}{id})*/
 letra = ([a-zA-Z]|"ñ"|"á"|"é"|"í"|"ó"|"ú")
 InputCharacter = [^\r\n]
 LineTerminator = \r|\n|\r\n
 id = (({letra}|"_")({letra}|{numero}|"_")*)
-cadenaComillas = (("\"" [^*] ~"\"") | ("\“" [^*] ~"\”"))
+cadenaComillas = (("\"" ([^*])? ~"\"") | ("\“" [^*] ~"\”") | ("\"\""))
 parametros = (("{" [^*] ~"]") | ("[" [^*] ~"]"))
 /*cadComillaSimple = ("'" [^*] ~"'")*/
 /*direccionWindows= ("\"" ({letra}":"("\\"({id}|{espacio}|"_"|"-"|{numero})+)+"."{id}) "\"")*/
@@ -130,7 +130,7 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
         {
                 addLexema("cadena",yytext(), yyline, yychar);
                 return new Symbol(sym.cadena,yychar, yyline, yytext().substring(1,yytext().length()-1));
-        }     
+        }  
     {id}                                                                                   
         {
                 addLexema("cadena",yytext(), yyline, yychar);
@@ -139,12 +139,12 @@ DocumentationComment = "#$" "*"+ [^/*] ~"$#"
     {numero}                                                                                   
         {
                 addLexema("numero",yytext(), yyline, yychar);
-                return new Symbol(sym.numero,yychar, yyline, Double.parseDouble( yytext()));
+                return new Symbol(sym.numero,yychar, yyline, Integer.parseInt( yytext()));
         }   
     {decimal}                                                                                   
         {
                 addLexema("numero",yytext(), yyline, yychar);
-                return new Symbol(sym.numero,yychar, yyline, Double.parseDouble( yytext()));
+                return new Symbol(sym.decimal,yychar, yyline, Double.parseDouble( yytext()));
         }                                                   
     .		
     {

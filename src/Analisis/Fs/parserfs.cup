@@ -153,8 +153,8 @@ precedence left multi, div;*/
 precedence left suma, resta ;
 precedence left div, multi;
 precedence left potencia;
-precedence left and;
 precedence left or;
+precedence left and;
 precedence left exclam;
 precedence left interrogacion;
 

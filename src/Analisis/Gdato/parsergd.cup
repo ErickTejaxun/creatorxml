@@ -115,7 +115,8 @@ parser code
 /*Terminales*/
 
 terminal String menorque, mayorque, slash, principal, lista, id, cadena;
-terminal Double numero;
+terminal Double decimal;
+terminal Integer numero;
 
 
 /*
@@ -184,4 +185,5 @@ LATRIBUTO::=
 
 VALOR::= cadena:valor{:RESULT = valor;:}
         |numero:valor{:RESULT = valor;:}
+        |decimal:valor{:RESULT = valor;:}
 ;

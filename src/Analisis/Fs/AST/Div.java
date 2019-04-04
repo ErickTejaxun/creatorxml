@@ -76,8 +76,16 @@ public class Div extends Exp{
                 switch(tipo2)
                 {
                     case "int":
+                        int tmp2 = Integer.valueOf(v2.toString());                        
+                        if(tmp2 ==0)
+                        {
+                            singlenton.addErrores(new error("semantico",linea,columna,tipo1 +" / " +tipo2,"N/0 indeterminado"));
+                            break;
+                        }
+                        valor = Integer.valueOf(v1.toString())/tmp2;
+                        break;                        
                     case "double":
-                        Double t = Double.parseDouble(v2.toString());
+                        Double t = Double.parseDouble(v2.toString());                        
                         if(t ==0)
                         {
                             singlenton.addErrores(new error("semantico",linea,columna,tipo1 +" / " +tipo2,"N/0 indeterminado"));

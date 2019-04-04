@@ -18,9 +18,11 @@ import Recursos.lexema;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -1121,8 +1123,25 @@ public class InterfazIDE extends javax.swing.JFrame {
             archivoActual = nombreArchivo;            
             if(pathArchivo.toLowerCase().contains(".fs"))
             {
+
+                File archivo= new File(pathArchivo); 
+                java.util.Scanner sc = new java.util.Scanner(archivo); 
+                String data = "";
+                while (sc.hasNextLine())
+                {
+                    if(data.equals(""))
+                    {
+                        data = sc.nextLine();
+                    }
+                    else
+                    {
+                        data = data + "\n" + sc.nextLine();
+                    }
+                }        
+                data = data.replace("\"\"","\"°\"");            
+                
                 parserfs parserfs_;
-                scannerfs scannerfs_ = new scannerfs(new java.io.FileReader(pathArchivo));
+                scannerfs scannerfs_ = new scannerfs(new BufferedReader(new StringReader(data)));
                 parserfs_ = new parserfs(scannerfs_);
                 parserfs_.parse();  
                 ejecutarFs(parserfs_.metodo);// --Enviamos a ejecutarFs nuestra mierda                 

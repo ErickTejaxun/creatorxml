@@ -51,7 +51,15 @@ public class Atributo extends  Exp
         { 
            str = itr.next();
            Object val = this.t.get(str);
-           valores.put(str, ((Nodo)val).ejecutar(entorno).valor);
+           if(val instanceof Nodo)
+           {
+               valores.put(str, ((Nodo)val).ejecutar(entorno).valor);
+           }
+           else
+           {
+               valores.put(str, val);
+           }
+           
         } 
         valor = valores;
     }

@@ -1,6 +1,6 @@
 imprimir("Fibonnaci(10) " + fibonaci(10) +"---"+ fibonaci2(10) );
 imprimir("factorial(6) " + factorial(6));
-var val = {a:3, b:4};
+var val = {a:3, b:11};
 var arr = [1,3, val.a,val.b, val];
 imprimir("ackerman("+arr[2]+","+arr[4].b+") = " + ackermann(val.a,arr[4].b));
 

@@ -15,7 +15,7 @@ public class Metodo extends Sentencia{
 
     
     public ArrayList<Nodo> declaracionParametros;
-    public ArrayList<Exp> listaParametros;
+    public ArrayList<Exp> listaParametros = new ArrayList<Exp>();
     public Bloque bloque;
     public String id;    
     public String tipo;
