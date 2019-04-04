@@ -16,12 +16,12 @@ funcion ReporteAritmetico(){
 	TodoCorrecto.map(ImprimirGanadores);
 }
 
-/*ReporteAritmetico();
+ReporteAritmetico();
 imprimir("----------------------");
 ReporteHistorico();
 imprimir("----------------------");
 ReporteIngles();
-imprimir("----------------------");*/
+imprimir("----------------------");
 ReporteLogico();
 funcion ReporteHistorico(){
 	var contenido = CrearArrayDesdeArchivo("VentanaHistoria.gdato");

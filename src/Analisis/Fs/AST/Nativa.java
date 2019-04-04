@@ -346,24 +346,24 @@ public class Nativa extends Exp
                                     /*---------------------Acumulable----------------------*/
                                     if(valor instanceof Integer)
                                     {
-                                        valorParametroIterador = new IntExp((Integer)t);                                    
+                                        valorParametroIterador = new IntExp((Integer)valor);                                    
                                     }
                                     if(valor instanceof Double)
                                     {
-                                        valorParametroIterador = new DoubleExp((Double)t);
+                                        valorParametroIterador = new DoubleExp((Double)valor);
                                     }     
                                     if(valor instanceof String)
                                     {
-                                        valorParametroIterador = new StringExp((String)t);
+                                        valorParametroIterador = new StringExp((String)valor);
                                     } 
                                     if(valor instanceof Boolean)
                                     {
-                                        valorParametroIterador = new BoolExp((Boolean)t);
+                                        valorParametroIterador = new BoolExp((Boolean)valor);
                                     }  
                                     if(valor instanceof  Hashtable)
                                     {
                                         valorParametro = new Atributo("");
-                                        ((Atributo)valorParametro).t = (Hashtable<String, Object>) t;
+                                        ((Atributo)valorParametro).valor = (Hashtable<String, Object>) valor;
                                     }                                    
 
                                     
@@ -376,8 +376,9 @@ public class Nativa extends Exp
                                     Llamada llamada = new Llamada(iterador,lista);     
                                     valor  = llamada.ejecutar(new Entorno(entorno, entorno.ventana)).valor;                                     
                                 }
+                                contador ++;
                             }
-                            contador ++;
+                            
                         }                          
                         
                       }
