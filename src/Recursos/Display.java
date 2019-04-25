@@ -22,11 +22,34 @@ public class Display
     public static ArrayList<Object> display = new ArrayList<Object>();
     public static ArrayList<Object> displayMetodo = new ArrayList<Object>();    
     public static ArrayList<Nodo> retornos = new ArrayList<Nodo>();
+    public static ArrayList<String> archivos = new ArrayList<String>();
+    public static String nombreArchivo = "";
 
     
     public static int puntero = 0; 
     
- 
+    public static String archivoActual()
+    {
+        if(!archivos.isEmpty())
+        {
+            return archivos.get(archivos.size()-1);
+        }
+        return "";
+    }
+    
+    public static void quitarArchivo()
+    {
+        if(!archivos.isEmpty())
+        {
+            archivos.remove(archivos.size()-1);
+        }        
+    }
+    
+    public static void addArhcivo(String path)
+    {
+        archivos.add(path);
+    }    
+    
     public static void agregarRetorno(Object valor)
     {
         //System.out.println(valor.toString());

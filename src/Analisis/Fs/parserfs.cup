@@ -4,6 +4,7 @@ import Recursos.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import Analisis.Fs.AST.*;
+import java.util.Hashtable;
 
 parser code
 {:    
@@ -116,7 +117,7 @@ parser code
 
 terminal String suma, multi, resta, div, or, and,si,sino/*,sinosi*/, corcheted, corchetei, punto, interrogacion, selecciona, defecto, retornar;
 terminal String desigual, igualigual, igual, mayor, menor, mayorigual,  menorigual, exclam, mientras, aumento, decremento, para, funcion;
-terminal String arrayarchivo;
+terminal String arrayarchivo, crearventana, leergxml;
 terminal String tint, tchar, tbool, tstring, tdouble, imprimir,cadena, nulo, masigual, menosigual, multiigual, divigual,coma,importar;
 terminal String puntocoma, llaveI, llaveD, pard, pari, identificador, detener,tcontinuar, dospuntos, caso,seleccion, var, potencia;
 terminal Boolean falso, verdadero;
@@ -129,7 +130,7 @@ terminal char caracter;
 * Aquí están los no terminales
 */
 non terminal INICIO;
-non terminal Exp  EXP, EXPL, EXPC, AUMENTO, DECREMENTO,  ACTUALIZACION, ACCESO, SSELECCION, ARRAYARCHIVO;
+non terminal Exp LEERGXML, EXP, EXPL, EXPC, AUMENTO, DECREMENTO,  ACTUALIZACION, ACCESO, SSELECCION, ARRAYARCHIVO, VENTANA;
 non terminal String TIPO, TASIGNACION;
 non terminal /*Sentencia*/ Nodo  INSTRUCCION, DECLARACION,ASIGNACION, IMPRIMIR , IF  , ELSE ,WHILE,FOR;
 non terminal Sentencia BREAK,SWITCH, CONTINUE, METODO;
@@ -195,17 +196,22 @@ NATIVA::=
              :}
             |NATIVA:origen punto identificador:funcion pari EXPL:metodo pard                         
              {:
-                RESULT= new Nativa(origenright, origenleft, origen, metodo);
+                RESULT= new Nativa(origenright, origenleft, origen, funcion, metodo);
              :}            
             |identificador:nombre punto identificador:funcion pari pard 
             {:
                 RESULT = new Nativa (nombreleft, nombreright, new idExp(nombre), funcion);
+            :}  
+            |identificador:nombre punto identificador:funcion pari  LVALORES:parametros  pard 
+            {:
+                RESULT = new Nativa (nombreleft, nombreright, new idExp(nombre), funcion, parametros);
             :}
-            |identificador:nombre punto identificador:funcion pari EXPL:metodo  pard 
+            /*|identificador:nombre punto identificador:funcion pari EXPL:metodo  pard 
             {:
                 RESULT = new Nativa (nombreleft, nombreright, new idExp(nombre), funcion, metodo);
-            :}            
-;          
+            :}*/
+;    
+
 
 METODO::= funcion:i identificador:nombre pari PARAMETROS:parametros pard BLOQUE:instrucciones
             {:
@@ -348,9 +354,25 @@ EXP::=
        |DECREMENTO:dec {:RESULT = dec;:}   
        |ACCESO:acceso {:RESULT = acceso;:}   
        |LLAMADA:llamada{:RESULT = llamada;:}  
+       |VENTANA:ventana{:RESULT = ventana;:}
        |NATIVA:valor {:RESULT =(Exp) valor;:}   
        |ARRAYARCHIVO:valor{:RESULT = valor;:}   
+       |LEERGXML:xml{:RESULT = xml;:}
        ;
+
+VENTANA::= crearventana:i pari EXPL:color coma EXPL:alto coma EXPL:ancho coma EXPL:nombre  pard
+            {:
+                Atributo atributos = new Atributo(colorleft, colorright, "color", color);
+                atributos.addAtributo("alto", alto);
+                atributos.addAtributo("ancho", ancho);
+                atributos.addAtributo("id", nombre);
+                atributos.addAtributo("nombre", nombre);
+                atributos.addAtributo("tipo", new StringExp("ventana"));
+                atributos.addAtributo("contenido",new Hashtable<String,Simbolo>());
+                RESULT = atributos;
+            :}
+;
+
 
 ARRAYARCHIVO::= arrayarchivo:i pari EXPL:expresion pard
                 {:
@@ -414,6 +436,12 @@ DEFECTO::= defecto:i dospuntos BLOQUE:bloque {:RESULT = new Caso(ileft, iright, 
 ;
 
 RETORNAR::=  retornar:i EXPL:expresion {:RESULT = new Retorno(ileft, iright, expresion);:}
+;
+
+LEERGXML::= leergxml:i pari EXPL:valor pard 
+    {:
+        RESULT = new Leer(ileft, iright, valor);
+    :}
 ;
 
 LLAMADA::= identificador:i pari LVALORES:valores pard 

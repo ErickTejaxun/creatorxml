@@ -24,6 +24,7 @@ public class error {
     //error("Lexico",valor, linea, columna)
     public error(String t , String v, int l, int c)
     {
+        this.path = Display.archivoActual();
         this.tipo = t;
         this.descripcion = v;
         this.linea = l;
@@ -34,6 +35,7 @@ public class error {
     
     public error(String tipo, int linea, int columna, String valor)
     {
+        this.path = Display.archivoActual();
         this.tipo=tipo;
         this.linea= linea;
         this.columna = columna;
@@ -43,6 +45,7 @@ public class error {
     
     public error(String tipo, int linea, int columna, String valor,String descripcion)
     {
+        this.path = Display.archivoActual();
         this.tipo=tipo;
         this.linea= linea;
         this.columna = columna;

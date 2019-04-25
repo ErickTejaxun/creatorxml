@@ -82,17 +82,18 @@ public class Bloque extends Sentencia{
     }
         
     public void ejecutarInstrucciones(Entorno entorno)
-    {        
-        //Display.add(this);        
+    {                        
         for (Nodo sentencia : sentencias) 
-        {             
-            valor = sentencia.ejecutar(entorno).valor;
+        {                         
+            valor = sentencia.ejecutar(entorno).valor;            
             if(valor instanceof Retorno)
             {
                 valor = Display.getRetornoActual().ejecutar(entorno).valor;
+                return;
+                //break;
             } 
         }        
-        Display.quitarMetodo();
+        //Display.quitarMetodo();
     }
     
 }

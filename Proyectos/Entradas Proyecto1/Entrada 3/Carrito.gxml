@@ -1,0 +1,66 @@
+<Ventana id = "Carrito" tipo = "Secundario">
+	<Contenedor id = "ContDatos4"  x = 10 y = 10 Alto = 600 Ancho = 500>
+		##############################################################################
+		######################## Control Cantidad Tipo Numerico ######################
+		##############################################################################
+		<Texto Nombre = "lblCantidad" X = 10 Y = 20>
+			Cantidad:
+		</Texto>
+		<Control tipo = "Numerico" Nombre = "CTCantidad" X = 100 Y = 20 Alto = 20 Ancho = 100 Minimo = 0>
+		</Control>
+		##############################################################################
+		####################### Control ID Tipo Numerico #############################
+		##############################################################################
+		<Texto Nombre = "lblId" X = 10 Y = 120>
+			Id Producto:
+		</Texto>
+		<Control tipo = "Numerico" Nombre = "CID" X = 100 Y = 120 Alto = 20 Ancho = 100 Minimo = 0 Maximo = 1000>
+		</Control>
+		##############################################################################
+		##################### Control IDUsuario Tipo Numerico ########################
+		##############################################################################
+		<Texto Nombre = "lblIdUsu" X = 10 Y = 220>
+			Id Usuario:
+		</Texto>
+		<Control tipo = "Numerico" Nombre = "CUsuario" X = 100 Y = 220 Alto = 20 Ancho = 100 Minimo = 0>
+		</Control>	
+		##############################################################################
+		######################## Control Tipo Tipo Texto ###########################
+		##############################################################################
+		<Texto Nombre = "lblTipo" X = 10 Y = 320>
+			Tipo:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTipo" X = 100 Y = 320 Alto = 20 Ancho = 100>
+			<Defecto>Ingrese aqui el tipo de comprador</Defecto>
+		</Control>
+		##############################################################################
+		######################## Control Categoria Tipo Texto ########################
+		##############################################################################
+		<Texto Nombre = "lblCategoria" X = 10 Y = 420>
+			Categoria:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CCategoria" X = 100 Y = 420 Alto = 20 Ancho = 100>
+			<Defecto>Ingrese aqui el tipo de categoria</Defecto>
+		</Control>
+		##############################################################################
+		##################### Control IDCat Tipo Numerico ############################
+		##############################################################################
+		<Texto Nombre = "lblIdCategoria" X = 10 Y = 520>
+			Id Categoria:
+		</Texto>
+		<Control tipo = "Numerico" Nombre = "idCategoria" X = 100 Y = 520 Alto = 20 Ancho = 100 Minimo = 0 Maximo = 20>
+		</Control>
+	</Contenedor>
+	<Contenedor id = "ContBtn4" x = 10 Y = 620 Alto = 200 Ancho = 400>
+		<Enviar Nombre = "btnEnviar" X = 75 Y = 30 Alto = 70 Ancho = 100>
+			<Texto nombre = "contenidoBoton">
+			Registrar
+			</Texto>
+		</Enviar>
+		<Boton Nombre = "btnEvaluacion2" X = 200 Y = 30 Referencia = "Inicio" Alto = 70 Ancho = 100>
+			<Texto Nombre = "lblbtnEvaluacion2">
+				Inicio
+			</Texto>
+		</Boton>
+	</Contenedor>
+</Ventana>

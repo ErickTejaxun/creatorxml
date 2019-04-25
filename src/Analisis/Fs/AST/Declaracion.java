@@ -54,6 +54,15 @@ public class Declaracion  extends Sentencia{
         }
     }
     
+    public Declaracion(int l, int c, ArrayList<String> nombres, String t, Exp atributos)
+    {
+        this.linea = l;
+        this.columna = c;
+        this.lista = nombres;
+        this.tipo = t;
+        this.exp = atributos;                
+    }
+    
     
     
     public void setValor(Entorno entorno)
@@ -68,6 +77,41 @@ public class Declaracion  extends Sentencia{
                 valor = entorno.insertarSimbolo(new Simbolo(name, tipo, "var","nada"));                         
             }
             valor = exp.ejecutar(entorno).valor;
+            if(valor instanceof Hashtable)
+            {
+                Object ventana = ((Hashtable)valor).get("ventana");
+                if(ventana!=null)                
+                {
+                    Simbolo sventana = entorno.getSimbolo(ventana.toString());
+                    if(sventana!=null)
+                    {
+                        ((Hashtable)((Hashtable)sventana.valor).get("contenido")).remove(((Hashtable)((Hashtable)sventana.valor).get("contenido")).size());
+                        ((Hashtable)((Hashtable)sventana.valor).get("contenido")).put(lista.get(0), valor);
+                    }
+                }else
+                {
+                    Object contenedor = ((Hashtable)valor).get("contenedor");
+                    if(contenedor!=null)
+                    {
+                        if(contenedor instanceof Hashtable)
+                        {
+                            Object nombreVentana = ((Hashtable)contenedor).get("ventana");
+                            if(nombreVentana !=null)
+                            {
+                                Simbolo s2ventana = entorno.getSimbolo(nombreVentana.toString());
+                                if(s2ventana !=null)
+                                {
+                                    Object contenido = ((Simbolo)s2ventana).valor;
+                                    if(contenido instanceof Hashtable)
+                                    {
+                                        //Object contenedor = ((Hashtable)contenido).get()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             determinarTipo(valor);             
             valor = entorno.insertarSimbolo(new Simbolo(lista.get(lista.size()-1),tipo , "var",exp.ejecutar(entorno).valor));                        
         }   

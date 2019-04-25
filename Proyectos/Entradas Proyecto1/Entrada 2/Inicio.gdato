@@ -1,0 +1,72 @@
+<lista>
+    <principal>
+    	<CTnombre>"primer nombre"</CTnombre>
+    	<CTapellido>"primer apellido"</CTapellido>
+    	<Cedad>12</Cedad>
+    	<CDSexo>"Femenino"</CDSexo>
+    </principal>
+
+    <principal>
+    	<CTnombre>"segundo nombre"</CTnombre>
+    	<CTapellido>"segundo apellido"</CTapellido>
+    	<Cedad>13</Cedad>
+    	<CDSexo>"Femenino"</CDSexo>
+    </principal>
+
+    <principal>
+    	<CTnombre>"tercer nombre"</CTnombre>
+    	<CTapellido>"tercer apellido"</CTapellido>
+    	<Cedad>12</Cedad>
+    	<CDSexo>"Femenino"</CDSexo>
+    </principal>
+
+    <principal>
+    	<CTnombre>"cuarto nombre"</CTnombre>
+    	<CTapellido>"cuarto apellido"</CTapellido>
+    	<Cedad>8</Cedad>
+    	<CDSexo>"Femenino"</CDSexo>
+    </principal>
+
+    <principal>
+    	<CTnombre>"quinto nombre"</CTnombre>
+    	<CTapellido>"quinto apellido"</CTapellido>
+    	<Cedad>7</Cedad>
+    	<CDSexo>"Femenino"</CDSexo>
+    </principal>
+
+    <principal>
+    	<CTnombre>"sexto nombre"</CTnombre>
+    	<CTapellido>"sexto apellido"</CTapellido>
+    	<Cedad>8</Cedad>
+    	<CDSexo>"Femenino"</CDSexo>
+    </principal>
+
+    <principal>
+    	<CTnombre>"septimo nombre"</CTnombre>
+    	<CTapellido>"septimo apellido"</CTapellido>
+    	<Cedad>10</Cedad>
+    	<CDSexo>"Femenino"</CDSexo>
+    </principal>
+
+    <principal>
+    	<CTnombre>"octavo nombre"</CTnombre>
+    	<CTapellido>"octavo apellido"</CTapellido>
+    	<Cedad>12</Cedad>
+    	<CDSexo>"Femenino"</CDSexo>
+    </principal>
+
+    <principal>
+    	<CTnombre>"noveno nombre"</CTnombre>
+    	<CTapellido>"noveno apellido"</CTapellido>
+    	<Cedad>8</Cedad>
+    	<CDSexo>"Femenino"</CDSexo>
+    </principal>
+
+    <principal>
+    	<CTnombre>"decimo nombre"</CTnombre>
+    	<CTapellido>"decimo apellido"</CTapellido>
+    	<Cedad>10</Cedad>
+    	<CDSexo>"Femenino"</CDSexo>
+    </principal>
+
+</lista>

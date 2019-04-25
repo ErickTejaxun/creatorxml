@@ -1,0 +1,61 @@
+<Importar>
+/Funciones.fs
+</Importar>
+
+<Ventana id = "Inicio" tipo = "Principal">
+	<Contenedor id = "ContDatos"  x = 10 y = 10 Alto = 500 Ancho = 500>
+		##############################################################################
+		######################## Control Nombre Tipo Texto ###########################
+		##############################################################################
+		<Texto Nombre = "lblNombre" X = 10 Y = 20>
+			Nombre:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTNombre" X = 100 Y = 20 Alto = 20 Ancho = 200>
+			<Defecto>Ingrese aqui su nombre</Defecto>
+		</Control>
+		##############################################################################
+		###################### Control Apellido Tipo Texto ###########################
+		##############################################################################
+		<Texto Nombre = "lblApellido" X = 10 Y = 100>
+			Apellido:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTApellido" X = 100 Y = 100 Alto = 20 Ancho = 200>
+			<Defecto>Ingrese aqui su apellido</Defecto>
+		</Control>
+		##############################################################################
+		####################### Control Edad Tipo Numerico ###########################
+		##############################################################################
+		<Texto Nombre = "lblEdad" X = 10 Y = 200>
+			Edad:
+		</Texto>
+		<Control tipo = "Numerico" Nombre = "CEdad" X = 100 Y = 200 Alto = 20 Ancho = 10>
+			<Defecto>18</Defecto>
+		</Control>
+		##############################################################################
+		###################### Control Sexo Tipo Desplegable #########################
+		##############################################################################
+		<Texto Nombre = "lblSexo" X = 10 Y = 300>
+			Sexo:
+		</Texto>
+		<Control tipo = "desplegable" Nombre = "CDSexo" X = 100 Y = 300 Alto = 20 Ancho = 200>
+			<ListaDatos>
+				<Dato>Femenino</Dato>
+				<Dato>Masculino</Dato>
+				<Dato>Indefinido</Dato>
+			</ListaDatos>
+			<Defecto>Indefinido</Defecto>
+		</Control>
+	</Contenedor>
+	<Contenedor id = "ContBtn" x = 10 Y = 520 Alto = 200 Ancho = 400>
+		<Enviar Nombre = "btnEnviar" X = 75 Y = 30 Alto = 70 Ancho = 100>
+			<Texto nombre = "contenidoBoton">
+			Registrar
+			</Texto>
+		</Enviar>
+		<Boton Nombre = "btnEvaluacion2" X = 200 Y = 30 Accion = {Calculos()} Alto = 70 Ancho = 100>
+			<Texto Nombre = "lblbtnEvaluacion2">
+				Calificacion
+			</Texto>
+		</Boton>
+	</Contenedor>
+</Ventana>

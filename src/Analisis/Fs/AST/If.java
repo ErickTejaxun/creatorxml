@@ -40,10 +40,23 @@ public class If extends Sentencia{
         Object condicion = cond.ejecutar(entorno).valor;
         if(condicion instanceof Boolean)
         {
+//            if((Boolean)condicion)
+//            {                
+//                valor = bloque.ejecutar(entorno).valor;
+//            } 
             if((Boolean)condicion)
-            {                
-                valor = bloque.ejecutar(entorno).valor;
-            }   
+            {
+                for (Nodo sentencia : bloque.sentencias) 
+                {                         
+                    valor = sentencia.ejecutar(entorno).valor;            
+                    if(valor instanceof Retorno)
+                    {
+                        //valor = Display.getRetornoActual().ejecutar(entorno).valor;
+                        //return;
+                        break;
+                    } 
+                }                             
+            }
         }
         else
         {

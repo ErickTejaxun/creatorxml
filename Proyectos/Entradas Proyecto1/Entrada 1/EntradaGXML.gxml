@@ -1,0 +1,54 @@
+<Ventana id = "Inicio" tipo = "Principal">
+	<Contenedor id = "ContRegistro"  x = 10 y = 10 Alto = 500 Ancho = 600>
+		##############################################################################
+		######################## Control Nombre Tipo Texto ###########################
+		##############################################################################
+		<Texto Nombre = "lblNombre" X = 10 Y = 20>
+			Nombre:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTNombre" X = 300 Y = 20 Alto = 50 Ancho = 100>
+			<Defecto>Ingrese aqui su nombre</Defecto>
+		</Control>
+		##############################################################################
+		####################### Control Edad Tipo Numerico ###########################
+		##############################################################################
+		<Texto Nombre = "lblEdad" X = 10 Y = 100>
+			Edad:
+		</Texto>
+		<Control tipo = "Numerico" Nombre = "CEdad" X = 100 Y = 50 Alto = 20 Ancho = 50 Minimo = 18>
+			<Defecto>18</Defecto>
+		</Control>
+		##############################################################################
+		################### Control Descripcion Tipo TextoArea #######################
+		##############################################################################
+		<Texto Nombre = "lblDescripcion" X = 10 Y = 200>
+			Descripcion:
+		</Texto>
+		<Control tipo = "TextoArea" Nombre = "CADescripcion" X = 100 Y = 80 Alto = 150 Ancho = 200>
+			<Defecto>Ingrese aqui la descripcion de
+			su registro</Defecto>
+		</Control>
+		##############################################################################
+		###################### Control Pais Tipo Desplegable #########################
+		##############################################################################
+		<Texto Nombre = "lblPais" X = 10 Y = 400>
+			Pais:
+		</Texto>
+		<Control tipo = "desplegable" Nombre = "CDPais" X = 100 Y = 400 Alto = 20 Ancho = 100>
+			<ListaDatos>
+				<Dato>Guatemala</Dato>
+				<Dato>Honduras</Dato>
+				<Dato>Costa Rica</Dato>
+				<Dato>Panama</Dato>
+			</ListaDatos>
+			<Defecto>Guatemala</Defecto>
+		</Control>
+	</Contenedor>
+	<Contenedor id = "ContBtn" x = 10 Y = 620 Alto = 200 Ancho = 600>
+		<Enviar Nombre = "btnEnviar" X = 75 Y = 30 Alto = 100 Ancho = 100>
+			<Texto nombre = "contenidoBoton">
+			Registrar
+			</Texto>
+		</Enviar>
+	</Contenedor>
+</Ventana>

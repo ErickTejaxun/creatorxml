@@ -13,6 +13,7 @@ import Analisis.XML.AST.NodoXML;
 import Recursos.singlenton;
 import Analisis.XML.parserxml;
 import Analisis.XML.scannerxml;
+import Recursos.Display;
 import Recursos.error;
 import Recursos.lexema;
 import java.awt.Color;
@@ -20,7 +21,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -717,22 +721,54 @@ public class InterfazIDE extends javax.swing.JFrame {
     public void nuevoArchivoConData(String nombre, String data)
     {
 
-            JPanel panel = new JPanel();
-            panel.setLayout(new java.awt.BorderLayout());
-            RSyntaxTextArea editor = new RSyntaxTextArea(30,60);            
-            editor.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
-            //editor.setCodeFoldingEnabled(true);
-            RTextScrollPane sp = new RTextScrollPane(editor);            
-            sp.setIconRowHeaderEnabled(true);
-                                                
-            Gutter gutter = sp.getGutter();                                
-            gutter.setBookmarkIcon(new ImageIcon(getClass().getResource("/breakpoint.png")));            
-            gutter.setBookmarkingEnabled(true);        
-            editor.setText(data);                 
-            
-            panel.add(sp);    
-            contenedorPaneles.add(nombre, panel);                        
-            agregarArbolGrafico(nombre);
+
+            try 
+            {
+                JPanel panel = new JPanel();
+                panel.setLayout(new java.awt.BorderLayout());
+                RSyntaxTextArea editor = new RSyntaxTextArea(30,60);  
+                String direccion = currentPaht();               
+                if(nombre.contains(".fs"))
+                {                          
+                    AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
+                    atmf.putMapping("text/fsxml", "CreatorXml201213050.fsxml");                    
+                    editor.setSyntaxEditingStyle("text/fsxml");
+                    direccion += "\\FSStyle.xml"; 
+                    InputStream in = new FileInputStream(direccion);
+                    Theme theme = Theme.load(in);
+                    theme.apply(editor);                                        
+                }
+                if(nombre.contains(".gxml") || nombre.contains(".gdato"))
+                {
+                    editor.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+//                    AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
+//                    atmf.putMapping("text/rsxml", "CreatorXml201213050.rsxml");                    
+//                    editor.setSyntaxEditingStyle("text/rsxml");                    
+                    direccion += "\\gxmlstyle.xml";   
+                    InputStream in = new FileInputStream(direccion);
+                    Theme theme = Theme.load(in);
+                    theme.apply(editor);                    
+                                      
+                }
+//                InputStream in = new FileInputStream(direccion);
+//                Theme theme = Theme.load(in);
+//                theme.apply(editor);
+                //editor.setCodeFoldingEnabled(true);
+                RTextScrollPane sp = new RTextScrollPane(editor);            
+                sp.setIconRowHeaderEnabled(true);
+
+                Gutter gutter = sp.getGutter();                                
+                gutter.setBookmarkIcon(new ImageIcon(getClass().getResource("/breakpoint.png")));             
+                gutter.setBookmarkingEnabled(true);        
+                editor.setText(data);                             
+                panel.add(sp);    
+                contenedorPaneles.add(nombre, panel);                        
+                agregarArbolGrafico(nombre);                
+                
+            } catch (IOException ex) {
+                Logger.getLogger(InterfazIDE.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
             //contadorNuevos++;            
 
     }    
@@ -810,7 +846,19 @@ public class InterfazIDE extends javax.swing.JFrame {
          }
          return path+"\\Proyectos";
     }      
-    
+    public String currentPaht(){
+        String path="";
+         File miDir = new File (".");
+         try {
+           //System.out.println (miDir.getCanonicalPath());
+           path=miDir.getCanonicalPath();
+         }
+         catch(Exception e) 
+         {
+           e.printStackTrace();
+         }
+         return path;
+    }       
     
     public void save() throws FileNotFoundException
     {        
@@ -1085,7 +1133,7 @@ public class InterfazIDE extends javax.swing.JFrame {
         errores.forEach((error) -> 
         {
             filasErrores.addRow(new Object[]
-            {raizActual,
+            {   error.getPath(),
                 error.getValor(),
                 error.getDescripcion(),
                 error.getLinea(),
@@ -1095,6 +1143,15 @@ public class InterfazIDE extends javax.swing.JFrame {
         });                       
     }
     
+    
+    public String getTraduccion()
+    {
+        String valor = "";// textAreaConsola.getText();
+        valor = cadenaImportaciones + "\n" + cadenaCuerpo;
+        //nuevoArchivoConData("traduccion.fs", cadenaImportaciones + "\n" + cadenaCuerpo);        
+        //textAreaConsola.setText("--");
+        return valor ;
+    }
     
     public void compilar() throws FileNotFoundException, Exception 
     {
@@ -1110,10 +1167,12 @@ public class InterfazIDE extends javax.swing.JFrame {
         if(actual.contains("."))
         {
             guardarArchivoSinGrafo(true);
+            
         }
         else
         {
-            guardarArchivoNuevoSinGrafo(true);
+            //guardarArchivoNuevoSinGrafo(true);
+            guardarArchivoNuevo();
         }   
         /*Fin Guardar*------------*/
         try 
@@ -1141,28 +1200,33 @@ public class InterfazIDE extends javax.swing.JFrame {
                 data = data.replace("\"\"","\"°\"");            
                 
                 parserfs parserfs_;
+                Display.addArhcivo(pathArchivo);
                 scannerfs scannerfs_ = new scannerfs(new BufferedReader(new StringReader(data)));
                 parserfs_ = new parserfs(scannerfs_);
-                parserfs_.parse();  
+                parserfs_.parse();                  
                 ejecutarFs(parserfs_.metodo);// --Enviamos a ejecutarFs nuestra mierda                 
+                Display.quitarArchivo();
             }
             else
             if(pathArchivo.toLowerCase().contains(".gxml"))
             {
                 parserxml parserxml_;
                 scannerxml scannerxml_ = new scannerxml(new java.io.FileReader(pathArchivo));
+                Display.addArhcivo(pathArchivo);
                 parserxml_ = new parserxml(scannerxml_);
                 parserxml_.parse();               
                 if(!parserxml_.lista.isEmpty())
                 {
                   listaxml.add(parserxml_.lista);
                 }     
-                EjecutarXML();                
+                EjecutarXML();     
+                Display.quitarArchivo();
             }                       
         } 
         catch (Exception e) 
         {
             System.out.println(e.getMessage());
+            Display.quitarArchivo();
         }
                        
         /*Mandamos a ejecutarFs esta onda.*/                
@@ -1533,6 +1597,7 @@ public class InterfazIDE extends javax.swing.JFrame {
     public void mostrarTraduccion()
     {
         textAreaConsola.setText(cadenaImportaciones + "\n" + cadenaCuerpo);
+        nuevoArchivoConData("traduccion.fs", cadenaImportaciones + "\n" + cadenaCuerpo);
     }
 
     public String generarEtiqueta()

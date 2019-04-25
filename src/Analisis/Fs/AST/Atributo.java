@@ -38,6 +38,10 @@ public class Atributo extends  Exp
     {
         t.put(id, e);
     }
+    public void addAtributo(String id, Object e)
+    {
+        t.put(id,e);
+    }
     
     public void setValor(Entorno entorno)
     {

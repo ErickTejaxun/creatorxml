@@ -1,0 +1,61 @@
+<Importar>
+/Alumno.gxml
+</Importar>
+
+<Importar>
+/Carrito.gxml
+</Importar>
+
+<Importar>
+/Curso.gxml
+</Importar>
+
+<Importar>
+/Maestro.gxml
+</Importar>
+
+<Importar>
+/Producto.gxml
+</Importar>
+
+<Importar>
+/Consultas.fs
+</Importar>
+
+<Ventana id = "Inicio" Color = "#000000" tipo = "Principal">
+	<Contenedor id = "ContenedorReportes" X = 10 Y = 10 Alto = 800 Ancho = 800 Borde = verdadero>
+		<Boton Nombre = "btnEvaluacion1" X = 60 Y = 40 Accion = {Consultas()} Alto = 75 Ancho = 75>
+			<Texto Nombre = "lblbtnEvaluacion1">
+				Consultas
+			</Texto>
+		</Boton>
+		<Boton Nombre = "btnEvaluacion2" X = 60 Y = 140  Referencia = "Maestro"  Alto = 75 Ancho = 75>
+			<Texto Nombre = "lblbtnEvaluacion2">
+				Ventana Maestro
+			</Texto>
+		</Boton>
+		<Boton Nombre = "btnEvaluacion3" X = 60 Y = 240 Referencia = "Alumno" Alto = 75 Ancho = 75>
+			<Texto Nombre = "lblbtnEvaluacion3">
+				Ventana Alumno
+			</Texto>
+		</Boton>
+		<Boton Nombre = "btnEvaluacion4" X = 60 Y = 340 Referencia = "Curso"  Alto = 75 Ancho = 75>
+			<Texto Nombre = "lblbtnEvaluacion4">
+				Ventana Curso
+			</Texto>
+		</Boton>
+		<Boton Nombre = "btnEvaluacion5" X = 60 Y = 440 Referencia = "Producto" Alto = 75 Ancho = 75>
+			<Texto Nombre = "lblbtnEvaluacion5">
+				Ventana Producto
+			</Texto>
+		</Boton>
+		<Boton Nombre = "btnEvaluacion6" X = 60 Y = 540 Referencia = "Carrito"  Alto = 75 Ancho = 75>
+			<Texto Nombre = "lblbtnEvaluacion6">
+				Ventana Carrito
+			</Texto>
+		</Boton>
+		<Enviar Nombre = "btnEnviar" X = 60 Y = 650 Alto = 75 Ancho = 75>
+			Sin funcionalidad
+		</Enviar>
+	</Contenedor>
+</Ventana>

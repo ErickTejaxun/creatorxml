@@ -1,0 +1,114 @@
+Archivo 2:
+1) Operaciones Aritmeticas Basicas
+1.1) 1765
+1.2) 80
+1.3) 9
+2) Operaciones Aritmeticas Avanzadas
+2.1) 112
+2.2) 143
+2.3) 14
+3) Operaciones Relacionales Basicas
+Salida CORRECTA!!
+4)Operaciones Relacionales Avanzadas
+Salida CORRECTA!!
+5) Operaciones Logicas Basicas
+Salida CORRECTA!!
+6) Operaciones Logicas Avanzadas
+Salida CORRECTA!!
+7) Operaciones Conjuntas
+Resultado: 41954
+8) factorial_recursivo
+3628800
+9) factorial_iterativo
+3628800
+Nombre:  primer nombre apellido: primer apellido
+.
+.
+.
+Nombre:  decimo nombre apellido: decimo apellido
+Suma de edades: 100
+
+Salidas archivo 3
+1) Total Carrito por usuario
+		Total usuario 10: 3800.0
+		Total usuario 11: 5600.0
+		Total usuario 12: 1300.0
+2) Productos Mayores a 100
+		Producto1
+		Producto2
+		Producto3
+		Producto5
+		Producto7
+		Producto9
+3) Productos mas comprados
+		Total producto 100: 1500.0
+		Total producto 200: 3200.0
+		Total producto 300: 6000.0
+4) Productos mas comprados por estudiantes
+		Total producto 100 de estudiantes: 700.0
+		Total producto 200 de estudiantes: 
+		Total producto 300 de estudiantes: 3000.0
+5) Productos mas comprados por estudiantes
+		Total producto 100 de maestros: 
+		Total producto 200 de maestros: 1400.0
+		Total producto 300 de maestros: 
+6) Productos mas comprados por estudiantes mayores
+		Total producto 100 de estudiantes mayores: 
+		Total producto 200 de estudiantes mayores: 
+		Total producto 300 de estudiantes mayores: 
+7) Comparacion Productos de estudiantes y maestros
+8) Listado de alumnos por curso
+    --> Curso 100
+    --> Curso 200
+    --> Curso 300
+
+Salidas archivo 4
+
+1) Potencia con operador ternario
+La potencia de 5.0 a la 5.0 es 3125.0
+2) Inversion de un numero
+3) ObtenerMCD
+4) Factorial
+El factorial de 7.0 es 5040.0
+5) Fibonacci
+El Fibonacci de 19.0 es 4181.0
+6) Hanoi
+mover disco de 1.0 a 3.0
+mover disco de 1.0 a 2.0
+mover disco de 3.0 a 2.0
+mover disco de 1.0 a 3.0
+mover disco de 2.0 a 1.0
+mover disco de 2.0 a 3.0
+mover disco de 1.0 a 3.0
+7) Hoftater Femenino y Masculino
+8) Paridad Par e Impar
+El numero 1.0 es: Par
+El numero 27.0 es: Impar
+9) Ackermann
+el resultado de ackerman 3,7 es 509.0
+10) Descendente, 13) Filtrar
+El primer alumno en contestar todo buen fue, 14) Buscar
+Julio Arango
+Todos Los estudiantes que ganaron la evaluacion de historia son: (Orden Descendente)
+Julio Arango
+Julia Sierra
+Juan Carlos Alberto
+11) Ascendente, 12) Invertir
+Los estudiantes que ganaron la evaluacion aritmetica son:
+Verificar que esten ordenados alfabeticamente
+Alba Chinchilla
+Gustavo Gamboa
+Juan Carlos Alberto
+Julia Sierra
+Julio Arango
+Verificar que esten ordenados alfabeticamente invertido
+Julio Arango
+Julia Sierra
+Juan Carlos Alberto
+Gustavo Gamboa
+Alba Chinchilla
+15) Map, 16) Reduce
+Imprimiendo nombres de los estudiantes que saben par e impar
+17) Todos, 18) Alguno
+Â¿Algun estudiante contesto mal el nombre del algoritmo ackermanm? falso
+Â¿Todos los estudiantes contestaron correctamente Ackermann(3,11)? verdadero

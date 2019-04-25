@@ -210,7 +210,12 @@ sinosi = (sino){comentario}{si}
     "nulo"   {
                 addLexema("reservada", yytext(), yyline, yychar);            
                 return  new Symbol(sym.nulo, yychar, yyline, yytext());
-            }  
+            }             
+    "leergxml"   
+            {
+                addLexema("reservada", yytext(), yyline, yychar);                         
+                return  new Symbol(sym.leergxml, yychar, yyline, yytext());
+            }              
     "retornar"   {
                 addLexema("reservada", yytext(), yyline, yychar);    
                 //System.out.println("------------------------------retornar-------------------");        
@@ -221,6 +226,11 @@ sinosi = (sino){comentario}{si}
                 addLexema("reservada", yytext(), yyline, yychar);            
                 return  new Symbol(sym.detener, yychar, yyline, yytext());
             }
+    "crearventana" 
+            {
+                addLexema("reservada", yytext(), yyline, yychar);            
+                return  new Symbol(sym.crearventana, yychar, yyline, yytext());
+            }                
     "crearArrayDesdeArchivo"   {
                 addLexema("reservada", yytext(), yyline, yychar);            
                 return  new Symbol(sym.arrayarchivo, yychar, yyline, yytext());

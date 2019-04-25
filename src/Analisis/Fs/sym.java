@@ -11,66 +11,68 @@ public class sym {
   public static final int igualigual = 18;
   public static final int suma = 2;
   public static final int resta = 4;
-  public static final int menosigual = 40;
-  public static final int imprimir = 36;
-  public static final int tcontinuar = 52;
-  public static final int detener = 51;
-  public static final int coma = 43;
-  public static final int nulo = 38;
-  public static final int divigual = 42;
+  public static final int menosigual = 42;
+  public static final int imprimir = 38;
+  public static final int tcontinuar = 54;
+  public static final int crearventana = 31;
+  public static final int detener = 53;
+  public static final int coma = 45;
+  public static final int nulo = 40;
+  public static final int divigual = 44;
   public static final int igual = 19;
-  public static final int identificador = 50;
-  public static final int tbool = 33;
-  public static final int caracter = 62;
-  public static final int seleccion = 55;
-  public static final int masigual = 39;
-  public static final int tint = 31;
+  public static final int identificador = 52;
+  public static final int tbool = 35;
+  public static final int leergxml = 32;
+  public static final int caracter = 64;
+  public static final int seleccion = 57;
+  public static final int masigual = 41;
+  public static final int tint = 33;
   public static final int si = 8;
   public static final int arrayarchivo = 30;
   public static final int mientras = 25;
-  public static final int importar = 44;
+  public static final int importar = 46;
   public static final int defecto = 15;
-  public static final int pari = 49;
+  public static final int pari = 51;
   public static final int menor = 21;
-  public static final int var = 56;
-  public static final int pard = 48;
+  public static final int var = 58;
+  public static final int pard = 50;
   public static final int EOF = 0;
   public static final int aumento = 26;
-  public static final int verdadero = 59;
+  public static final int verdadero = 61;
   public static final int para = 28;
   public static final int error = 1;
+  public static final int tstring = 36;
   public static final int mayor = 20;
-  public static final int tstring = 34;
-  public static final int entero = 60;
+  public static final int entero = 62;
   public static final int or = 6;
   public static final int menorigual = 23;
-  public static final int llaveI = 46;
-  public static final int multiigual = 41;
+  public static final int llaveI = 48;
+  public static final int multiigual = 43;
   public static final int exclam = 24;
   public static final int punto = 12;
   public static final int funcion = 29;
-  public static final int dospuntos = 53;
+  public static final int dospuntos = 55;
   public static final int desigual = 17;
-  public static final int llaveD = 47;
-  public static final int potencia = 57;
-  public static final int falso = 58;
-  public static final int caso = 54;
+  public static final int llaveD = 49;
+  public static final int potencia = 59;
+  public static final int falso = 60;
+  public static final int caso = 56;
   public static final int multi = 3;
   public static final int corchetei = 11;
   public static final int mayorigual = 22;
   public static final int corcheted = 10;
   public static final int and = 7;
   public static final int decremento = 27;
-  public static final int puntocoma = 45;
+  public static final int puntocoma = 47;
   public static final int retornar = 16;
-  public static final int tdouble = 35;
+  public static final int tdouble = 37;
   public static final int div = 5;
   public static final int selecciona = 14;
-  public static final int decimal = 61;
+  public static final int decimal = 63;
   public static final int interrogacion = 13;
-  public static final int cadena = 37;
+  public static final int cadena = 39;
   public static final int sino = 9;
-  public static final int tchar = 32;
+  public static final int tchar = 34;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -103,6 +105,8 @@ public class sym {
   "para",
   "funcion",
   "arrayarchivo",
+  "crearventana",
+  "leergxml",
   "tint",
   "tchar",
   "tbool",

@@ -151,7 +151,7 @@ public class Ventana extends NodoXML
                 ventana.setVentanaActual(idVentana);
                 valor+= "\""+color+"\",";
                 /*Ancho y alto*/
-                valor+= alto + "," + ancho+");";     
+                valor+= alto + "," +ancho+ ",\""+ id +"\""+ ");";  
                 ventana.addCuerpoInicio((String) valor);
             }
             else 
@@ -162,7 +162,7 @@ public class Ventana extends NodoXML
                 ventana.setVentanaActual(idVentana);
                 valor+= "\""+color+"\",";
                 /*Ancho y alto*/
-                valor+= alto + "," + ancho+");";    
+                valor+= alto + "," + ancho+ ",\""+ id +"\""+ ");";  
                 ventana.addCuerpoInicio((String) valor);
             }
             else
@@ -177,7 +177,7 @@ public class Ventana extends NodoXML
                 valor+= "\""+color+"\",";
                         
                 /*Ancho y alto*/
-                valor+= alto + "," + ancho+");";   
+                valor+= alto + "," + ancho+ ",\""+ id +"\""+ ");";   
                 ventana.addCuerpoInicio((String) valor);                                
                 singlenton.addErrores(new error("Semantico",columna,linea,tipo, "Tipo de ventana no válido"));
             }
