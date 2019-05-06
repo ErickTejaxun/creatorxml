@@ -5,16 +5,25 @@
  */
 package Analisis.Fs.AST;
 
+import Recursos.Display;
 import Recursos.error;
 import Recursos.singlenton;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.WindowConstants;
 
@@ -150,17 +159,82 @@ public class Nativa extends Exp
                 break;
             case "creartexto":
                 creartexto(entorno);
-                break;     
+                break;  
+            case "crearboton":
+                crearboton(entorno);
+                break;                 
             case "alcargar":
                 alcargar(entorno);
                 break;
+            case "crearcajatexto":
+                crearcajatexto(entorno);
+                break;
+            case "alclic":
+                alclic(entorno);
+                break;
+            
+               
 //            case "leergxml":
 //                leergxml(entorno);
 //                break;                    
         }
     }
 
-    
+    public void alclic(Entorno entorno)
+    {
+        if(id==null)
+        {
+            id =((idExp)origen).id;
+        }
+        
+        Simbolo boton = entorno.getSimbolo(id);
+        Hashtable atributos = (Hashtable)boton.valor;
+        String tipo = atributos.get("tipo").toString();
+        if(tipo.equalsIgnoreCase("boton"))
+        {
+           
+           String nombreVentana = atributos.get("ventana").toString();
+           String nombrePanel =  atributos.get("panel").toString();
+           Ventana ventanatmp = entorno.ventana.listaVentanas.get(nombreVentana);
+           if(ventanatmp!=null)
+           {
+               Component[] componentes = ventanatmp.getComponents();
+               Panel panelTmp = null;
+               for(int i = 0; i < componentes.length; i++)
+               {
+                   if(componentes[i] instanceof Panel )
+                   {                       
+                       if(((Panel)componentes[i]).id.equalsIgnoreCase(nombrePanel))
+                       {
+                       }
+                   }
+               }
+           }
+           Simbolo ventana = entorno.getSimbolo(nombreVentana);
+           Hashtable contenidoVentana = (Hashtable)((Hashtable)ventana.valor).get("contenido");
+           if(contenidoVentana !=null)
+           {
+               Hashtable panel =(Hashtable) ((Hashtable)contenidoVentana).get(nombrePanel);
+               if(panel!=null)
+               {
+                   Hashtable contenidoPanel = (Hashtable)panel.get("contenido");
+                   if(contenidoPanel !=null)
+                   {
+                       Simbolo botonBuscado = (Simbolo)contenidoPanel.get(id);
+                       if(botonBuscado!=null)
+                       {
+                           ((Hashtable)botonBuscado.valor).put("alclic", expresion);
+                       }
+                   }
+               }
+           }
+        }
+        else
+        {
+            singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo botón."));
+        }
+        
+    }
     public void alcargar(Entorno entorno)
     {
         Object nombre = ((idExp)origen).id; //origen.ejecutar(entorno).valor
@@ -190,8 +264,10 @@ public class Nativa extends Exp
                         else
                         {
                             /*Aqui levantamos nuestra ventana*/
+                            /*----------------------VENTANA-------------------------------*/
                             String titulo = ((Hashtable)ventana.valor).get("id").toString();                            
                             Ventana nuevaVentana = new Ventana(); // Instanciamos la ventana :3 
+                            nuevaVentana.setId(titulo);
                             int alto = (int)((Hashtable)ventana.valor).get("alto");
                             int ancho = (int)((Hashtable)ventana.valor).get("ancho");
                             String color = ((Hashtable)ventana.valor).get("color").toString();
@@ -205,14 +281,14 @@ public class Nativa extends Exp
                             panelPrincipalNuevaVentana.setBackground(colorPaint); 
                             panelPrincipalNuevaVentana.setBounds(0, 0, alto, ancho);
                             panelPrincipalNuevaVentana.setLayout(null);                                                                              
-                            nuevaVentana.repaint();                                                                                    
-                            nuevaVentana.id = titulo;
+                            nuevaVentana.repaint();                                                                                                               
                             /*Creamos todas sus mierdas*/
                                                         
                             Enumeration e = ((Hashtable)ventana.valor).keys();                            
                             Object valor;                            
                             valor = ((Hashtable)ventana.valor).get("contenido");                              
-                            if(valor instanceof Hashtable) /*Esta hash es el contenido de elementos.*/
+                            /*Elementos del panel*/
+                            if(valor instanceof Hashtable) 
                             {
                                 Hashtable elementosVentana = ((Hashtable)valor);
                                 Enumeration elementos = elementosVentana.keys();
@@ -222,10 +298,12 @@ public class Nativa extends Exp
                                     Object clave = elementos.nextElement();
                                     Object elemento = elementosVentana.get(clave);
                                     Hashtable atributosContenedor = (Hashtable)elemento;
-                                    if(elemento !=null)
+                                    //if(elemento !=null)
+                                    if(((Hashtable)elemento).get("tipo").equals("contenedor"))
                                     {
-                                        Panel nuevoContenedor = new Panel();
-                                        String idContenedor = clave.toString();
+                                        Panel nuevoContenedor = new Panel();                                        
+                                        String idContenedor = atributosContenedor.get("id").toString();
+                                        nuevoContenedor.id = idContenedor;
                                         int altoContenedor = (int)atributosContenedor.get("alto");
                                         int anchoContenedor = (int)atributosContenedor.get("ancho");
                                         String colorC = atributosContenedor.get("color").toString();
@@ -265,26 +343,129 @@ public class Nativa extends Exp
                                                         txt.setBounds(x,y, txt.getText().length()*7,20);
                                                         nuevoContenedor.add(txt);
                                                         break;
+                                                    case "cajatexto":                                                        
+                                                        cajatexto caja = new cajatexto();
+                                                        caja.ventana = nuevaVentana.id;
+                                                        caja.contenedor = nuevoContenedor.id;
+                                                        //Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, valor)                             
+                                                        estiloLetra = getEstilo((boolean)atributosElementoContenedor.get("negrilla"),(boolean)atributosElementoContenedor.get("cursiva"));
+                                                        caja.setFont(new java.awt.Font(atributosElementoContenedor.get("fuente").toString(), 0, (int)atributosElementoContenedor.get("tamano")));
+                                                        caja.setForeground(colorFuente(atributosElementoContenedor.get("color").toString()));
+                                                        caja.setText(atributosElementoContenedor.get("texto").toString());
+                                                        x = (int)atributosElementoContenedor.get("x");
+                                                        y = (int)atributosElementoContenedor.get("y");
+                                                        caja.setBounds(x,y, caja.getText().length()*7,20);
+                                                        nuevoContenedor.add(caja);
+                                                        break;   
+                                                    case "boton":
+                                                        Boton boton = new Boton();
+                                                        boton.ventana = nuevaVentana.id;
+                                                        boton.contenedor = nuevoContenedor.id;                                                        
+                                                        //CrearBoton(Fuente, Tamaño, Color, X, Y,Referencia, valor, Alto, Ancho)                                                                              
+                                                        Font fuente = new Font(atributosElementoContenedor.get("fuente").toString(), 0, (int)atributosElementoContenedor.get("tamano"));                                                        
+                                                        boton.setFont(fuente);    
+                                                        boton.setForeground(colorFuente(atributosElementoContenedor.get("color").toString()));
+                                                        boton.setText(atributosElementoContenedor.get("valor").toString());
+                                                        x = (int)atributosElementoContenedor.get("x");
+                                                        y = (int)atributosElementoContenedor.get("y");
+                                                        int altoBoton = (int)atributosElementoContenedor.get("alto");
+                                                        int anchoBoton = (int)atributosElementoContenedor.get("ancho");
+                                                        boton.setBounds(x,y, anchoBoton, altoBoton);
+                                                        boton.setReferencia(atributosElementoContenedor.get("referencia").toString());   
+                                                        boton.referencia = atributosElementoContenedor.get("referencia").toString();
+                                                        Object alclic = atributosElementoContenedor.get("alclic");
+                                                        if(alclic !=null)
+                                                        {
+                                                            boton.alclic = (Llamada)alclic;
+                                                            boton.addActionListener
+                                                            (
+                                                                new ActionListener() {
+                                                                @Override
+                                                                public void actionPerformed(ActionEvent e) {
+                                                                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                                                }
+                                                            }
+                                                            );
+                                                            boton.addMouseListener
+                                                            (
+                                                                    new MouseListener() {
+                                                                @Override
+                                                                public void mouseClicked(MouseEvent e) {
+                                                                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                                                }
+
+                                                                @Override
+                                                                public void mouseReleased(MouseEvent e) {
+                                                                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                                                }
+
+                                                                @Override
+                                                                public void mouseEntered(MouseEvent e) {
+                                                                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                                                }
+
+                                                                @Override
+                                                                public void mouseExited(MouseEvent e) {
+                                                                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                                                }
+                                                                @Override
+                                                                public void mousePressed(MouseEvent e) 
+                                                                {                
+                                                                    Boton boton = (Boton)e.getSource(); 
+                                                                    boton.alclic.ejecutar(entorno);
+                                                                    if(!boton.referencia.equals(""))
+                                                                    {
+                                                                        String siguienteVentana = "";
+                                                                        Enumeration enumVentanas = entorno.tablaSimbolos.keys();
+                                                                        while(enumVentanas.hasMoreElements())
+                                                                        {        
+                                                                            Object claveElementoContenedor = enumVentanas.nextElement();   
+                                                                            
+                                                                            Simbolo ventanaSimbolo = (Simbolo)entorno.tablaSimbolos.get(claveElementoContenedor);
+                                                                            if(ventanaSimbolo.valor instanceof Hashtable)
+                                                                            {                                                                               
+                                                                                Hashtable atributosVentanasSimbolo = (Hashtable)ventanaSimbolo.valor;                                                                            
+                                                                                String nombreTmp = atributosVentanasSimbolo.get("id").toString();
+                                                                                if(nombreTmp.equalsIgnoreCase(boton.referencia))
+                                                                                {
+                                                                                    Hashtable elementoSimboloVentana = (Hashtable)ventanaSimbolo.valor;
+                                                                                    if(elementoSimboloVentana!=null)
+                                                                                    {
+                                                                                        siguienteVentana = ventanaSimbolo.id;
+                                                                                    }                                                                                
+                                                                                }                                                                                
+                                                                            }
+                                                                        }                                                                        
+                                                                        Nativa nat = new Nativa (0, 0, new idExp(siguienteVentana), "alcargar");
+                                                                        nat.ejecutar(entorno);
+                                                                    }
+                                                                }                                                                
+                                                            }
+                                                            );
+                                                        }
+                                                        
+                                                        nuevoContenedor.add(boton);
+                                                        break;                                                         
                                                 }
                                             }
                                         }
-                                        /*-------------------------Fin elementos Contenedor*/
-                                        
-                                        
-                                        panelPrincipalNuevaVentana.add(nuevoContenedor);                                        
+                                        panelPrincipalNuevaVentana.add(nuevoContenedor);
+                                        /*-------------------------Fin elementos Contenedor*/                                                                                
+                                                                              
                                     }
                                 }
                             }
-                                                        
-                            
+                                                                                     
                             /*Agregamos el panel principal*/
                             nuevaVentana.add(panelPrincipalNuevaVentana);  
+                            //en.add(nuevaVentana); 
                             /*Ejecutamos el metodo :V*/
                             Object metodoInicial = ((Hashtable)ventana.valor).get("alcargar");
                             if(metodoInicial!=null)
                             {
                                 ((Llamada)metodoInicial).ejecutar(entorno);
-                            }                            
+                            }                                                             
+                            entorno.ventana.listaVentanas.put(nuevaVentana.id, nuevaVentana);
                             nuevaVentana.show();
                             //System.out.println("Levantanado la puta interfaz");
                         }
@@ -312,7 +493,7 @@ public class Nativa extends Exp
         return 0;
     }
     
-    public void creartexto(Entorno entorno)
+    public void crearcajatexto(Entorno entorno)
     {
         if(parametros !=null)
         {
@@ -346,15 +527,20 @@ public class Nativa extends Exp
                 {
                     Hashtable<String,Object> atributos = new Hashtable<String,Object>();
                     /*Obtenemos todos los atributos*/
-                    Simbolo nuevoTexto = new Simbolo("", "texto");
+                    Simbolo nuevoTexto = new Simbolo(Display.nombreNuevoElemento, "cajatexto");
                     nuevoTexto.rol = "variable";
                     if(parametros.size()==8)
                     {
                         //Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, valor
-                        atributos.put("tipo", "texto");
-                        atributos.put("fuente", parametros.get(0).ejecutar(entorno).valor);
-                        atributos.put("tamano", parametros.get(1).ejecutar(entorno).valor);
-                        String color = parametros.get(2).ejecutar(entorno).valor.toString();
+                        /*
+                        CrearCajaTexto(Alto, Ancho, Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, defecto, nombre)
+                        */                        
+                        atributos.put("tipo", "cajatexto");
+                        atributos.put("alto", parametros.get(0).ejecutar(entorno).valor);
+                        atributos.put("ancho", parametros.get(1).ejecutar(entorno).valor);
+                        atributos.put("fuente", parametros.get(2).ejecutar(entorno).valor);
+                        atributos.put("tamano", parametros.get(3).ejecutar(entorno).valor);                                               
+                        String color = parametros.get(4).ejecutar(entorno).valor.toString();
                         if(isColor(color))
                         {
                             atributos.put("color", color);
@@ -363,13 +549,16 @@ public class Nativa extends Exp
                         {
                             atributos.put("color", ((Hashtable)contenedor.valor).get("color"));
                         }
-
-                        atributos.put("x", parametros.get(3).ejecutar(entorno).valor);
-                        atributos.put("y", parametros.get(4).ejecutar(entorno).valor);
-                        atributos.put("negrilla", parametros.get(5).ejecutar(entorno).valor);
-                        atributos.put("cursiva",parametros.get(6).ejecutar(entorno).valor);
-                        atributos.put("texto",parametros.get(7).ejecutar(entorno).valor);
-                        atributos.put("contenido", new Hashtable<String,Simbolo>());
+                        atributos.put("x", parametros.get(4).ejecutar(entorno).valor);
+                        atributos.put("y", parametros.get(5).ejecutar(entorno).valor);
+                        atributos.put("negrilla", parametros.get(6).ejecutar(entorno).valor);
+                        atributos.put("cursiva",parametros.get(7).ejecutar(entorno).valor);
+                        atributos.put("texto",parametros.get(8).ejecutar(entorno).valor);
+                        atributos.put("id",parametros.get(9).ejecutar(entorno).valor);
+                        atributos.put("nombre",parametros.get(10).ejecutar(entorno).valor);
+                        atributos.put("ventana",ventana.id);
+                        atributos.put("panel",contenedor.id);
+                        //atributos.put("contenido", new Hashtable<String,Simbolo>());
                         valor = atributos;  
                         nuevoTexto.valor = atributos;
                         ((Hashtable)contenedorVentana.get("contenido")).put("", nuevoTexto);
@@ -388,6 +577,162 @@ public class Nativa extends Exp
 //
 //                        nuevoContenedor.valor = atributos;
                         //entorno.insertarSimbolo(nuevoContenedor);
+                    }
+                    else
+                    {
+                        singlenton.addErrores(new error("semantico",linea,columna, id," Faltan parametros para la creación de un conetenedor."));
+                    }
+                    //nuevoContenedor.valores = ;
+                }                
+            }                        
+        }
+    }      
+    
+    public void crearboton(Entorno entorno)
+    {
+        if(parametros !=null)
+        {
+            if(id==null)
+            {
+                id =((idExp)origen).id;
+            }
+            Simbolo contenedor = entorno.getSimbolo(id);
+            if(((Hashtable)contenedor.valor).get("tipo")!=null)
+            {
+                if(!((Hashtable)contenedor.valor).get("tipo").equals("contenedor"))
+                {
+                    singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+                    return;                    
+                }                
+            }
+            else
+            {
+                singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+                return;
+            }       
+            
+            Simbolo ventana = entorno.getSimbolo(((Hashtable)contenedor.valor).get("ventana").toString());
+            Hashtable tmpAtributos = ((Hashtable)((Hashtable)ventana.valor).get("contenido"));
+            Object tmp = tmpAtributos.get(id);
+            if(tmp instanceof Hashtable)
+            {
+                //Simbolo contenedorVentana = (Simbolo)tmp;
+                Hashtable contenedorVentana = (Hashtable)tmp; // contenedor en el que vamos a guardar este elemento
+                if(contenedorVentana!=null)
+                {
+                    Hashtable<String,Object> atributos = new Hashtable<String,Object>();
+                    /*Obtenemos todos los atributos*/
+                    Simbolo nuevoBoton = new Simbolo(Display.nombreNuevoElemento, "boton");
+                    nuevoBoton.rol = "variable";
+                    if(parametros.size()==9)
+                    {
+                        //CrearBoton(Fuente, Tamaño, Color, X, Y,Referencia, valor, Alto, Ancho)
+                        atributos.put("id", nuevoBoton.id);
+                        atributos.put("tipo", "boton");
+                        atributos.put("fuente", parametros.get(0).ejecutar(entorno).valor);
+                        atributos.put("tamano", parametros.get(1).ejecutar(entorno).valor);
+                        String color = parametros.get(2).ejecutar(entorno).valor.toString();
+                        if(isColor(color))
+                        {
+                            atributos.put("color", color);
+                        }
+                        else
+                        {
+                            atributos.put("color", ((Hashtable)contenedor.valor).get("color"));
+                        }
+
+                        atributos.put("x", parametros.get(3).ejecutar(entorno).valor);
+                        atributos.put("y", parametros.get(4).ejecutar(entorno).valor);
+                        atributos.put("referencia", parametros.get(5).ejecutar(entorno).valor);
+                        atributos.put("valor",parametros.get(6).ejecutar(entorno).valor);
+                        atributos.put("alto",parametros.get(7).ejecutar(entorno).valor);
+                        atributos.put("ancho",parametros.get(8).ejecutar(entorno).valor);
+                        atributos.put("ventana",ventana.id);
+                        atributos.put("panel",contenedor.id);                        
+                        valor = atributos;  
+                        nuevoBoton.valor = atributos;
+                        ((Hashtable)contenedorVentana.get("contenido")).put(nuevoBoton.id, nuevoBoton);
+
+                    }
+                    else
+                    {
+                        singlenton.addErrores(new error("semantico",linea,columna, id," Faltan parametros para la creación de un conetenedor."));
+                    }
+                    //nuevoContenedor.valores = ;
+                }                
+            }                        
+        }
+    }        
+    public void creartexto(Entorno entorno)
+    {
+        
+        if(parametros !=null)
+        {   
+            /*Primero obtenemos el id del contenedor donde se va a crear el texto.*/
+            if(id==null)
+            {
+                id =((idExp)origen).id;
+            }
+            Simbolo contenedor = entorno.getSimbolo(id); /*Buscamos el contendor en modo de variable.*/
+            
+            if(((Hashtable)contenedor.valor).get("tipo")!=null)
+            {
+                if(!((Hashtable)contenedor.valor).get("tipo").equals("contenedor"))
+                {
+                    singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+                    return;                    
+                }                
+            }
+            else
+            {
+                singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+                return;
+            }                          
+            
+            /*Ahora buscamos la ventana donde está almacenada el contenedor.*/
+            Simbolo ventana = entorno.getSimbolo(((Hashtable)contenedor.valor).get("ventana").toString());            
+            Hashtable tmpAtributos = ((Hashtable)((Hashtable)ventana.valor).get("contenido"));            
+            Object tmp = tmpAtributos.get(id);
+            
+            if(tmp instanceof Hashtable)
+            {
+                //Simbolo contenedorVentana = (Simbolo)tmp;
+                Hashtable contenedorVentana = (Hashtable)tmp; // contenedor en el que vamos a guardar este elemento
+                if(contenedorVentana!=null)
+                {
+                    Hashtable<String,Object> atributos = new Hashtable<String,Object>();
+                    /*Obtenemos todos los atributos*/
+                    Simbolo nuevoTexto = new Simbolo("", "texto");
+                    nuevoTexto.rol = "variable";
+                    if(parametros.size()==8)
+                    {
+                        //Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, valor
+                        atributos.put("tipo", "texto");
+                        atributos.put("id", "");
+                        atributos.put("fuente", parametros.get(0).ejecutar(entorno).valor);
+                        atributos.put("tamano", parametros.get(1).ejecutar(entorno).valor);
+                        String color = parametros.get(2).ejecutar(entorno).valor.toString();
+                        if(isColor(color))
+                        {
+                            atributos.put("color", color);
+                        }
+                        else
+                        {
+                            atributos.put("color", ((Hashtable)contenedor.valor).get("color"));
+                        }
+
+                        atributos.put("x", parametros.get(3).ejecutar(entorno).valor);
+                        atributos.put("y", parametros.get(4).ejecutar(entorno).valor);
+                        atributos.put("negrilla", parametros.get(5).ejecutar(entorno).valor);
+                        atributos.put("cursiva",parametros.get(6).ejecutar(entorno).valor);
+                        atributos.put("texto",parametros.get(7).ejecutar(entorno).valor);
+                        atributos.put("ventana",id);
+                        atributos.put("contenedor","");
+                        //atributos.put("contenido", new Hashtable<String,Simbolo>());
+                        valor = atributos;  
+                        nuevoTexto.valor = atributos;
+                        nuevoTexto.id = atributos.hashCode()+"";
+                        ((Hashtable)contenedorVentana.get("contenido")).put(nuevoTexto.id, nuevoTexto);
                     }
                     else
                     {
@@ -431,6 +776,7 @@ public class Nativa extends Exp
                 if(parametros.size()==6)
                 {
                     atributos.put("tipo", "contenedor");
+                    atributos.put("id",Display.nombreNuevoElemento);
                     atributos.put("alto", parametros.get(0).ejecutar(entorno).valor);
                     atributos.put("ancho", parametros.get(1).ejecutar(entorno).valor);
                     String color = parametros.get(2).ejecutar(entorno).valor.toString();

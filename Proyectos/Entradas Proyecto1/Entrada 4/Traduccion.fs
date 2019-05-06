@@ -1,17 +1,16 @@
 importar("./FuncionesEvaluacion.fs");
-Var vent_VentanaPrincipal=CrearVentana("#000000",1000,1000,"VentanaPrincipal");
-Var cont_Contenedor1_VentanaPrincipal=vent_VentanaPrincipal.CrearContenedor(400,400,"#ffffff",verdadero,10,10);
+Var vent_VentanaPrincipal=CrearVentana("#ffff88",1000,1000,"VentanaPrincipal");
+Var cont_Contenedor1_VentanaPrincipal=vent_VentanaPrincipal.CrearContenedor(900,400,"#ffffff",verdadero,10,10);
 cont_Contenedor1_VentanaPrincipal.CrearTexto("Arial",14,"#000000",10,10,verdadero,falso,"Haga clic en el siguiente boton para iniciar la evaluacion");
-imprimir(cont_Contenedor1_VentanaPrincipado);
-vent_VentanaPrincipal.alcargar();
 
-Var btn_btnEvaluacion_VentanaPrincipal=cont_Contenedor1_VentanaPrincipal.CrearBoton("Arial",14,"#FFFFFF",60,40,"VentanaAritmetica","Iniciar Evaluacion",100,100);
-/*
+Var btn_btnEvaluacion_VentanaPrincipal=cont_Contenedor1_VentanaPrincipal.CrearBoton("Arial",14,"#00ff00",50,50,"VentanaAritmetica","Iniciar Evaluacion",30,200);
+
 btn_btnEvaluacion_VentanaPrincipal.AlClic(Bienvenido());
+
 
 cont_Contenedor1_VentanaPrincipal.CrearTexto("Arial",14,"#000000",10,250,falso,verdadero,"Haga clic en el siguiente boton para iniciar el area de reportes");
 
-Var btn_btnReportes_VentanaPrincipal=cont_Contenedor1_VentanaPrincipal.CrearBoton("Arial",14,"#FFFFFF",60,300,"VentanaReportes","Iniciar Reportes",100,100);
+Var btn_btnReportes_VentanaPrincipal=cont_Contenedor1_VentanaPrincipal.CrearBoton("Arial",14,"#FFFFFF",50,280,"VentanaReportes","Iniciar Reportes",100,200);
 
 btn_btnReportes_VentanaPrincipal.AlClic(BienvenidoReporte());
 
@@ -50,7 +49,7 @@ cont_ContenedorAritmeticas_VentanaAritmetica.CrearTexto("Arial",14,"#000000",10,
 
 cont_ContenedorAritmeticas_VentanaAritmetica.CrearControlNumerico(50,100,5000,0,150,150,0,"CPotencia");
 
-Var btn_btnPotencia_VentanaAritmetica=cont_ContenedorAritmeticas_VentanaAritmetica.CrearBoton("Arial",14,"#FFFFFF",300,150,nulo,"Ver Respuesta",50,100);
+Var btn_btnPotencia_VentanaAritmetica=cont_ContenedorAritmeticas_VentanaAritmetica.CrearBoton("Arial",14,"#FFFFFF",300,150,nulo,"Ver Respuesta",50,150);
 
 btn_btnPotencia_VentanaAritmetica.AlClic(VerPotencia(5,5));
 
@@ -58,7 +57,7 @@ cont_ContenedorAritmeticas_VentanaAritmetica.CrearTexto("Arial",14,"#000000",10,
 
 cont_ContenedorAritmeticas_VentanaAritmetica.CrearControlNumerico(50,100,6000,0,150,250,0,"CFactorial");
 
-Var btn_btnFactorial_VentanaAritmetica=cont_ContenedorAritmeticas_VentanaAritmetica.CrearBoton("Arial",14,"#FFFFFF",300,250,nulo,"Ver Respuesta",50,100);
+Var btn_btnFactorial_VentanaAritmetica=cont_ContenedorAritmeticas_VentanaAritmetica.CrearBoton("Arial",14,"#FFFFFF",300,250,nulo,"Ver Respuesta",50,150);
 
 btn_btnFactorial_VentanaAritmetica.AlClic(VerFactorial(7));
 
@@ -66,7 +65,7 @@ cont_ContenedorAritmeticas_VentanaAritmetica.CrearTexto("Arial",14,"#000000",10,
 
 cont_ContenedorAritmeticas_VentanaAritmetica.CrearControlNumerico(50,100,nulo,0,150,350,0,"CInvertido");
 
-Var btn_btnInvertido_VentanaAritmetica=cont_ContenedorAritmeticas_VentanaAritmetica.CrearBoton("Arial",14,"#FFFFFF",300,350,nulo,"Ver Respuesta",50,100);
+Var btn_btnInvertido_VentanaAritmetica=cont_ContenedorAritmeticas_VentanaAritmetica.CrearBoton("New Times Romans",20,"#ff00ff",300,350,nulo,"Ver Respuesta",50,150);
 
 btn_btnInvertido_VentanaAritmetica.AlClic(VerInvertido(351230347));
 
@@ -76,8 +75,8 @@ cont_ContenedorAritmeticas_VentanaAritmetica.CrearControlNumerico(50,100,nulo,0,
 
 Var btn_btnMCD_VentanaAritmetica=cont_ContenedorAritmeticas_VentanaAritmetica.CrearBoton("Arial",14,"#FFFFFF",300,450,nulo,"Ver Respuesta",50,100);
 
-btn_btnMCD_VentanaAritmetica.AlClic(VerMCD(240,506,10));
-
+//btn_btnMCD_VentanaAritmetica.AlClic(VerMCD(240,506,10));
+btn_btnMCD_VentanaAritmetica.AlClic(VerMCD(240,506));
 cont_ContenedorAritmeticas_VentanaAritmetica.CrearTexto("Arial",14,"#000000",10,550,falso,falso,"Ingrese el Fibonacci de 19:");
 
 cont_ContenedorAritmeticas_VentanaAritmetica.CrearControlNumerico(50,100,6000,0,150,550,0,"CFibonacci");
@@ -313,4 +312,4 @@ funcion Guardar_VentanaReportes(){
 	vent_VentanaReportes.CrearArrayDesdeArchivo();
 EnviarSinFuncionalidad();
 
-}*/
+}

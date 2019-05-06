@@ -24,6 +24,7 @@ public class Display
     public static ArrayList<Nodo> retornos = new ArrayList<Nodo>();
     public static ArrayList<String> archivos = new ArrayList<String>();
     public static String nombreArchivo = "";
+    public static String nombreNuevoElemento="";
 
     
     public static int puntero = 0; 

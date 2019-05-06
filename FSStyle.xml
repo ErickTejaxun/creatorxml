@@ -37,12 +37,12 @@
       <style token="IDENTIFIER" fg="000000"/>
       <style token="RESERVED_WORD" fg="032cf9" bold="true"/>
       <style token="RESERVED_WORD_2" fg="032cf9" bold="true"/>
-      <style token="ANNOTATION" fg="808080"/>
+      <style token="ANNOTATION" fg="8a8e8a"/>
       <style token="COMMENT_DOCUMENTATION" fg="8a8e8a"/>
       <style token="COMMENT_EOL" fg="8a8e8a"/>
       <style token="COMMENT_MULTILINE" fg="8a8e8a"/>
-      <style token="COMMENT_KEYWORD" fg="7F9FBF" bold="true"/>
-      <style token="COMMENT_MARKUP" fg="7f7f9f"/>
+      <style token="COMMENT_KEYWORD" fg="8a8e8a" bold="true"/>
+      <style token="COMMENT_MARKUP" fg="8a8e8a"/>
       <style token="DATA_TYPE" fg="7f0055" bold="true"/>      
       <style token="FUNCTION" fg="0319f9"/>
       <style token="LITERAL_BOOLEAN" fg="f97703" bold="true"/>

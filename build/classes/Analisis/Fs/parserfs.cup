@@ -202,6 +202,10 @@ NATIVA::=
             {:
                 RESULT = new Nativa (nombreleft, nombreright, new idExp(nombre), funcion);
             :}  
+            |identificador:nombre punto arrayarchivo:funcion pari pard 
+            {:
+                RESULT = new Nativa (nombreleft, nombreright, new idExp(nombre), "guardar");
+            :}              
             |identificador:nombre punto identificador:funcion pari  LVALORES:parametros  pard 
             {:
                 RESULT = new Nativa (nombreleft, nombreright, new idExp(nombre), funcion, parametros);
@@ -358,6 +362,7 @@ EXP::=
        |NATIVA:valor {:RESULT =(Exp) valor;:}   
        |ARRAYARCHIVO:valor{:RESULT = valor;:}   
        |LEERGXML:xml{:RESULT = xml;:}
+       |nulo:nulo {:RESULT = new StringExp("nulo");:}
        ;
 
 VENTANA::= crearventana:i pari EXPL:color coma EXPL:alto coma EXPL:ancho coma EXPL:nombre  pard

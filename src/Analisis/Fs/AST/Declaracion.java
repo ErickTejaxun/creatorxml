@@ -5,6 +5,7 @@
  */
 package Analisis.Fs.AST;
 
+import Recursos.Display;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -76,42 +77,48 @@ public class Declaracion  extends Sentencia{
                 name = lista.get(x);                
                 valor = entorno.insertarSimbolo(new Simbolo(name, tipo, "var","nada"));                         
             }
+            Display.nombreNuevoElemento = lista.get(0);
             valor = exp.ejecutar(entorno).valor;
             if(valor instanceof Hashtable)
             {
                 Object ventana = ((Hashtable)valor).get("ventana");
+                /*Si no es null, es un contenedor. Entonces buscamos la ventana en la tabla de simbolos
+                y la agregamos a contendio.*/
                 if(ventana!=null)                
                 {
                     Simbolo sventana = entorno.getSimbolo(ventana.toString());
                     if(sventana!=null)
                     {
-                        ((Hashtable)((Hashtable)sventana.valor).get("contenido")).remove(((Hashtable)((Hashtable)sventana.valor).get("contenido")).size());
+                        ((Hashtable)((Hashtable)sventana.valor).get("contenido")).remove(((Hashtable)((Hashtable)sventana.valor).get("contenido")).size());                        
                         ((Hashtable)((Hashtable)sventana.valor).get("contenido")).put(lista.get(0), valor);
                     }
-                }else
-                {
-                    Object contenedor = ((Hashtable)valor).get("contenedor");
-                    if(contenedor!=null)
-                    {
-                        if(contenedor instanceof Hashtable)
-                        {
-                            Object nombreVentana = ((Hashtable)contenedor).get("ventana");
-                            if(nombreVentana !=null)
-                            {
-                                Simbolo s2ventana = entorno.getSimbolo(nombreVentana.toString());
-                                if(s2ventana !=null)
-                                {
-                                    Object contenido = ((Simbolo)s2ventana).valor;
-                                    if(contenido instanceof Hashtable)
-                                    {
-                                        //Object contenedor = ((Hashtable)contenido).get()
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                }                                                
             }
+//                /*Si es null, significa que puede que sea otro controlador.*/
+//                else
+//                {
+//                    Object contenedor = ((Hashtable)valor).get("contenedor");
+//                    if(contenedor!=null)
+//                    {
+//                        if(contenedor instanceof Hashtable)
+//                        {
+//                            Object nombreVentana = ((Hashtable)contenedor).get("ventana");
+//                            if(nombreVentana !=null)
+//                            {
+//                                Simbolo s2ventana = entorno.getSimbolo(nombreVentana.toString());
+//                                if(s2ventana !=null)
+//                                {
+//                                    Object contenido = ((Simbolo)s2ventana).valor;
+//                                    if(contenido instanceof Hashtable)
+//                                    {
+//                                        //Object contenedor = ((Hashtable)contenido).get()
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
             determinarTipo(valor);             
             valor = entorno.insertarSimbolo(new Simbolo(lista.get(lista.size()-1),tipo , "var",exp.ejecutar(entorno).valor));                        
         }   

@@ -14,4 +14,8 @@ import javax.swing.JFrame;
 public class Ventana extends JFrame
 {
     public String id;    
+    public void setId(String id)
+    {
+        this.id = id;
+    }
 }

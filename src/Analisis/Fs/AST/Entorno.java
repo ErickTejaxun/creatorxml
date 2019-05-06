@@ -79,6 +79,10 @@ public class Entorno
             {
                 tipo = "objeto";
             }
+            if(simbolo.valor instanceof Long)
+            {
+                System.out.println("Error----------------------------Long");
+            }
             simbolo.tipo = tipo;
             tablaSimbolos.put(simbolo.id, simbolo);
             //System.out.println("Declaración de nueva variable :"+simbolo.id + "\ttipo:"+ simbolo.tipo +"\tvalor:"+simbolo.valor.toString());

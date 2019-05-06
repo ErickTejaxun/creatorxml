@@ -170,5 +170,3 @@ funcion promedioEdad(var prom,  var item){
 funcion ImprimirNombres(var item){
     Imprimir("Nombre: " + item.CTNombre + " apellido: " + item.CTApellido);
 } 
-
- Calculos();

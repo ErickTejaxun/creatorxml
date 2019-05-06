@@ -7,6 +7,7 @@ package CreatorXml201213050;
 
 import Analisis.Fs.AST.Entorno;
 import Analisis.Fs.AST.Nodo;
+import Analisis.Fs.AST.Ventana;
 import Analisis.Fs.parserfs;
 import Analisis.Fs.scannerfs;
 import Analisis.XML.AST.NodoXML;
@@ -64,7 +65,7 @@ public class InterfazIDE extends javax.swing.JFrame {
     public int contadorPrincipal = 0;
     public String cadenaCuerpo = "";
     public Entorno entornoGlobal = new Entorno(null,this);
-    
+    public Hashtable<String, Ventana> listaVentanas = new Hashtable<String,Ventana>();
     /**
      Contadores de elementos     
      */
