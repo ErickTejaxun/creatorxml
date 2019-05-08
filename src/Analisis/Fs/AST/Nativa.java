@@ -11,6 +11,7 @@ import Recursos.singlenton;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -25,6 +26,10 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.WindowConstants;
 
 /**
@@ -169,6 +174,18 @@ public class Nativa extends Exp
             case "crearcajatexto":
                 crearcajatexto(entorno);
                 break;
+            case "crearcontrolnumerico":
+                crearcontrolnumerico(entorno);
+                break;                
+            case "crearareatexto":
+                crearareatexto(entorno);
+                break;    
+            case "crearimagen":
+                crearimagen(entorno);
+                break;                
+            case "creardesplegable":
+                creardesplegable(entorno);
+                break;                    
             case "alclic":
                 alclic(entorno);
                 break;
@@ -329,18 +346,23 @@ public class Nativa extends Exp
                                             {
                                                 Simbolo tmpElementoContenedor = (Simbolo)valorElementoContenedor;
                                                 Hashtable atributosElementoContenedor = (Hashtable)tmpElementoContenedor.valor;
+                                                int estiloLetra = 0;
                                                 switch(tmpElementoContenedor.tipo)
                                                 {
                                                     case "texto":
                                                         Texto txt = new Texto();
-                                                        //Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, valor)                             
-                                                        int estiloLetra = getEstilo((boolean)atributosElementoContenedor.get("negrilla"),(boolean)atributosElementoContenedor.get("cursiva"));
-                                                        txt.setFont(new java.awt.Font(atributosElementoContenedor.get("fuente").toString(), 0, (int)atributosElementoContenedor.get("tamano")));
+                                                        //Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, valor)                                                                                     
+                                                        estiloLetra = getEstilo((boolean)atributosElementoContenedor.get("negrilla"),(boolean)atributosElementoContenedor.get("cursiva"));
+                                                        txt.setFont(new java.awt.Font(atributosElementoContenedor.get("fuente").toString(), estiloLetra, (int)atributosElementoContenedor.get("tamano")));
                                                         txt.setForeground(colorFuente(atributosElementoContenedor.get("color").toString()));
                                                         txt.setText(atributosElementoContenedor.get("texto").toString());
                                                         int x = (int)atributosElementoContenedor.get("x");
                                                         int y = (int)atributosElementoContenedor.get("y");
-                                                        txt.setBounds(x,y, txt.getText().length()*7,20);
+                                                        if(estiloLetra==0)
+                                                        {
+                                                            estiloLetra = 1;
+                                                        }
+                                                        txt.setBounds(x,y, txt.getText().length()*7*estiloLetra,20);
                                                         nuevoContenedor.add(txt);
                                                         break;
                                                     case "cajatexto":                                                        
@@ -349,20 +371,120 @@ public class Nativa extends Exp
                                                         caja.contenedor = nuevoContenedor.id;
                                                         //Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, valor)                             
                                                         estiloLetra = getEstilo((boolean)atributosElementoContenedor.get("negrilla"),(boolean)atributosElementoContenedor.get("cursiva"));
-                                                        caja.setFont(new java.awt.Font(atributosElementoContenedor.get("fuente").toString(), 0, (int)atributosElementoContenedor.get("tamano")));
+                                                        caja.setFont(new java.awt.Font(atributosElementoContenedor.get("fuente").toString(), estiloLetra, (int)atributosElementoContenedor.get("tamano")));
                                                         caja.setForeground(colorFuente(atributosElementoContenedor.get("color").toString()));
                                                         caja.setText(atributosElementoContenedor.get("texto").toString());
                                                         x = (int)atributosElementoContenedor.get("x");
                                                         y = (int)atributosElementoContenedor.get("y");
-                                                        caja.setBounds(x,y, caja.getText().length()*7,20);
+                                                        if(estiloLetra==0)
+                                                        {
+                                                            estiloLetra = 1;
+                                                        }                                                        
+                                                        caja.setBounds(x,y, caja.getText().length()*7*estiloLetra,20);
                                                         nuevoContenedor.add(caja);
                                                         break;   
+                                                    case "areatexto":                                                        
+                                                        AreaTexto areatexto = new AreaTexto();
+                                                        areatexto.ventana = nuevaVentana.id;
+                                                        areatexto.contenedor = nuevoContenedor.id;
+                                                        //Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, valor)                             
+                                                        estiloLetra = getEstilo((boolean)atributosElementoContenedor.get("negrilla"),(boolean)atributosElementoContenedor.get("cursiva"));
+                                                        areatexto.setFont(new java.awt.Font(atributosElementoContenedor.get("fuente").toString(), estiloLetra, (int)atributosElementoContenedor.get("tamano")));
+                                                        areatexto.setForeground(colorFuente(atributosElementoContenedor.get("color").toString()));
+                                                        areatexto.setText(atributosElementoContenedor.get("texto").toString());
+                                                        x = (int)atributosElementoContenedor.get("x");
+                                                        y = (int)atributosElementoContenedor.get("y");
+                                                        alto = (int)atributosElementoContenedor.get("alto");
+                                                        ancho = (int)atributosElementoContenedor.get("ancho");
+                                                        areatexto.setBounds(x,y, alto, ancho);
+                                                        nuevoContenedor.add(areatexto);
+                                                        break;  
+                                                    case "imagen":
+                                                        JLabel contenedorImagen = new JLabel();
+                                                        //.CrearImagen(Ruta, X, Y, Alto, Ancho)
+                                                        String nombreArchivo = entorno.ventana.getTituloVentanaActual();
+                                                        String pathArchivo = entorno.ventana.direcciones.get(nombreArchivo);
+                                                        String nombreImagen = atributosElementoContenedor.get("ruta").toString();
+                                                        pathArchivo = pathArchivo.substring(0, pathArchivo.length()-nombreArchivo.length()) + nombreImagen;                                                        
+                                                        x = (int)atributosElementoContenedor.get("x");
+                                                        y = (int)atributosElementoContenedor.get("y");
+                                                        alto = (int)atributosElementoContenedor.get("alto");
+                                                        ancho = (int)atributosElementoContenedor.get("ancho");                                                        
+                                                        contenedorImagen.setBounds(x,y, ancho,alto);
+                                                        ImageIcon icono =   new ImageIcon(pathArchivo);                                                        
+                                                        ImageIcon iconoEscala = new ImageIcon(icono.getImage().getScaledInstance(ancho, alto, java.awt.Image.SCALE_DEFAULT));                
+                                                        contenedorImagen.setIcon(iconoEscala);                                                          
+                                                        nuevoContenedor.add(contenedorImagen);
+                                                        break;                                                        
+                                                    case "desplegable": 
+                                                        //CrearDesplegable(Alto, Ancho, lista, X, Y, Defecto, nombre)
+                                                        Desplegable nuevoDespegable = new Desplegable();
+                                                        nuevoDespegable.ventana = nuevaVentana.id;
+                                                        nuevoDespegable.contenedor = nuevoContenedor.id;
+                                                        //Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, valor)                             
+                                                        String nombreLista = atributosElementoContenedor.get("lista").toString();
+                                                        idExp tmp = new idExp(nombreLista);
+                                                        Object listaObjeto = tmp.ejecutar(entorno).valor;
+                                                        String defectoitem = atributosElementoContenedor.get("defecto").toString();
+                                                        int contador = 0;
+                                                        boolean flag = true;
+                                                        if(listaObjeto!=null)
+                                                        {
+                                                            ArrayList listaValores = (ArrayList)listaObjeto;
+                                                            for(Object item: listaValores)
+                                                            {            
+                                                                if(item.toString().equalsIgnoreCase(defectoitem)){flag = false;}
+                                                                if(flag){contador++;}                                                               
+                                                                nuevoDespegable.addItem(item);
+                                                            }
+                                                        }
+                                                        nuevoDespegable.setSelectedIndex(contador);
+                                                        x = (int)atributosElementoContenedor.get("x");
+                                                        y = (int)atributosElementoContenedor.get("y");
+                                                        alto = (int)atributosElementoContenedor.get("alto");
+                                                        ancho = (int)atributosElementoContenedor.get("ancho");
+                                                        nuevoDespegable.setBounds(x,y,  ancho,alto);
+                                                        nuevoContenedor.add(nuevoDespegable);
+                                                        break;                                                          
+                                                    case "controlnumerico":                                                        
+                                                        Spinner spinner_ = new Spinner();
+                                                        spinner_.ventana = nuevaVentana.id;
+                                                        spinner_.contenedor = nuevoContenedor.id;
+                                                        //CrearControlNumerico(Alto, Ancho, Maximo, Minimo, X, Y, defecto, nombre)                           
+                                                        String strminimo = "-1000";
+                                                        String strmaximo = "1000";
+                                                        String strdefecto = "0";
+                                                        if(!atributosElementoContenedor.get("minimo").toString().equals("nulo"))
+                                                        {
+                                                            singlenton.addErrores(new error("semantico",linea,columna, id,""));
+                                                            strminimo = atributosElementoContenedor.get("minimo").toString();
+                                                        }
+                                                        if(!atributosElementoContenedor.get("maximo").toString().equals("nulo"))
+                                                        {
+                                                            strmaximo = atributosElementoContenedor.get("maximo").toString();
+                                                        }  
+                                                        if(!atributosElementoContenedor.get("defecto").toString().equals("nulo"))
+                                                        {
+                                                            strdefecto=  atributosElementoContenedor.get("defecto").toString();
+                                                        }                                                        
+                                                        double minimo = Double.parseDouble(strminimo);
+                                                        double maximo =  Double.parseDouble(strmaximo);
+                                                        double defecto =  Double.parseDouble(strdefecto);
+                                                        SpinnerNumberModel model1 = new SpinnerNumberModel(defecto,minimo , maximo, 1.0);
+                                                        x = (int)atributosElementoContenedor.get("x");
+                                                        y = (int)atributosElementoContenedor.get("y");
+                                                        alto = (int)atributosElementoContenedor.get("alto");
+                                                        ancho = (int)atributosElementoContenedor.get("ancho");
+                                                        spinner_.setBounds(x,y, alto, ancho);
+                                                        spinner_.setModel(model1);
+                                                        nuevoContenedor.add(spinner_);
+                                                        break;                                                          
                                                     case "boton":
                                                         Boton boton = new Boton();
                                                         boton.ventana = nuevaVentana.id;
                                                         boton.contenedor = nuevoContenedor.id;                                                        
                                                         //CrearBoton(Fuente, Tamaño, Color, X, Y,Referencia, valor, Alto, Ancho)                                                                              
-                                                        Font fuente = new Font(atributosElementoContenedor.get("fuente").toString(), 0, (int)atributosElementoContenedor.get("tamano"));                                                        
+                                                        Font fuente = new Font(atributosElementoContenedor.get("fuente").toString(), estiloLetra, (int)atributosElementoContenedor.get("tamano"));                                                        
                                                         boton.setFont(fuente);    
                                                         boton.setForeground(colorFuente(atributosElementoContenedor.get("color").toString()));
                                                         boton.setText(atributosElementoContenedor.get("valor").toString());
@@ -492,16 +614,20 @@ public class Nativa extends Exp
         }        
         return 0;
     }
+   
     
-    public void crearcajatexto(Entorno entorno)
+    public void crearcontrolnumerico(Entorno entorno)
     {
+        
         if(parametros !=null)
-        {
+        {   
+            /*Primero obtenemos el id del contenedor donde se va a crear el texto.*/
             if(id==null)
             {
                 id =((idExp)origen).id;
             }
-            Simbolo contenedor = entorno.getSimbolo(id);
+            Simbolo contenedor = entorno.getSimbolo(id); /*Buscamos el contendor en modo de variable.*/
+            
             if(((Hashtable)contenedor.valor).get("tipo")!=null)
             {
                 if(!((Hashtable)contenedor.valor).get("tipo").equals("contenedor"))
@@ -514,11 +640,85 @@ public class Nativa extends Exp
             {
                 singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
                 return;
-            }       
+            }                          
             
-            Simbolo ventana = entorno.getSimbolo(((Hashtable)contenedor.valor).get("ventana").toString());
-            Hashtable tmpAtributos = ((Hashtable)((Hashtable)ventana.valor).get("contenido"));
+            /*Ahora buscamos la ventana donde está almacenada el contenedor.*/
+            Simbolo ventana = entorno.getSimbolo(((Hashtable)contenedor.valor).get("ventana").toString());            
+            Hashtable tmpAtributos = ((Hashtable)((Hashtable)ventana.valor).get("contenido"));            
             Object tmp = tmpAtributos.get(id);
+            
+            if(tmp instanceof Hashtable)
+            {
+                //Simbolo contenedorVentana = (Simbolo)tmp;
+                Hashtable contenedorVentana = (Hashtable)tmp; // contenedor en el que vamos a guardar este elemento
+                if(contenedorVentana!=null)
+                {
+
+                    if(parametros.size()==8)
+                    {
+                        Hashtable<String,Object> atributos = new Hashtable<String,Object>();
+                        /*Obtenemos todos los atributos*/
+                        Simbolo nuevoSpinnerPro = new Simbolo(parametros.get(7).ejecutar(entorno).valor.toString(), "controlnumerico");
+                        nuevoSpinnerPro.rol = "variable";                        
+                        //Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, valor
+                        //CrearControlNumerico(Alto, Ancho, Maximo, Minimo, X, Y, defecto, nombre)
+                        atributos.put("tipo", "controlnumerico");
+                        atributos.put("id", parametros.get(7).ejecutar(entorno).valor);
+                        atributos.put("alto", parametros.get(0).ejecutar(entorno).valor);
+                        atributos.put("ancho", parametros.get(1).ejecutar(entorno).valor);
+                        atributos.put("maximo", parametros.get(2).ejecutar(entorno).valor);
+                        atributos.put("minimo", parametros.get(3).ejecutar(entorno).valor);
+                        atributos.put("x", parametros.get(4).ejecutar(entorno).valor);
+                        atributos.put("y", parametros.get(5).ejecutar(entorno).valor);
+                        atributos.put("defecto", parametros.get(6).ejecutar(entorno).valor);
+                        atributos.put("contenedor","");
+                        //atributos.put("contenido", new Hashtable<String,Simbolo>());
+                        valor = atributos;  
+                        nuevoSpinnerPro.valor = atributos;
+                        nuevoSpinnerPro.id = parametros.get(7).ejecutar(entorno).valor.toString();
+                        ((Hashtable)contenedorVentana.get("contenido")).put(nuevoSpinnerPro.id, nuevoSpinnerPro);
+                    }
+                    else
+                    {
+                        singlenton.addErrores(new error("semantico",linea,columna, id," Faltan parametros para la creación de un conetenedor."));
+                    }
+                    //nuevoContenedor.valores = ;
+                }                
+            }                        
+        }
+    }       
+    
+    public void crearareatexto(Entorno entorno)
+    {
+        
+        if(parametros !=null)
+        {   
+            /*Primero obtenemos el id del contenedor donde se va a crear el texto.*/
+            if(id==null)
+            {
+                id =((idExp)origen).id;
+            }
+            Simbolo contenedor = entorno.getSimbolo(id); /*Buscamos el contendor en modo de variable.*/
+            
+            if(((Hashtable)contenedor.valor).get("tipo")!=null)
+            {
+                if(!((Hashtable)contenedor.valor).get("tipo").equals("contenedor"))
+                {
+                    singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+                    return;                    
+                }                
+            }
+            else
+            {
+                singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+                return;
+            }                          
+            
+            /*Ahora buscamos la ventana donde está almacenada el contenedor.*/
+            Simbolo ventana = entorno.getSimbolo(((Hashtable)contenedor.valor).get("ventana").toString());            
+            Hashtable tmpAtributos = ((Hashtable)((Hashtable)ventana.valor).get("contenido"));            
+            Object tmp = tmpAtributos.get(id);
+            
             if(tmp instanceof Hashtable)
             {
                 //Simbolo contenedorVentana = (Simbolo)tmp;
@@ -527,19 +727,18 @@ public class Nativa extends Exp
                 {
                     Hashtable<String,Object> atributos = new Hashtable<String,Object>();
                     /*Obtenemos todos los atributos*/
-                    Simbolo nuevoTexto = new Simbolo(Display.nombreNuevoElemento, "cajatexto");
+                    Simbolo nuevoTexto = new Simbolo(parametros.get(10).ejecutar(entorno).valor.toString(), "areatexto");
                     nuevoTexto.rol = "variable";
-                    if(parametros.size()==8)
+                    if(parametros.size()==11)
                     {
                         //Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, valor
-                        /*
-                        CrearCajaTexto(Alto, Ancho, Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, defecto, nombre)
-                        */                        
-                        atributos.put("tipo", "cajatexto");
+                        //CrearCajaTexto(Alto, Ancho, Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, defecto, nombre)
+                        atributos.put("tipo", "areatexto");
+                        atributos.put("id", parametros.get(10).ejecutar(entorno).valor);
                         atributos.put("alto", parametros.get(0).ejecutar(entorno).valor);
                         atributos.put("ancho", parametros.get(1).ejecutar(entorno).valor);
                         atributos.put("fuente", parametros.get(2).ejecutar(entorno).valor);
-                        atributos.put("tamano", parametros.get(3).ejecutar(entorno).valor);                                               
+                        atributos.put("tamano", parametros.get(3).ejecutar(entorno).valor);
                         String color = parametros.get(4).ejecutar(entorno).valor.toString();
                         if(isColor(color))
                         {
@@ -549,34 +748,19 @@ public class Nativa extends Exp
                         {
                             atributos.put("color", ((Hashtable)contenedor.valor).get("color"));
                         }
-                        atributos.put("x", parametros.get(4).ejecutar(entorno).valor);
-                        atributos.put("y", parametros.get(5).ejecutar(entorno).valor);
-                        atributos.put("negrilla", parametros.get(6).ejecutar(entorno).valor);
-                        atributos.put("cursiva",parametros.get(7).ejecutar(entorno).valor);
-                        atributos.put("texto",parametros.get(8).ejecutar(entorno).valor);
-                        atributos.put("id",parametros.get(9).ejecutar(entorno).valor);
-                        atributos.put("nombre",parametros.get(10).ejecutar(entorno).valor);
-                        atributos.put("ventana",ventana.id);
-                        atributos.put("panel",contenedor.id);
+
+                        atributos.put("x", parametros.get(5).ejecutar(entorno).valor);
+                        atributos.put("y", parametros.get(6).ejecutar(entorno).valor);
+                        atributos.put("negrilla", parametros.get(7).ejecutar(entorno).valor);
+                        atributos.put("cursiva",parametros.get(8).ejecutar(entorno).valor);
+                        atributos.put("texto",parametros.get(9).ejecutar(entorno).valor);
+                        atributos.put("ventana",parametros.get(9).ejecutar(entorno).valor.toString());
+                        atributos.put("contenedor","");
                         //atributos.put("contenido", new Hashtable<String,Simbolo>());
                         valor = atributos;  
                         nuevoTexto.valor = atributos;
-                        ((Hashtable)contenedorVentana.get("contenido")).put("", nuevoTexto);
-//                        Object tabla = null;
-//                        if(contenedorVentana.valor instanceof Hashtable)
-//                        {
-//                            tabla = ((Hashtable)contenedorVentana.valor).get("contenido");
-//                        }
-//                        if(tabla!=null)
-//                        {
-//                            if(tabla instanceof Hashtable)
-//                            {
-//                                ((Hashtable) tabla).put(((Hashtable) tabla).size()+1, valor);
-//                            }
-//                        }
-//
-//                        nuevoContenedor.valor = atributos;
-                        //entorno.insertarSimbolo(nuevoContenedor);
+                        nuevoTexto.id = parametros.get(10).ejecutar(entorno).valor.toString();
+                        ((Hashtable)contenedorVentana.get("contenido")).put(nuevoTexto.id, nuevoTexto);
                     }
                     else
                     {
@@ -587,6 +771,169 @@ public class Nativa extends Exp
             }                        
         }
     }      
+    public void crearcajatexto(Entorno entorno)
+    {
+        
+        if(parametros !=null)
+        {   
+            /*Primero obtenemos el id del contenedor donde se va a crear el texto.*/
+            if(id==null)
+            {
+                id =((idExp)origen).id;
+            }
+            Simbolo contenedor = entorno.getSimbolo(id); /*Buscamos el contendor en modo de variable.*/
+            
+            if(((Hashtable)contenedor.valor).get("tipo")!=null)
+            {
+                if(!((Hashtable)contenedor.valor).get("tipo").equals("contenedor"))
+                {
+                    singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+                    return;                    
+                }                
+            }
+            else
+            {
+                singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+                return;
+            }                          
+            
+            /*Ahora buscamos la ventana donde está almacenada el contenedor.*/
+            Simbolo ventana = entorno.getSimbolo(((Hashtable)contenedor.valor).get("ventana").toString());            
+            Hashtable tmpAtributos = ((Hashtable)((Hashtable)ventana.valor).get("contenido"));            
+            Object tmp = tmpAtributos.get(id);
+            
+            if(tmp instanceof Hashtable)
+            {
+                //Simbolo contenedorVentana = (Simbolo)tmp;
+                Hashtable contenedorVentana = (Hashtable)tmp; // contenedor en el que vamos a guardar este elemento
+                if(contenedorVentana!=null)
+                {
+                    Hashtable<String,Object> atributos = new Hashtable<String,Object>();
+                    /*Obtenemos todos los atributos*/
+                    Simbolo nuevoTexto = new Simbolo(parametros.get(0).ejecutar(entorno).valor.toString(), "cajatexto");
+                    nuevoTexto.rol = "variable";
+                    if(parametros.size()==11)
+                    {
+                        //Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, valor
+                        //CrearCajaTexto(Alto, Ancho, Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, defecto, nombre)
+                        atributos.put("tipo", "cajatexto");
+                        atributos.put("id", parametros.get(10).ejecutar(entorno).valor);
+                        atributos.put("alto", parametros.get(0).ejecutar(entorno).valor);
+                        atributos.put("ancho", parametros.get(1).ejecutar(entorno).valor);
+                        atributos.put("fuente", parametros.get(2).ejecutar(entorno).valor);
+                        atributos.put("tamano", parametros.get(3).ejecutar(entorno).valor);
+                        String color = parametros.get(4).ejecutar(entorno).valor.toString();
+                        if(isColor(color))
+                        {
+                            atributos.put("color", color);
+                        }
+                        else
+                        {
+                            atributos.put("color", ((Hashtable)contenedor.valor).get("color"));
+                        }
+
+                        atributos.put("x", parametros.get(5).ejecutar(entorno).valor);
+                        atributos.put("y", parametros.get(6).ejecutar(entorno).valor);
+                        atributos.put("negrilla", parametros.get(7).ejecutar(entorno).valor);
+                        atributos.put("cursiva",parametros.get(8).ejecutar(entorno).valor);
+                        atributos.put("texto",parametros.get(9).ejecutar(entorno).valor);
+                        atributos.put("ventana",parametros.get(9).ejecutar(entorno).valor.toString());
+                        atributos.put("contenedor","");
+                        //atributos.put("contenido", new Hashtable<String,Simbolo>());
+                        valor = atributos;  
+                        nuevoTexto.valor = atributos;
+                        nuevoTexto.id = parametros.get(9).ejecutar(entorno).valor.toString();
+                        ((Hashtable)contenedorVentana.get("contenido")).put(nuevoTexto.id, nuevoTexto);
+                    }
+                    else
+                    {
+                        singlenton.addErrores(new error("semantico",linea,columna, id," Faltan parametros para la creación de un conetenedor."));
+                    }
+                    //nuevoContenedor.valores = ;
+                }                
+            }                        
+        }
+    }     
+    
+//    public void crearcajatexto(Entorno entorno)
+//    {
+//        if(parametros !=null)
+//        {
+//            if(id==null)
+//            {
+//                id =((idExp)origen).id;
+//            }
+//            Simbolo contenedor = entorno.getSimbolo(id);
+//            if(((Hashtable)contenedor.valor).get("tipo")!=null)
+//            {
+//                if(!((Hashtable)contenedor.valor).get("tipo").equals("contenedor"))
+//                {
+//                    singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+//                    return;                    
+//                }                
+//            }
+//            else
+//            {
+//                singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+//                return;
+//            }       
+//            
+//            Simbolo ventana = entorno.getSimbolo(((Hashtable)contenedor.valor).get("ventana").toString());
+//            Hashtable tmpAtributos = ((Hashtable)((Hashtable)ventana.valor).get("contenido"));
+//            Object tmp = tmpAtributos.get(id);
+//            if(tmp instanceof Hashtable)
+//            {
+//                //Simbolo contenedorVentana = (Simbolo)tmp;
+//                Hashtable contenedorVentana = (Hashtable)tmp; // contenedor en el que vamos a guardar este elemento
+//                if(contenedorVentana!=null)
+//                {
+//                    Hashtable<String,Object> atributos = new Hashtable<String,Object>();
+//                    /*Obtenemos todos los atributos*/
+//                    Simbolo nuevoTexto = new Simbolo(Display.nombreNuevoElemento, "cajatexto");
+//                    nuevoTexto.rol = "variable";
+//                    if(parametros.size()==11)
+//                    {
+//                        //Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, valor
+//                        /*
+//                        CrearCajaTexto(Alto, Ancho, Fuente, Tamaño, Color, X, Y, Negrilla, Cursiva, defecto, nombre)                        
+//                        */                        
+//                        atributos.put("tipo", "cajatexto");
+//                        atributos.put("alto", parametros.get(0).ejecutar(entorno).valor);
+//                        atributos.put("ancho", parametros.get(1).ejecutar(entorno).valor);
+//                        atributos.put("fuente", parametros.get(2).ejecutar(entorno).valor);
+//                        atributos.put("tamano", parametros.get(3).ejecutar(entorno).valor);                                               
+//                        String color = parametros.get(4).ejecutar(entorno).valor.toString();
+//                        if(isColor(color))
+//                        {
+//                            atributos.put("color", color);
+//                        }
+//                        else
+//                        {
+//                            atributos.put("color", ((Hashtable)contenedor.valor).get("color"));
+//                        }
+//                        atributos.put("x", parametros.get(5).ejecutar(entorno).valor);
+//                        atributos.put("y", parametros.get(6).ejecutar(entorno).valor);
+//                        atributos.put("negrilla", parametros.get(7).ejecutar(entorno).valor);
+//                        atributos.put("cursiva",parametros.get(8).ejecutar(entorno).valor);
+//                        atributos.put("texto",parametros.get(9).ejecutar(entorno).valor);
+//                        atributos.put("id",parametros.get(10).ejecutar(entorno).valor);
+//                        atributos.put("nombre",parametros.get(11).ejecutar(entorno).valor);
+//                        atributos.put("ventana",ventana.id);
+//                        atributos.put("panel",contenedor.id);
+////                        valor = atributos;  
+////                        nuevoTexto.valor = atributos;
+////                        nuevoTexto.id = atributos.hashCode()+"";
+////                        ((Hashtable)contenedorVentana.get("contenido")).put(nuevoTexto.id, nuevoTexto);
+//                    }
+//                    else
+//                    {
+//                        singlenton.addErrores(new error("semantico",linea,columna, id," Faltan parametros para la creación de un conetenedor."));
+//                    }
+//                    //nuevoContenedor.valores = ;
+//                }                
+//            }                        
+//        }
+//    }      
     
     public void crearboton(Entorno entorno)
     {
@@ -662,7 +1009,142 @@ public class Nativa extends Exp
                 }                
             }                        
         }
-    }        
+    }
+    public void crearimagen(Entorno entorno)
+    {
+        
+        if(parametros !=null)
+        {   
+            /*Primero obtenemos el id del contenedor donde se va a crear el texto.*/
+            if(id==null)
+            {
+                id =((idExp)origen).id;
+            }
+            Simbolo contenedor = entorno.getSimbolo(id); /*Buscamos el contendor en modo de variable.*/
+            
+            if(((Hashtable)contenedor.valor).get("tipo")!=null)
+            {
+                if(!((Hashtable)contenedor.valor).get("tipo").equals("contenedor"))
+                {
+                    singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+                    return;                    
+                }                
+            }
+            else
+            {
+                singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+                return;
+            }                          
+            
+            /*Ahora buscamos la ventana donde está almacenada el contenedor.*/
+            Simbolo ventana = entorno.getSimbolo(((Hashtable)contenedor.valor).get("ventana").toString());            
+            Hashtable tmpAtributos = ((Hashtable)((Hashtable)ventana.valor).get("contenido"));            
+            Object tmp = tmpAtributos.get(id);
+            
+            if(tmp instanceof Hashtable)
+            {
+                //Simbolo contenedorVentana = (Simbolo)tmp;
+                Hashtable contenedorVentana = (Hashtable)tmp; // contenedor en el que vamos a guardar este elemento
+                if(contenedorVentana!=null)
+                {                    
+                    if(parametros.size()==5)
+                    {                        
+                        Hashtable<String,Object> atributos = new Hashtable<String,Object>();
+                        /*Obtenemos todos los atributos*/
+                        Simbolo nuevodesplegable = new Simbolo(parametros.get(0).ejecutar(entorno).valor.toString(), "imagen");
+                        nuevodesplegable.rol = "variable";                        
+                        //CrearImagen(Ruta, X, Y, Alto, Ancho)
+                        atributos.put("tipo", "imagen");                                                
+                        atributos.put("ruta", parametros.get(0).ejecutar(entorno).valor);
+                        atributos.put("x", parametros.get(1).ejecutar(entorno).valor);                        
+                        atributos.put("y", parametros.get(2).ejecutar(entorno).valor);
+                        atributos.put("alto",parametros.get(3).ejecutar(entorno).valor);
+                        atributos.put("ancho", parametros.get(4).ejecutar(entorno).valor);                        
+
+                        //atributos.put("contenido", new Hashtable<String,Simbolo>());
+                        valor = atributos;  
+                        nuevodesplegable.valor = atributos;
+                        nuevodesplegable.id = atributos.get("ruta").toString();
+                        ((Hashtable)contenedorVentana.get("contenido")).put(nuevodesplegable.id, nuevodesplegable);
+                    }
+                    else
+                    {
+                        singlenton.addErrores(new error("semantico",linea,columna, id," Faltan parametros para la creación de un conetenedor."));
+                    }
+                    //nuevoContenedor.valores = ;
+                }                
+            }                        
+        }
+    }     
+    public void creardesplegable(Entorno entorno)
+    {
+        
+        if(parametros !=null)
+        {   
+            /*Primero obtenemos el id del contenedor donde se va a crear el texto.*/
+            if(id==null)
+            {
+                id =((idExp)origen).id;
+            }
+            Simbolo contenedor = entorno.getSimbolo(id); /*Buscamos el contendor en modo de variable.*/
+            
+            if(((Hashtable)contenedor.valor).get("tipo")!=null)
+            {
+                if(!((Hashtable)contenedor.valor).get("tipo").equals("contenedor"))
+                {
+                    singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+                    return;                    
+                }                
+            }
+            else
+            {
+                singlenton.addErrores(new error("semantico",linea,columna, id," No es un objeto de tipo contenedor"));
+                return;
+            }                          
+            
+            /*Ahora buscamos la ventana donde está almacenada el contenedor.*/
+            Simbolo ventana = entorno.getSimbolo(((Hashtable)contenedor.valor).get("ventana").toString());            
+            Hashtable tmpAtributos = ((Hashtable)((Hashtable)ventana.valor).get("contenido"));            
+            Object tmp = tmpAtributos.get(id);
+            
+            if(tmp instanceof Hashtable)
+            {
+                //Simbolo contenedorVentana = (Simbolo)tmp;
+                Hashtable contenedorVentana = (Hashtable)tmp; // contenedor en el que vamos a guardar este elemento
+                if(contenedorVentana!=null)
+                {                    
+                    if(parametros.size()==7)
+                    {                        
+                        Hashtable<String,Object> atributos = new Hashtable<String,Object>();
+                        /*Obtenemos todos los atributos*/
+                        Simbolo nuevodesplegable = new Simbolo(parametros.get(6).ejecutar(entorno).valor.toString(), "desplegable");
+                        nuevodesplegable.rol = "variable";                        
+                        //CrearDesplegable(Alto, Ancho, lista, X, Y, Defecto, nombre)
+                        atributos.put("tipo", "desplegable");
+                        atributos.put("id", parametros.get(6).ejecutar(entorno).valor);
+                        atributos.put("nombre", parametros.get(6).ejecutar(entorno).valor);
+                        atributos.put("alto", parametros.get(0).ejecutar(entorno).valor);
+                        atributos.put("ancho", parametros.get(1).ejecutar(entorno).valor);
+                        atributos.put("lista",((idExp)parametros.get(2)).id);
+                        atributos.put("x",parametros.get(3).ejecutar(entorno).valor);
+                        atributos.put("y", parametros.get(4).ejecutar(entorno).valor);
+                        atributos.put("defecto", parametros.get(5).ejecutar(entorno).valor);                        
+
+                        //atributos.put("contenido", new Hashtable<String,Simbolo>());
+                        valor = atributos;  
+                        nuevodesplegable.valor = atributos;
+                        nuevodesplegable.id = atributos.get("id").toString();
+                        ((Hashtable)contenedorVentana.get("contenido")).put(nuevodesplegable.id, nuevodesplegable);
+                    }
+                    else
+                    {
+                        singlenton.addErrores(new error("semantico",linea,columna, id," Faltan parametros para la creación de un conetenedor."));
+                    }
+                    //nuevoContenedor.valores = ;
+                }                
+            }                        
+        }
+    }       
     public void creartexto(Entorno entorno)
     {
         

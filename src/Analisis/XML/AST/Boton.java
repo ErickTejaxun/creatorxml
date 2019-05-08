@@ -61,7 +61,7 @@ public class Boton extends NodoXML
         }
         if(!accion.equals(""))
         {
-            valor+= "\nbot"+nombre+"_"+ventana.contenedorActual+".alclic("+accion+");";
+            valor+= "\nboton_"+nombre+"_"+ventana.contenedorActual+".alclic("+accion+");";
         }
         ventana.addCuerpoFinal(valor.toString());
     }

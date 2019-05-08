@@ -92,6 +92,10 @@ public class Bloque extends Sentencia{
                 return;
                 //break;
             } 
+            if(valor instanceof Romper)
+            {
+                return;
+            }
         }        
         //Display.quitarMetodo();
     }

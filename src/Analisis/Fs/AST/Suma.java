@@ -40,7 +40,7 @@ public class Suma extends Exp{
         if(v1 instanceof Simbolo)
         {
             tipo1 = ((Simbolo)v1).tipo;
-        }
+        }        
         
         /*Tipo del objeto 2 --------------------------*/
         if(v2 instanceof Integer)

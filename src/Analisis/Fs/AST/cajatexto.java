@@ -5,13 +5,14 @@
  */
 package Analisis.Fs.AST;
 
-import javax.swing.JTextArea;
+
+import javax.swing.JTextField;
 
 /**
  *
  * @author erick
  */
-public class cajatexto  extends JTextArea
+public class cajatexto  extends JTextField
 {
     public String id ="",ventana="", contenedor="";
 }

@@ -1,3 +1,4 @@
+paisaje(10);
 funcion Paisaje(var clasificacion){
 	Selecciona(clasificacion / 10){
 		caso 1: {
@@ -17,6 +18,7 @@ funcion Paisaje(var clasificacion){
 		}
 		caso 1: {
 			Imprimir("atardecer");
+			imprimir("puta madre");
 			detener;
 			Imprimir("No debio haber impreso esto");
 		}
@@ -36,7 +38,7 @@ funcion Paisaje(var clasificacion){
 			Imprimir("No debio haber impreso esto");
 		}
 		caso 5: {
-			Imprimir("Azul");
+			Imprimir("Azul");			
 			detener;
 			Imprimir("No debio haber impreso esto");
 		}

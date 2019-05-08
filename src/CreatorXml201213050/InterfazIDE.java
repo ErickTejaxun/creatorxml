@@ -591,6 +591,10 @@ public class InterfazIDE extends javax.swing.JFrame {
             }
             nombreArchivo = nombre;  
             direcciones.put(nombreArchivo,path);  //  Guardamos <nombre, dirccion>
+            if(nombreArchivo.toLowerCase().contains(".gxml"))
+            {
+                //direcciones.put(nombreArchivo.substring(0,nombreArchivo.length()-5)+"resultado.fs",path);  //  Guardamos <nombre, dirccion>
+            }
         }  
         if(eleccion==null){return;}
         
@@ -1012,6 +1016,8 @@ public class InterfazIDE extends javax.swing.JFrame {
         
     }  
     
+    
+    
     public void guardarArchivoSinGrafo(boolean compilar) 
     {
         String seleccionado = contenedorPaneles.getTitleAt(contenedorPaneles.getSelectedIndex());
@@ -1220,7 +1226,7 @@ public class InterfazIDE extends javax.swing.JFrame {
                 {
                   listaxml.add(parserxml_.lista);
                 }     
-                EjecutarXML();     
+                EjecutarXML(pathArchivo);     
                 Display.quitarArchivo();
             }                       
         } 
@@ -1234,7 +1240,11 @@ public class InterfazIDE extends javax.swing.JFrame {
         mostrarErrores(singlenton.listaErrores);            
     }
     
-    public void EjecutarXML()
+    public String getTituloVentanaActual()
+    {
+        return contenedorPaneles.getTitleAt(contenedorPaneles.getSelectedIndex());
+    }
+    public void EjecutarXML(String path)
     {
         /*Primero el primer ast*/
         for(ArrayList<NodoXML> l : listaxml)
@@ -1255,7 +1265,8 @@ public class InterfazIDE extends javax.swing.JFrame {
                 n.ejecutar(this);
             }
         }       
-        mostrarTraduccion();
+        
+        mostrarTraduccion(path);
     }
     
     
@@ -1595,10 +1606,28 @@ public class InterfazIDE extends javax.swing.JFrame {
         cadenaCuerpo += "\n" + c;
     }    
     
-    public void mostrarTraduccion()
+    public void mostrarTraduccion(String path)
     {
-        textAreaConsola.setText(cadenaImportaciones + "\n" + cadenaCuerpo);
-        nuevoArchivoConData("traduccion.fs", cadenaImportaciones + "\n" + cadenaCuerpo);
+        textAreaConsola.setText(cadenaImportaciones + "\n" + cadenaCuerpo);   
+        StringTokenizer token = new StringTokenizer(path,"\\");
+        String nombre = "";
+        String pathAcumulado = "";
+        while(token.hasMoreTokens())
+        {
+            nombre = token.nextToken();
+            if(pathAcumulado.equals(""))
+            {
+                pathAcumulado += nombre;
+            }
+            else
+            {
+                pathAcumulado += "\\"+ nombre;
+            }
+        }
+        nombre = nombre.substring(0,nombre.length()-5)+"resultado.fs";
+        pathAcumulado = pathAcumulado.substring(0,pathAcumulado.length()-5)+"resultado.fs";
+        direcciones.put(nombre,pathAcumulado);  //  Guardamos <nombre, dirccion>
+        nuevoArchivoConData(nombre, cadenaImportaciones + "\n" + cadenaCuerpo);     
     }
 
     public String generarEtiqueta()

@@ -1,5 +1,3 @@
-
-
 importar ("\formulas.fs");
 importar ("\ventas.fs");
 

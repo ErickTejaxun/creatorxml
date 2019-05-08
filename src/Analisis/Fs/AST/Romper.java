@@ -38,14 +38,15 @@ public class Romper extends Sentencia{
                 singlenton.addErrores(new error("semantico",linea,columna, "Romper","Romper inválido."));
             }                
         }
-    
+        valor = this;
         return this;
     }
     @Override
     public Nodo generar3D(Entorno entorno) 
     {
-        valor = "";
-        valor2 = (String) valor;
+        //valor = "";
+        //valor2 = (String) valor;
+        ejecutar(entorno);
         return this;
     }    
 }

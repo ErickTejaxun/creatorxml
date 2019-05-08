@@ -1,4 +1,5 @@
 importar("./FuncionesEvaluacion.fs");
+//imprimir('c' -10);
 Var vent_VentanaPrincipal=CrearVentana("#ffff88",1000,1000,"VentanaPrincipal");
 Var cont_Contenedor1_VentanaPrincipal=vent_VentanaPrincipal.CrearContenedor(900,400,"#ffffff",verdadero,10,10);
 cont_Contenedor1_VentanaPrincipal.CrearTexto("Arial",14,"#000000",10,10,verdadero,falso,"Haga clic en el siguiente boton para iniciar la evaluacion");
@@ -7,16 +8,15 @@ Var btn_btnEvaluacion_VentanaPrincipal=cont_Contenedor1_VentanaPrincipal.CrearBo
 
 btn_btnEvaluacion_VentanaPrincipal.AlClic(Bienvenido());
 
-
 cont_Contenedor1_VentanaPrincipal.CrearTexto("Arial",14,"#000000",10,250,falso,verdadero,"Haga clic en el siguiente boton para iniciar el area de reportes");
 
-Var btn_btnReportes_VentanaPrincipal=cont_Contenedor1_VentanaPrincipal.CrearBoton("Arial",14,"#FFFFFF",50,280,"VentanaReportes","Iniciar Reportes",100,200);
+Var btn_btnReportes_VentanaPrincipal=cont_Contenedor1_VentanaPrincipal.CrearBoton("Arial",14,"#000055",50,280,"VentanaReportes","Iniciar Reportes",100,200);
 
 btn_btnReportes_VentanaPrincipal.AlClic(BienvenidoReporte());
 
-Var cont_ContBtn_VentanaPrincipal=vent_VentanaPrincipal.CrearContenedor(200,400,"#000000",falso,10,420);
+Var cont_ContBtn_VentanaPrincipal=vent_VentanaPrincipal.CrearContenedor(200,200,"#ffffff",verdadero,10,420);
 
-Var btnE_btnEnviar_VentanaPrincipal=cont_ContBtn_VentanaPrincipal.CrearBoton("Arial",14,"#FFFFFF",75,30,nulo,"Enviar",100,100);
+Var btnE_btnEnviar_VentanaPrincipal=cont_ContBtn_VentanaPrincipal.CrearBoton("Arial",14,"#000000",40,30,nulo,"Enviar",100,100);
 
 btnE_btnEnviar_VentanaPrincipal.AlClic(Guardar_VentanaPrincipal());
 
@@ -25,7 +25,9 @@ Var btn_btnEvaluacion2_VentanaPrincipal=cont_ContBtn_VentanaPrincipal.CrearBoton
 btn_btnEvaluacion2_VentanaPrincipal.AlClic(Calculos());
 
 vent_VentanaPrincipal.AlCargar();
+
 funcion CargarVentana_VentanaAritmetica(){
+	imprimir("hola perros");
 	vent_VentanaAritmetica.AlCargar();
 }
 funcion CargarVentana_VentanaReportes(){
@@ -35,19 +37,19 @@ funcion Guardar_VentanaPrincipal(){
 	vent_VentanaPrincipal.CrearArrayDesdeArchivo();
 }
 
-Var vent_VentanaAritmetica=CrearVentana("#2E2EFE",1000,1000,"VentanaAritmetica");
+Var vent_VentanaAritmetica=CrearVentana("#2E2EFE",1030,1050,"VentanaAritmetica");
 
 Var cont_ContenedorAritmeticas_VentanaAritmetica=vent_VentanaAritmetica.CrearContenedor(1000,1000,"#2E2EFE",verdadero,10,10);
 
-cont_ContenedorAritmeticas_VentanaAritmetica.CrearTexto("Times New Roman",18,"#000000",450,20,verdadero,verdadero,"Bienvenido a la prueba de Aritmetica, responda las siguientes preguntas");
+cont_ContenedorAritmeticas_VentanaAritmetica.CrearTexto("Arial Black",18,"#000000",100,10,verdadero,verdadero,"Bienvenido a la prueba de Aritmetica, responda las siguientes preguntas");
 
 cont_ContenedorAritmeticas_VentanaAritmetica.CrearTexto("Arial",14,"#000000",10,50,falso,falso,"Ingrese su Nombre:");
 
-cont_ContenedorAritmeticas_VentanaAritmetica.CrearCajaTexto(20,100,"Arial",12,"#000000",100,50,falso,falso,"Ingrese aqui su nombre","CTNombre");
+cont_ContenedorAritmeticas_VentanaAritmetica.CrearCajaTexto(20,100,"Arial",12,"#000000",150,50,falso,falso,"Ingrese aqui su nombre","CTNombre");
 
 cont_ContenedorAritmeticas_VentanaAritmetica.CrearTexto("Arial",14,"#000000",10,150,falso,falso,"Ingrese la potencia de 5 a la 5:");
 
-cont_ContenedorAritmeticas_VentanaAritmetica.CrearControlNumerico(50,100,5000,0,150,150,0,"CPotencia");
+cont_ContenedorAritmeticas_VentanaAritmetica.CrearControlNumerico(50,100,5000,-100,250,150,100,"CPotencia");
 
 Var btn_btnPotencia_VentanaAritmetica=cont_ContenedorAritmeticas_VentanaAritmetica.CrearBoton("Arial",14,"#FFFFFF",300,150,nulo,"Ver Respuesta",50,150);
 
@@ -75,7 +77,7 @@ cont_ContenedorAritmeticas_VentanaAritmetica.CrearControlNumerico(50,100,nulo,0,
 
 Var btn_btnMCD_VentanaAritmetica=cont_ContenedorAritmeticas_VentanaAritmetica.CrearBoton("Arial",14,"#FFFFFF",300,450,nulo,"Ver Respuesta",50,100);
 
-//btn_btnMCD_VentanaAritmetica.AlClic(VerMCD(240,506,10));
+btn_btnMCD_VentanaAritmetica.AlClic(VerMCD(240,506,10));
 btn_btnMCD_VentanaAritmetica.AlClic(VerMCD(240,506));
 cont_ContenedorAritmeticas_VentanaAritmetica.CrearTexto("Arial",14,"#000000",10,550,falso,falso,"Ingrese el Fibonacci de 19:");
 
@@ -103,9 +105,10 @@ cont_ContenedorHistoria_VentanaHistoria.CrearCajaTexto(10,100,"Arial",12,"#00000
 
 cont_ContenedorHistoria_VentanaHistoria.CrearTexto("Arial",14,"#000000",10,250,falso,falso,"Ingrese el paisaje de la foto");
 
-cont_ContenedorHistoria_VentanaHistoria.CrearDesplegable(50,100,list_CDPaisaje1_VentanaHistoria,150,250,"Playa","CDPaisaje1");
-
 Var list_CDPaisaje1_VentanaHistoria=["Playa","Luna","Selva","Desierto","Oceano"];
+
+cont_ContenedorHistoria_VentanaHistoria.CrearDesplegable(50,200,list_CDPaisaje1_VentanaHistoria,150,250,"Playa","CDPaisaje1");
+
 
 cont_ContenedorHistoria_VentanaHistoria.CrearImagen("playa.jpg",300,250,100,100);
 
@@ -115,9 +118,10 @@ btn_btnPlaya_VentanaHistoria.AlClic(Paisaje(10));
 
 cont_ContenedorHistoria_VentanaHistoria.CrearTexto("Arial",14,"#000000",10,400,falso,falso,"Ingrese el paisaje de la foto");
 
-cont_ContenedorHistoria_VentanaHistoria.CrearDesplegable(50,100,list_CDPaisaje2_VentanaHistoria,150,400,"Playa","CDPaisaje2");
-
 Var list_CDPaisaje2_VentanaHistoria=["Playa","Luna","Selva","Desierto","Oceano"];
+cont_ContenedorHistoria_VentanaHistoria.CrearDesplegable(50,100,list_CDPaisaje2_VentanaHistoria,150,400,"Luna","CDPaisaje2");
+
+
 
 cont_ContenedorHistoria_VentanaHistoria.CrearImagen("luna.jpg",300,400,100,100);
 
@@ -127,9 +131,10 @@ btn_btnLuna_VentanaHistoria.AlClic(Paisaje(20));
 
 cont_ContenedorHistoria_VentanaHistoria.CrearTexto("Arial",14,"#000000",10,550,falso,falso,"Ingrese el paisaje de la foto");
 
-cont_ContenedorHistoria_VentanaHistoria.CrearDesplegable(50,100,list_CDPaisaje3_VentanaHistoria,150,550,"Playa","CDPaisaje3");
-
 Var list_CDPaisaje3_VentanaHistoria=["Playa","Luna","Selva","Desierto","Oceano"];
+
+cont_ContenedorHistoria_VentanaHistoria.CrearDesplegable(50,100,list_CDPaisaje3_VentanaHistoria,150,550,"Desierto","CDPaisaje3");
+
 
 cont_ContenedorHistoria_VentanaHistoria.CrearImagen("selva.jpg",300,550,100,100);
 
@@ -139,9 +144,9 @@ btn_btnSelva_VentanaHistoria.AlClic(Paisaje(30));
 
 cont_ContenedorHistoria_VentanaHistoria.CrearTexto("Arial",14,"#000000",10,700,falso,falso,"Ingrese el paisaje de la foto");
 
-cont_ContenedorHistoria_VentanaHistoria.CrearDesplegable(50,100,list_CDPaisaje4_VentanaHistoria,150,700,"Playa","CDPaisaje4");
-
 Var list_CDPaisaje4_VentanaHistoria=["Playa","Luna","Selva","Desierto","Oceano"];
+
+cont_ContenedorHistoria_VentanaHistoria.CrearDesplegable(50,100,list_CDPaisaje4_VentanaHistoria,150,700,"Playa","CDPaisaje4");
 
 cont_ContenedorHistoria_VentanaHistoria.CrearImagen("Desierto.jpg",300,700,100,100);
 
@@ -151,9 +156,10 @@ btn_btnDesierto_VentanaHistoria.AlClic(Paisaje(40));
 
 cont_ContenedorHistoria_VentanaHistoria.CrearTexto("Arial",14,"#000000",10,850,falso,falso,"Ingrese el paisaje de la foto");
 
+Var list_CDPaisaje5_VentanaHistoria=["Playa","Luna","Selva","Desierto","Oceano"];
+
 cont_ContenedorHistoria_VentanaHistoria.CrearDesplegable(50,100,list_CDPaisaje5_VentanaHistoria,150,850,"Playa","CDPaisaje5");
 
-Var list_CDPaisaje5_VentanaHistoria=["Playa","Luna","Selva","Desierto","Oceano"];
 
 cont_ContenedorHistoria_VentanaHistoria.CrearImagen("oceano.jpg",300,850,100,100);
 
@@ -256,14 +262,13 @@ Var cont_ContEnviarLogicas_VentanaLogica=vent_VentanaLogica.CrearContenedor(100,
 Var btnE_btnEnviar_VentanaLogica=cont_ContEnviarLogicas_VentanaLogica.CrearBoton("Arial",14,"#FFFFFF",75,30,"VentanaReportes","Contestar",70,40);
 
 btnE_btnEnviar_VentanaLogica.AlClic(Guardar_VentanaLogica());
-
+vent_VentanaHistoria.AlCargar();
 funcion CargarVentana_VentanaHistoria(){
 	vent_VentanaHistoria.AlCargar();
 }
 funcion Guardar_VentanaAritmetica(){
 	vent_VentanaAritmetica.CrearArrayDesdeArchivo();
 }
-
 funcion CargarVentana_VentanaIngles(){
 	vent_VentanaIngles.AlCargar();
 }
@@ -310,6 +315,5 @@ btnE_btnEnviar_VentanaReportes.AlClic(Guardar_VentanaReportes());
 
 funcion Guardar_VentanaReportes(){
 	vent_VentanaReportes.CrearArrayDesdeArchivo();
-EnviarSinFuncionalidad();
-
+	EnviarSinFuncionalidad();
 }
